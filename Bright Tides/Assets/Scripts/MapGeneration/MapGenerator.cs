@@ -46,8 +46,8 @@ public class MapGenerator : MonoBehaviour {
         for (int i = 0; i < mapWidth; i++) {
             for (int j = 0; j < mapHeight; j++) {
                 Vector3 tilePosition = new Vector3(tileSize.x * i, transform.position.y, tileSize.z * j); // Use the y value of the MapGenerator for tile height
-                if (Random.value >= 0.90) {
-                    GameObject currentTile = Instantiate(islandTile, tilePosition, Quaternion.AngleAxis(0, Vector3.up)); // ~10% of a tile being an island tile
+                if (Random.value >= 0.99) {
+                    GameObject currentTile = Instantiate(islandTile, tilePosition, Quaternion.AngleAxis(0, Vector3.up)); // ~1% of a tile being an island tile
                 }
                 else {
                     GameObject currentTile = Instantiate(basicTile, tilePosition, Quaternion.AngleAxis(0, Vector3.up));

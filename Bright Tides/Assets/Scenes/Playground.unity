@@ -285,8 +285,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   basicTile: {fileID: 1833484686205004, guid: 31c6908f6ebee40469b617f38d1fbd89, type: 2}
   islandTile: {fileID: 1363071472698494, guid: b39e3debd5d2d064887d39f3e3d507e0, type: 2}
-  mapWidth: 20
-  mapHeight: 20
+  mapWidth: 100
+  mapHeight: 100
 --- !u!4 &1542718082
 Transform:
   m_ObjectHideFlags: 0
