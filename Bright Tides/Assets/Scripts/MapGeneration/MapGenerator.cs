@@ -6,8 +6,11 @@ public class MapGenerator : MonoBehaviour {
 
     [Header("Tile Prefabs")]
 
-    [Tooltip("The basic map tile for generation")]
+    [Tooltip("The basic map tile")]
     public GameObject basicTile;
+
+    [Tooltip("The island map tile")]
+    public GameObject islandTile;
 
 
     [Header("Map Parameters")]
@@ -43,7 +46,12 @@ public class MapGenerator : MonoBehaviour {
         for (int i = 0; i < mapWidth; i++) {
             for (int j = 0; j < mapHeight; j++) {
                 Vector3 tilePosition = new Vector3(tileSize.x * i, transform.position.y, tileSize.z * j); // Use the y value of the MapGenerator for tile height
-                GameObject currentTile = Instantiate(basicTile, tilePosition, Quaternion.AngleAxis(0, Vector3.up));
+                if (Random.value >= 0.90) {
+                    GameObject currentTile = Instantiate(islandTile, tilePosition, Quaternion.AngleAxis(0, Vector3.up)); // ~10% of a tile being an island tile
+                }
+                else {
+                    GameObject currentTile = Instantiate(basicTile, tilePosition, Quaternion.AngleAxis(0, Vector3.up));
+                }
             }
         }
 	}
