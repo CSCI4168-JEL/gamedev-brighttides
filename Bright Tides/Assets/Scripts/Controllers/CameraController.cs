@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraControl : MonoBehaviour {
+public class CameraController : MonoBehaviour {
 
     private Transform target; // The target that the camera will follow
     private Vector3 offset; // The initial distance of the camera from the target

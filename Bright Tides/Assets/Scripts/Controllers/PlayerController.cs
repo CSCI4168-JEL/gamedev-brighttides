@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class PlayerControl : MonoBehaviour {
+public class PlayerController : MonoBehaviour {
 
     private CharacterController characterController;
 
