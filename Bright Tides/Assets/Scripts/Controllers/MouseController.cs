@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class MouseController : MonoBehaviour {
 	public GameObject selectedObject; // object that is currently selected
+
+    private GameObject selectedObjectIndicator;
+
 	public GameObject mouseOverObject; // object that the mouse is currently over
 	public GameObject selectedIndicator; // indicator game object for a tile that is selected
+    
 
 	// Use this for initialization
 	void Start () {
@@ -53,9 +57,9 @@ public class MouseController : MonoBehaviour {
 			}
 
             // clear the selection indicator on the currently selected object if one exists
-            if (selectedObject != null && selectedObject.transform.Find("SelectionIndicator(Clone)"))
+            if (selectedObject != null)
             {
-                Destroy(selectedObject.transform.Find("SelectionIndicator(Clone)").gameObject);
+                Destroy(selectedObjectIndicator);
             }
 
             // if the newly selected item is already the selected item, then clear it as selected
@@ -67,7 +71,7 @@ public class MouseController : MonoBehaviour {
 			else
 			{				
 				selectedObject = newSelection;
-				GameObject selectionIndicator = Instantiate(selectedIndicator, selectedObject.transform);
+				selectedObjectIndicator = Instantiate(selectedIndicator, selectedObject.transform);
 			}
 		}
 	}
