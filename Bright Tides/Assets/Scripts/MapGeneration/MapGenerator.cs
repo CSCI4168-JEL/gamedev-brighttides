@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class MapGenerator : MonoBehaviour {
 
     [Header("Tile Prefabs")]
@@ -37,17 +38,23 @@ public class MapGenerator : MonoBehaviour {
         map = new GameObject[mapWidth, mapHeight]; // Instantiate the array with the proper size
         GameObject tile = Instantiate(basicTile, Vector3.zero, Quaternion.AngleAxis(0, Vector3.up)); // Generate temporary tile
         tileSize = tile.GetComponent<Renderer>().bounds.size;
-        GameObject.Destroy(tile);  // Get rid of temporary tile
+        GameObject.DestroyImmediate(tile);  // Get rid of temporary tile
     }
 
     // Use this for initialization
     void Start () {
+        GameObject[] currentMap = GameObject.FindGameObjectsWithTag("MapTile");
+
+        foreach(GameObject childObj in currentMap)
+        {
+            GameObject.DestroyImmediate(childObj);
+        }
 
         for (int i = 0; i < mapWidth; i++) {
             for (int j = 0; j < mapHeight; j++) {
                 Vector3 tilePosition = new Vector3(tileSize.x * i, transform.position.y, tileSize.z * j); // Use the y value of the MapGenerator for tile height
                 GameObject tileType;
-                if (Random.value >= 0.99) {
+                if (Random.value >= 0.59) {
                     tileType = islandTile; // ~1% of a tile being an island tile
                 }
                 else {
@@ -55,6 +62,7 @@ public class MapGenerator : MonoBehaviour {
                 }
 
                 GameObject currentTile = Instantiate(tileType, tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform);
+                    currentTile.tag = "MapTile";
             }
         }
 	}
