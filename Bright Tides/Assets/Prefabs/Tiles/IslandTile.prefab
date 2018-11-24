@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 65703001859957908}
   m_Layer: 0
   m_Name: IslandTile
-  m_TagString: Untagged
+  m_TagString: MapTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
