@@ -37,7 +37,6 @@ public class MapGenerator : MonoBehaviour {
 
     // Return 2D int array from map string, but throw an exception if it has inconsistent dimensions
     private int[,] ParseMapStringTo2DIntArray(string mapString) {
-
         string fileString = mapFile.ToString(); // Get the TextFile contents
         fileString = fileString.Replace("\r", ""); // Remove carriage returns
         string[] stringArray = fileString.Split('\n'); // Flatten map file into string array split by new line characters
@@ -48,22 +47,23 @@ public class MapGenerator : MonoBehaviour {
 
         int[,] intArray = new int[mapWidth, mapHeight];
 
-        int i = 0;
-        foreach (string line in stringArray) {
-            int j = 0;
+        int h = 0;
+        foreach (string line in stringArray) { // Go through each line (height)
+            int w = 0;
             if (line.Length != mapWidth) {
                 throw new System.Exception("String map dimensions must be rectangular. Current line width was " + line.Length + ", but expected width " + mapWidth); // Throw exception if the line is inconsistent width
             }
 
-            foreach (char c in line) {
-                intArray[i, j] = (int)char.GetNumericValue(c); // Get the integer value of c
+            foreach (char c in line) { // Go through each character in each line (width)
+                intArray[w, h] = (int)char.GetNumericValue(c); // Get the integer value of c
 
-                j++;
+                w++;
             }
-            i++;
+            h++;
         }
 
         return intArray;
+        
     }
 
     // The generator method that will produce the actual tile map from the 2D array
@@ -74,7 +74,7 @@ public class MapGenerator : MonoBehaviour {
 
         for (int i = 0; i < mapWidth; i++) {
             for (int j = 0; j < mapHeight; j++) {
-                Vector3 tilePosition = new Vector3(tileSize.x * i, transform.position.y, tileSize.z * j); // Use the y value of the MapGenerator for tile height
+                Vector3 tilePosition = new Vector3(tileSize.x * i, transform.position.y, tileSize.z * -j); // Use the y value of the MapGenerator for tile height
 
                 TileManager.TileTypes currentTile = (TileManager.TileTypes)intArray[i, j]; // Cast it to the enum type for easier reference
                 GameObject generatedTile;
@@ -91,8 +91,10 @@ public class MapGenerator : MonoBehaviour {
                         generatedTile = TileManager.singleton.CreateWaterTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform); // Temporarily create water tile until all types are implemented
                         break;
                 }
+
+                generatedTileMap[i, j] = generatedTile; // Add the generated tile to the map
             }
         }
-        return generatedTileMap;
+        return generatedTileMap; // Output the completed map
     }
 }

@@ -8,12 +8,12 @@ public class TileManager : MonoBehaviour {
 
     // Enum to store all tile types for map generation
     public enum TileTypes : int {
-        playerSpawnTile,
-        playerExitTile,
-        waterTile,
-        obstacleTile,
-        enemySpawnTile,
-        treasureTile
+        playerSpawnTile,    // 0
+        playerExitTile,     // 1
+        waterTile,          // 2
+        obstacleTile,       // 3
+        enemySpawnTile,     // 4
+        treasureTile        // 5
     }
 
     [HideInInspector]
