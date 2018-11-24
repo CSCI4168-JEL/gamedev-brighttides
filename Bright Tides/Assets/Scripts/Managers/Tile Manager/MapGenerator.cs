@@ -74,19 +74,25 @@ public class MapGenerator : MonoBehaviour {
 
         for (int i = 0; i < mapWidth; i++) {
             for (int j = 0; j < mapHeight; j++) {
-                Debug.Log(tileSize.ToString());
                 Vector3 tilePosition = new Vector3(tileSize.x * i, transform.position.y, tileSize.z * j); // Use the y value of the MapGenerator for tile height
 
                 TileManager.TileTypes currentTile = (TileManager.TileTypes)intArray[i, j]; // Cast it to the enum type for easier reference
+                GameObject generatedTile;
 
                 switch(currentTile) {
                     case TileManager.TileTypes.waterTile:
-                        TileManager.singleton.CreateWaterTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform);
+                        generatedTile = TileManager.singleton.CreateWaterTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform);
                         break;
                     case TileManager.TileTypes.obstacleTile:
-                        TileManager.singleton.CreateIslandTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform);
+                        generatedTile =TileManager.singleton.CreateIslandTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform);
+                        break;
+                    default:
+                        Debug.LogWarning("Ignored missing case during map generation, defaulting to water tile");
+                        generatedTile = TileManager.singleton.CreateWaterTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform); // Temporarily create water tile until all types are implemented
                         break;
                 }
+
+                generatedTile.tag = "MapTile"; // Set the tag for the generated tile
             }
         }
         return generatedTileMap;

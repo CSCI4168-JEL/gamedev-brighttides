@@ -638,7 +638,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 13143610}
-  - component: {fileID: 13143609}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -646,21 +645,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &13143609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 13143608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06cbf2af7da649a4bafc2971557c432b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  basicTile: {fileID: 1833484686205004, guid: 31c6908f6ebee40469b617f38d1fbd89, type: 2}
-  islandTile: {fileID: 1363071472698494, guid: b39e3debd5d2d064887d39f3e3d507e0, type: 2}
-  mapWidth: 20
-  mapHeight: 20
 --- !u!4 &13143610
 Transform:
   m_ObjectHideFlags: 0

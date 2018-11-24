@@ -34,9 +34,7 @@ public class TileManager : MonoBehaviour {
         if (!execute) {
             return;
         }
-    }
 
-    private void Start() {
         tileSize = GetTileSize(); // Initialize the tile size
     }
 
