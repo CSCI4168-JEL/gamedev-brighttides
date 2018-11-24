@@ -91,8 +91,6 @@ public class MapGenerator : MonoBehaviour {
                         generatedTile = TileManager.singleton.CreateWaterTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform); // Temporarily create water tile until all types are implemented
                         break;
                 }
-
-                generatedTile.tag = "MapTile"; // Set the tag for the generated tile
             }
         }
         return generatedTileMap;
