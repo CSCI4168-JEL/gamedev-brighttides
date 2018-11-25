@@ -52,3 +52,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapFile: {fileID: 4900000, guid: 3e8de614c9be5e94080fdabb3e379d1c, type: 3}
+  tileSet: {fileID: 11400000, guid: cdc65022add5b6f43a8bbca331d23296, type: 2}

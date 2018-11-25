@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33632469318469002}
   - component: {fileID: 23807890213387394}
   - component: {fileID: 65963657530450054}
+  - component: {fileID: 114152466880071298}
   m_Layer: 0
   m_Name: WaterTile
   m_TagString: MapTile
@@ -96,3 +97,14 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114152466880071298
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1833484686205004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7f146d925970654fa03a2f6d35badbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

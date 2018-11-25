@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4901707781407724}
   - component: {fileID: 114872053936037008}
   m_Layer: 0
-  m_Name: MapGenerator_Test
+  m_Name: MapGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,4 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06cbf2af7da649a4bafc2971557c432b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapFile: {fileID: 4900000, guid: 5e7e35d06c0c9a0499cee8b6e81dae2e, type: 3}
+  mapFile: {fileID: 0}
+  tileSet: {fileID: 0}

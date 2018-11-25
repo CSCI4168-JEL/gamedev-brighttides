@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        target = PlayerManager.singleton.playerPrefab.transform;
+        target = PlayerManager.singleton.playerInstance.transform;
         offset = transform.position - target.position; // Get the offset as the difference between target and camera position
         transform.LookAt(target);
     }
@@ -17,6 +17,6 @@ public class CameraController : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         transform.position = target.position + offset; // Move the camera by the offset
-        transform.LookAt(PlayerManager.singleton.playerPrefab.transform);
+        transform.LookAt(PlayerManager.singleton.playerInstance.transform);
     }
 }

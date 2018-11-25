@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour {
 
-    [Header("Map File")]
+    [Header("Map File Asset")]
     [Tooltip("The text file to read for a map. Must have valid dimensions.")]
     public TextAsset mapFile;
+
+    [Header("Tile Set Asset")]
+    [Tooltip("The selection of tile prefabs that the map will use.")]
+    public TileSet tileSet;
 
     private GameObject[,] tileMap; // Array of GameObjects (the map)
     private int mapWidth;
@@ -24,8 +28,8 @@ public class MapGenerator : MonoBehaviour {
     private string ParseTextFileToMapString(TextAsset textFile) {
         string parsedFile = textFile.ToString();
 
-        string playerSpawn = ((int)TileManager.TileTypes.playerSpawnTile).ToString();
-        string playerExit = ((int)TileManager.TileTypes.playerExitTile).ToString();
+        string playerSpawn = ((int)TileType.playerSpawnTile).ToString();
+        string playerExit = ((int)TileType.playerExitTile).ToString();
 
         if (!parsedFile.Contains(playerSpawn) || !parsedFile.Contains(playerExit)) {
             throw new System.Exception("Missing player spawn and/or exit!"); // Throw exception if the file is missing a player spawn and player exit
@@ -68,29 +72,16 @@ public class MapGenerator : MonoBehaviour {
 
     // The generator method that will produce the actual tile map from the 2D array
     private GameObject[,] GenerateTileMapFrom2DIntArray(int[,] intArray) {
-        Vector3 tileSize = TileManager.singleton.tileSize; // The size of the tiles' bounds for uniform tile placement
+        Vector3 tileSize = Vector3.one;
 
         GameObject[,] generatedTileMap = new GameObject[mapWidth, mapHeight]; // Instantiate the array with the proper size
 
         for (int i = 0; i < mapWidth; i++) {
             for (int j = 0; j < mapHeight; j++) {
-                Vector3 tilePosition = new Vector3(tileSize.x * i, transform.position.y, tileSize.z * -j); // Use the y value of the MapGenerator for tile height
+                TileType currentTileType = (TileType)intArray[i, j]; // Cast it to the enum type for easier reference
 
-                TileManager.TileTypes currentTile = (TileManager.TileTypes)intArray[i, j]; // Cast it to the enum type for easier reference
-                GameObject generatedTile;
-
-                switch(currentTile) {
-                    case TileManager.TileTypes.waterTile:
-                        generatedTile = TileManager.singleton.CreateWaterTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform);
-                        break;
-                    case TileManager.TileTypes.obstacleTile:
-                        generatedTile =TileManager.singleton.CreateIslandTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform);
-                        break;
-                    default:
-                        Debug.LogWarning("Ignored missing case during map generation, defaulting to water tile");
-                        generatedTile = TileManager.singleton.CreateWaterTile(tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform); // Temporarily create water tile until all types are implemented
-                        break;
-                }
+                Vector3 tilePosition = new Vector3(tileSize.x * i, transform.position.y, tileSize.z * -j); // Use the y value of the MapGenerator for tile height and use array position for x and z
+                GameObject generatedTile = tileSet.CreateTile(currentTileType, tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform);
 
                 generatedTileMap[i, j] = generatedTile; // Add the generated tile to the map
             }

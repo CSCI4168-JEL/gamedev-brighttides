@@ -3,32 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerManager : MonoBehaviour {
+public class PlayerManager : Singleton<PlayerManager> {
 
     public static PlayerManager singleton;
+    public GameObject playerInstance;
 
-    [Header("Required Prefab References")]
-    [Tooltip("A reference to the PlayerCharacter prefab")]
-    public GameObject playerPrefab; // Should be assigned the player prefab
+    private string playerTag = "Player";
 
-    void Awake() {
-        bool execute = SetSingleton();
+    private GameObject _player;
+    public GameObject Player {
+        get {
+            if (_player == null) {
+                _player = GameObject.FindGameObjectWithTag(playerTag);
 
-        if (!execute) {
-            return;
-        }
-    }
-
-    bool SetSingleton() {
-        // Ensure no other instance exists
-        if (singleton == null) {
-            singleton = this;
-            DontDestroyOnLoad(gameObject);
-            return true;
-        }
-        else {
-            Destroy(gameObject);
-            return false;
+                if (_player) {
+                    Debug.LogError("No instance of GameObject with tag: " + playerTag + " exists in the scene.");
+                }
+            }
+            return _player;
         }
     }
 
@@ -37,8 +29,6 @@ public class PlayerManager : MonoBehaviour {
     }
 
     void Update() {
-    }
 
-    private void FixedUpdate() {
     }
 }
