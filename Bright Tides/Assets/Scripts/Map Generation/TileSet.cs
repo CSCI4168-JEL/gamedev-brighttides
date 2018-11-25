@@ -45,7 +45,7 @@ public class TileSet : ScriptableObject {
                 return CreateTreasureSpawnTile(position, rotation, parent);
 
             case TileType.obstacleTile:
-                return CreateWaterTile(position, rotation, parent);
+                return CreateObstacleTile(position, rotation, parent);
 
             case TileType.playerSpawnTile:
                 return CreatePlayerSpawnTile(position, rotation, parent);
@@ -71,7 +71,7 @@ public class TileSet : ScriptableObject {
     }
 
     GameObject CreatePlayerExitTile(Vector3 position, Quaternion rotation, Transform parent) {
-        GameObject tile = Instantiate(waterTile, position, rotation, parent);
+        GameObject tile = Instantiate(playerExitTile, position, rotation, parent);
         tile.GetComponent<Tile>().TileProperties.IsPathable = true;
         return tile;
     }

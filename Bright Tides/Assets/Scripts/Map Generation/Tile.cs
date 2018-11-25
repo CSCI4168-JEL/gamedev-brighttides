@@ -6,7 +6,7 @@ using UnityEngine;
 public class Tile : MonoBehaviour {
     public TileProperties TileProperties { get; private set; } // TileProperties class defined using auto-implemented property
 
-    private void Start() {
+    private void Awake() {
         TileProperties = new TileProperties();
     }
 }
