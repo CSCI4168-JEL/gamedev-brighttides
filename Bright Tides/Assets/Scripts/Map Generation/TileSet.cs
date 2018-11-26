@@ -84,7 +84,7 @@ public class TileSet : ScriptableObject {
     }
 
     GameObject CreateObstacleTile(Vector3 position, Quaternion rotation, Transform parent) {
-        GameObject selectedPrefab = obstacleTiles[Random.Range(0, obstacleTiles.Length - 1)]; // Choose randomly from all provided obstacle tile prefabs
+        GameObject selectedPrefab = obstacleTiles[Random.Range(0, obstacleTiles.Length)]; // Choose randomly from all provided obstacle tile prefabs
         GameObject tile = Instantiate(selectedPrefab, position, rotation, parent);
         tile.GetComponent<Tile>().TileProperties.IsPathable = false;
         return tile;
