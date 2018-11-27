@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Name: L1R1
   m_EditorClassIdentifier: 
   sceneName: Level 1 Region 1
+  mapDefinitionFile: {fileID: 4900000, guid: 3e8de614c9be5e94080fdabb3e379d1c, type: 3}
+  tileSet: {fileID: 11400000, guid: f6ca8a754b3585b498a4e4e8a680ac80, type: 2}
+  map: {fileID: 0}
+  mapGenerated: 0
   previousLevel: 0
   nextLevel: 2
   playerModel: {fileID: 100008, guid: 1c3786888dac094409695bde433168ed, type: 3}

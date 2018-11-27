@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 33540872663574382}
   - component: {fileID: 23059385087763102}
   - component: {fileID: 114049877501963812}
+  - component: {fileID: 65443861354425968}
   m_Layer: 0
   m_Name: ObstacleTile (RocksA)
   m_TagString: Untagged
@@ -230,6 +231,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1464590295567846}
   m_Mesh: {fileID: 4300000, guid: 744b67e3b024d3f48b5ddccb98aa7817, type: 3}
+--- !u!65 &65443861354425968
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1464590295567846}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000005, y: 1, z: 1.0000005}
+  m_Center: {x: -0.000000029802322, y: 0, z: 0.000000059604645}
 --- !u!114 &114049877501963812
 MonoBehaviour:
   m_ObjectHideFlags: 1

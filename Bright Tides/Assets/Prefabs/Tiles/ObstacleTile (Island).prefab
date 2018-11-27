@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 33135201593358540}
   - component: {fileID: 23320932546611810}
   - component: {fileID: 114771997434783054}
+  - component: {fileID: 65142036911690472}
   m_Layer: 0
   m_Name: ObstacleTile (Island)
   m_TagString: Untagged
@@ -478,6 +479,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1419099049257382}
   m_Mesh: {fileID: 4300000, guid: 11cd7f7c8e7a0d44cae0db3736183c0c, type: 3}
+--- !u!65 &65142036911690472
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1180381832845022}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0000005, y: 1, z: 1.0000005}
+  m_Center: {x: -0.000000029802322, y: 0, z: 0.000000059604645}
 --- !u!114 &114771997434783054
 MonoBehaviour:
   m_ObjectHideFlags: 1

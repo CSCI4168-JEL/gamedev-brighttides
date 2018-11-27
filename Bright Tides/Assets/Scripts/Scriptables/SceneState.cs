@@ -12,35 +12,23 @@ public enum LEVELS : int
 }
 
 [CreateAssetMenu(menuName = "Bright Tides/Scene Data", fileName = "Scene State", order = 1)]
+[System.Serializable]
 public class SceneState : ScriptableObject  {
-    [Header("Scene Data")]
+    [Header("Scene Definition")]
     public string sceneName;
+    public TextAsset mapDefinitionFile;
+    public TileSet tileSet;
+
+    [Header("Scene Data")]
+    public GameObject map;
+    public bool mapGenerated = false;
 
     public LEVELS previousLevel;
     public LEVELS nextLevel;
 
-    [Header("Player Settings")]
-    public GameObject playerModel;
-    public GameObject playerInstance;
-    public float movementSpeed = 0.5f;
 
-    public Transform moveToTransform;
+    
 
-    void MovePlayer()
-    {
-        // The step size is equal to speed times frame time.
-        float step = movementSpeed * Time.deltaTime;
-
-        // Move our position a step closer to the target.
-        playerInstance.transform.position = Vector3.MoveTowards(playerInstance.transform.position, moveToTransform.position + new Vector3(0, 0.52f, 0), step);
-
-    }
-
-    public void InstantiatePlayer(Transform startingTileTransform)
-    {
-        playerInstance = Instantiate(playerModel, startingTileTransform);
-        playerInstance.transform.position += new Vector3(0, 0.52f, 0);
-        playerInstance.name = "Player";
-    }
+    
 
 }

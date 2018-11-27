@@ -34,6 +34,7 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(gameManager.loadingGame);
         if (gameManager.loadingGame) return;
 
         RaycastHit hit; // ray cast collision information
@@ -56,6 +57,7 @@ public class MouseController : MonoBehaviour
         }
         else // ray did not collide, clear mouse over object
         {
+            //Debug.Log("No ray collision on mouse.");
             this.gameObject.GetComponent<Renderer>().enabled = false; // disable renderer if no collision occurred (i.e. mouse if off map)
             ClearMouseOverObject();
         }
@@ -90,7 +92,7 @@ public class MouseController : MonoBehaviour
             else
             {
                 selectedObject = newSelection;
-                gameManager.scene.moveToTransform = newSelection.transform;
+                gameManager.moveToTransform = newSelection.transform;
                 selectedObjectIndicator = Instantiate(selectedIndicator, selectedObject.transform);
             }
         }
@@ -101,7 +103,7 @@ public class MouseController : MonoBehaviour
 	 * */
     private void ClearSelected()
     {
-        gameManager.scene.moveToTransform = null;
+        gameManager.moveToTransform = null;
         selectedObject = null;
     }
 
@@ -131,5 +133,9 @@ public class MouseController : MonoBehaviour
         }
 
         mouseOverObject = newObject;
+
+        
     }
+
+    
 }
