@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class MouseController : MonoBehaviour
 {
-    public GameManager gameManager;
+    private Material currentIndicator = null;
 
     [Header("Selection Indicators")]
     public GameObject selectedIndicator; // indicator game object for a tile that is selected
 
     [Header("Mouse Selection Materials")]
+    public Material defaultMaterial;
     public Material mouseOverMaterial;
     public Material validMoveLocationrMaterial;
     public Material invalidMoveLocationrMaterial;
@@ -28,14 +29,14 @@ public class MouseController : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-
+        this.GetComponent<Renderer>().material = defaultMaterial;
     }
 
     // Update is called once per frame
     void Update()
     {
         //Debug.Log(gameManager.loadingGame);
-        if (gameManager.loadingGame) return;
+        if (GameManager.instance.loadingGame) return;
 
         RaycastHit hit; // ray cast collision information
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // get a ray from camera center through mouse position
@@ -92,7 +93,7 @@ public class MouseController : MonoBehaviour
             else
             {
                 selectedObject = newSelection;
-                gameManager.moveToTransform = newSelection.transform;
+                GameManager.instance.moveToTransform = newSelection.transform;
                 selectedObjectIndicator = Instantiate(selectedIndicator, selectedObject.transform);
             }
         }
@@ -103,7 +104,7 @@ public class MouseController : MonoBehaviour
 	 * */
     private void ClearSelected()
     {
-        gameManager.moveToTransform = null;
+        GameManager.instance.moveToTransform = null;
         selectedObject = null;
     }
 

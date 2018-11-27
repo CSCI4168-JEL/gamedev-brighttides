@@ -403,6 +403,26 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114779279873666832, guid: cba0ae215b73e4d40846888ea9f37feb,
+        type: 2}
+      propertyPath: invalidMoveLocationrMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 764a103562ebed8468dcac2c290c6816, type: 2}
+    - target: {fileID: 114779279873666832, guid: cba0ae215b73e4d40846888ea9f37feb,
+        type: 2}
+      propertyPath: validMoveLocationrMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 3283c11aa6bfee64197db67822a336db, type: 2}
+    - target: {fileID: 114779279873666832, guid: cba0ae215b73e4d40846888ea9f37feb,
+        type: 2}
+      propertyPath: defaultMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: aeec7b998d280b64a8781b2a02c118cd, type: 2}
+    - target: {fileID: 23407773962885916, guid: cba0ae215b73e4d40846888ea9f37feb,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3283c11aa6bfee64197db67822a336db, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cba0ae215b73e4d40846888ea9f37feb, type: 2}
   m_IsPrefabAsset: 0
