@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MouseController : MonoBehaviour
 {
-    public GameState gameManager;
+    public GameManager gameManager;
 
     [Header("Selection Indicators")]
     public GameObject selectedIndicator; // indicator game object for a tile that is selected
@@ -26,7 +26,7 @@ public class MouseController : MonoBehaviour
 
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
 
     }
@@ -90,7 +90,7 @@ public class MouseController : MonoBehaviour
             else
             {
                 selectedObject = newSelection;
-                gameManager.moveToTransform = newSelection.transform;
+                gameManager.scene.moveToTransform = newSelection.transform;
                 selectedObjectIndicator = Instantiate(selectedIndicator, selectedObject.transform);
             }
         }
@@ -101,7 +101,7 @@ public class MouseController : MonoBehaviour
 	 * */
     private void ClearSelected()
     {
-        gameManager.moveToTransform = null;
+        gameManager.scene.moveToTransform = null;
         selectedObject = null;
     }
 

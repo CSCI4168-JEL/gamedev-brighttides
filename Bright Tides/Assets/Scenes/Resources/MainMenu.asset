@@ -14,8 +14,6 @@ MonoBehaviour:
   sceneName: Main Menu
   previousLevel: -1
   nextLevel: 1
-  loadingGame: 0
-  simulateTurn: 0
   playerModel: {fileID: 1001897922855434, guid: 7fc9f02a5a37c994682cdee7e36121f4,
     type: 2}
   playerInstance: {fileID: 0}

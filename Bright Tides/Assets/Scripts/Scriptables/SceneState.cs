@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 
 public enum LEVELS : int
 {
@@ -11,17 +11,13 @@ public enum LEVELS : int
     level2 = 2
 }
 
-[CreateAssetMenu(menuName = "Bright Tides/Game Manager", fileName = "Game State", order = 1)]
-public class GameState : ScriptableObject  {
+[CreateAssetMenu(menuName = "Bright Tides/Scene Data", fileName = "Scene State", order = 1)]
+public class SceneState : ScriptableObject  {
     [Header("Scene Data")]
     public string sceneName;
 
     public LEVELS previousLevel;
     public LEVELS nextLevel;
-
-    [Header("Game State")]
-    public bool loadingGame = true;
-    public bool simulateTurn = false;
 
     [Header("Player Settings")]
     public GameObject playerModel;
@@ -29,42 +25,6 @@ public class GameState : ScriptableObject  {
     public float movementSpeed = 0.5f;
 
     public Transform moveToTransform;
-
-
-    public void LoadNextLevel()
-    {
-        if (this.nextLevel != LEVELS.none)
-        {
-            this.LoadLevel(this.nextLevel);
-        }
-    }
-
-    public void LoadPreviousLevel()
-    {
-        if (this.previousLevel != LEVELS.none)
-        {
-            this.LoadLevel(this.previousLevel);
-        }
-    }
-
-    private void LoadLevel(LEVELS levelIndex)
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.LoadScene((int) levelIndex);
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-
-    // call back when scene is finished loading
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        Debug.Log("OnSceneLoaded: " + scene.name);
-        Debug.Log(mode);
-        this.loadingGame = false;
-    }
 
     void MovePlayer()
     {
