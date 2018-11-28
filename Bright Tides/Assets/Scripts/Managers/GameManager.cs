@@ -189,15 +189,25 @@ public class GameManager : MonoBehaviour {
 
     void MovePlayer()
     {
-        // The step size is equal to speed times frame time.
-        float step = movementSpeed * Time.deltaTime;
+        Vector3 playerOffsetPosition = new Vector3(0, 0.52f, 0);
+        MoveEntity(playerInstance, moveToTransform.gameObject, playerOffsetPosition, movementSpeed);
 
-        // Move our position a step closer to the target.
-        playerInstance.transform.position = Vector3.MoveTowards(playerInstance.transform.position, moveToTransform.position + new Vector3(0, 0.52f, 0), step);
-        if (playerInstance.transform.position - new Vector3(0, 0.52f, 0) == moveToTransform.position)
+        if (playerInstance.transform.position - playerOffsetPosition == moveToTransform.position)
         {
             this.moveToTransform = null;
-            simulateTurn = false;
+            // simulateTurn = false;
+        }
+    }
+
+    void MoveEntity(GameObject entity, GameObject target, Vector3 positionAdjustment, float speed)
+    {
+        if (entity.transform.position - positionAdjustment == target.transform.position)
+        {
+            Debug.Log("Moving entitiy " + entity.name + " complete.");
+        }
+        else
+        {
+            entity.transform.position = Vector3.MoveTowards(entity.transform.position, target.transform.position + positionAdjustment, speed * Time.deltaTime);
         }
     }
 
