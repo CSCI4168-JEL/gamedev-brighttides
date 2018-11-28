@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf34f315deb8d6641af169e24a60e576, type: 3}
   m_Name: Default_TileSet
   m_EditorClassIdentifier: 
-  waterTile: {fileID: 1156748467960534, guid: 500e59eda28b776449b03f22a6ad3e7a, type: 2}
-  playerExitTile: {fileID: 1330058824199318, guid: 7cd31047c84bd8b4395dec8f9f8e72b1,
+  waterTile: {fileID: 1615195743672892, guid: db7f5cb2d69986144b489897de2ba143, type: 2}
+  playerExitTile: {fileID: 1185081376533236, guid: 1d105982a459b104aa4fe2ec063e5664,
     type: 2}
   obstacleTiles:
-  - {fileID: 1180381832845022, guid: b39e3debd5d2d064887d39f3e3d507e0, type: 2}
-  - {fileID: 1464590295567846, guid: 4095efb8ba497b04f843347fda46a5d9, type: 2}
+  - {fileID: 1573441798622348, guid: ea2e1904f10f81a4a94607219230404d, type: 2}
+  - {fileID: 1058338985992894, guid: 32e2f8d4ba370b64aa25f9a4400b4358, type: 2}

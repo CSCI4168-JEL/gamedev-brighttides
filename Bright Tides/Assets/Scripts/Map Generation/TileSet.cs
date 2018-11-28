@@ -78,7 +78,7 @@ public class TileSet : ScriptableObject {
 
     GameObject CreateWaterTile(Vector3 position, Quaternion rotation, Transform parent) {
         GameObject tile = Instantiate(waterTile, position, rotation, parent);
-        Tile tileComponent = tile.GetComponent<Tile>(); // This is null. TODO: find out why??? Misunderstanding getting component of a specific type?
+        Tile tileComponent = tile.GetComponent<Tile>();
         tileComponent.TileProperties.IsPathable = true;
         return tile;
     }

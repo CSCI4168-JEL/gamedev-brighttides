@@ -2,26 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour {
+public class MapGenerator {
 
-    [Header("Map File Asset")]
-    [Tooltip("The text file to read for a map. Must have valid dimensions.")]
-    public TextAsset mapFile;
-
-    [Header("Tile Set Asset")]
-    [Tooltip("The selection of tile prefabs that the map will use.")]
-    public TileSet tileSet;
-
-    private GameObject[,] tileMap; // Array of GameObjects (the map)
+    public TextAsset mapFile; // The text file to read for a map. Must have valid dimensions
+    public TileSet tileSet; // The selection of tile prefabs that the map will use
+    
     private int mapWidth;
     private int mapHeight;
 
+    public GameObject StartingPosition { get; private set; }
+
+    public MapGenerator(TextAsset mapFile, TileSet tileSet)
+    {
+        this.mapFile = mapFile;
+        this.tileSet = tileSet;
+    }
+
     // Use this for initialization
-    void Start () {
+    public GameObject Generate() {
         string mapFileString = ParseTextFileToMapString(mapFile); // Validate and read the text file as string
         int[,] parsedMapFile = ParseMapStringTo2DIntArray(mapFileString); // Parse the string into 2d int array
 
-        tileMap = GenerateTileMapFrom2DIntArray(parsedMapFile); // Generate the map and keep a reference
+        //tileMap = GenerateTileMapFrom2DIntArray(parsedMapFile); // Generate the map and keep a reference
+        return GenerateTileMapFrom2DIntArray(parsedMapFile); // Generate the map and keep a reference
     }
 
     // Return parsed text asset as a string array, but throw an exception if it does not contain the required characters
@@ -71,7 +74,10 @@ public class MapGenerator : MonoBehaviour {
     }
 
     // The generator method that will produce the actual tile map from the 2D array
-    private GameObject[,] GenerateTileMapFrom2DIntArray(int[,] intArray) {
+    private GameObject GenerateTileMapFrom2DIntArray(int[,] intArray)
+        {
+            GameObject mapRoot = new GameObject(name: "Map");
+
         Vector3 tileSize = Vector3.one;
 
         GameObject[,] generatedTileMap = new GameObject[mapWidth, mapHeight]; // Instantiate the array with the proper size
@@ -80,12 +86,17 @@ public class MapGenerator : MonoBehaviour {
             for (int j = 0; j < mapHeight; j++) {
                 TileType currentTileType = (TileType)intArray[i, j]; // Cast it to the enum type for easier reference
 
-                Vector3 tilePosition = new Vector3(tileSize.x * i, transform.position.y, tileSize.z * -j); // Use the y value of the MapGenerator for tile height and use array position for x and z
-                GameObject generatedTile = tileSet.CreateTile(currentTileType, tilePosition, Quaternion.AngleAxis(0, Vector3.up), transform);
+                Vector3 tilePosition = new Vector3(tileSize.x * i, mapRoot.transform.position.y, tileSize.z * -j); // Use the y value of the MapGenerator for tile height and use array position for x and z
+                GameObject generatedTile = tileSet.CreateTile(currentTileType, tilePosition, Quaternion.AngleAxis(0, Vector3.up), mapRoot.transform);
+                if (currentTileType == TileType.playerSpawnTile)
+                {
+                    this.StartingPosition = generatedTile;
+                }
 
                 generatedTileMap[i, j] = generatedTile; // Add the generated tile to the map
             }
         }
-        return generatedTileMap; // Output the completed map
+
+        return mapRoot;
     }
 }

@@ -14,6 +14,7 @@ public class Tile : MonoBehaviour {
 [System.Serializable]
 public class TileProperties {
     public bool IsPathable { get; set; }
+    
 
     // Default tile settings in the constructor
     public TileProperties() {
