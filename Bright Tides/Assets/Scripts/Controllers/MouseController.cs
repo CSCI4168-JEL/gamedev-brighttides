@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MouseMode {
+    move,
+    explore,
+    attack
+}
+
 public class MouseController : MonoBehaviour
 {
     private Material currentIndicator = null;
@@ -23,37 +29,37 @@ public class MouseController : MonoBehaviour
 
     public GameObject mouseOverObject; // object that the mouse is currently over
 
-    private int mouseMode;
+    private MouseMode mouseMode;
 
 
     // Use this for initialization
     void Awake()
     {
         this.GetComponent<Renderer>().material = defaultMaterial;
-        mouseMode = 0;
+        mouseMode = MouseMode.explore; // Exploring by default
     }
 
     public void SetIndicatorToMove()
     {
         Debug.Log("Setting mouse indicator to moving...");
-        mouseMode = 1;
+        mouseMode = MouseMode.move;
     }
 
     public void SetIndicatorToExplore()
     {
         Debug.Log("Setting mouse indicator to exploring...");
-        mouseMode = 0;
+        mouseMode = MouseMode.explore;
     }
 
     public void SetIndicatorToAttack()
     {
         Debug.Log("Setting mouse indicator to attacking...");
-        mouseMode = 2;
+        mouseMode = MouseMode.attack;
     }
 
     public void UpdateMouseIndicator()
     {
-        if (mouseMode == 1)
+        if (mouseMode == MouseMode.move)
         {
             if (mouseOverObject.GetComponent<Tile>().TileProperties.IsPathable)
             {
@@ -66,11 +72,11 @@ public class MouseController : MonoBehaviour
                 this.GetComponent<Renderer>().material = this.invalidMoveLocationrMaterial;
             }
         }
-        else if (mouseMode == 2)
+        else if (mouseMode == MouseMode.attack)
         {
             this.GetComponent<Renderer>().material = this.targetModeMaterial;
         }
-        else if (mouseMode == 0)
+        else if (mouseMode == MouseMode.explore)
         {
             this.GetComponent<Renderer>().material = this.defaultMaterial;
         }
@@ -91,7 +97,7 @@ public class MouseController : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             // if the fire button clicked, either select or deselect the tile that the mouse is over
-            if (Input.GetButtonDown("Fire1") && mouseMode == 0)
+            if (Input.GetButtonDown("Fire1") && mouseMode == MouseMode.explore)
             {
                 UpdateSelectObject(hit.transform.gameObject);
             }
@@ -102,7 +108,7 @@ public class MouseController : MonoBehaviour
             this.gameObject.transform.position = new Vector3(mouseOverObject.transform.position.x, this.transform.position.y, mouseOverObject.transform.position.z);
 
             // set movement target if in move mode and player selected a tile that is pathable
-            if (Input.GetButtonDown("Fire1") && mouseMode == 1 && this.mouseOverObject.GetComponent<Tile>().TileProperties.IsPathable)
+            if (Input.GetButtonDown("Fire1") && mouseMode == MouseMode.move && this.mouseOverObject.GetComponent<Tile>().TileProperties.IsPathable)
             {
                 GameManager.instance.moveToTransform = mouseOverObject.transform;
             }
@@ -124,7 +130,7 @@ public class MouseController : MonoBehaviour
 	 * */
     private void UpdateSelectObject(GameObject newSelection)
     {
-        if (newSelection != null && mouseMode == 0)
+        if (newSelection != null && mouseMode == MouseMode.explore)
         {
             // traverse game object tree until we get a map tile
             while (newSelection.tag != "MapTile")
