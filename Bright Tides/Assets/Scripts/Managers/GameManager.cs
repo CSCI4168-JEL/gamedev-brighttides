@@ -128,6 +128,11 @@ public class GameManager : MonoBehaviour {
                 break;
         }
 
+        if (this.scene.showUI)
+        {
+            this.gameObject.transform.Find("UI").gameObject.SetActive(true);
+        }
+
         // we have finished loading 
         this.loadingGame = false;        
     }

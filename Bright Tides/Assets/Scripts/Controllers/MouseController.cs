@@ -23,13 +23,58 @@ public class MouseController : MonoBehaviour
 
     public GameObject mouseOverObject; // object that the mouse is currently over
 
-
+    private int mouseMode;
 
 
     // Use this for initialization
     void Awake()
     {
         this.GetComponent<Renderer>().material = defaultMaterial;
+        mouseMode = 0;
+    }
+
+    public void SetIndicatorToMove()
+    {
+        Debug.Log("Setting mouse indicator to moving...");
+        mouseMode = 1;
+    }
+
+    public void SetIndicatorToExplore()
+    {
+        Debug.Log("Setting mouse indicator to exploring...");
+        mouseMode = 0;
+    }
+
+    public void SetIndicatorToAttack()
+    {
+        Debug.Log("Setting mouse indicator to attacking...");
+        mouseMode = 2;
+    }
+
+    public void UpdateMouseIndicator()
+    {
+        if (mouseMode == 1)
+        {
+            if (mouseOverObject.GetComponent<Tile>().TileProperties.IsPathable)
+            {
+                //Debug.Log("Tile is traversible");
+                this.GetComponent<Renderer>().material = this.validMoveLocationrMaterial;
+            }
+            else
+            {
+                //Debug.Log("Tile is blocked");
+                this.GetComponent<Renderer>().material = this.invalidMoveLocationrMaterial;
+            }
+        }
+        else if (mouseMode == 2)
+        {
+            this.GetComponent<Renderer>().material = this.targetModeMaterial;
+        }
+        else if (mouseMode == 0)
+        {
+            this.GetComponent<Renderer>().material = this.defaultMaterial;
+        }
+        
     }
 
     // Update is called once per frame
@@ -46,7 +91,7 @@ public class MouseController : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             // if the fire button clicked, either select or deselect the tile that the mouse is over
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1") && mouseMode == 0)
             {
                 UpdateSelectObject(hit.transform.gameObject);
             }
@@ -55,6 +100,16 @@ public class MouseController : MonoBehaviour
             SetMouseOverObject(hit.transform.gameObject);
             this.gameObject.GetComponent<Renderer>().enabled = true;
             this.gameObject.transform.position = new Vector3(mouseOverObject.transform.position.x, this.transform.position.y, mouseOverObject.transform.position.z);
+
+            // set movement target if in move mode and player selected a tile that is pathable
+            if (Input.GetButtonDown("Fire1") && mouseMode == 1 && this.mouseOverObject.GetComponent<Tile>().TileProperties.IsPathable)
+            {
+                GameManager.instance.moveToTransform = mouseOverObject.transform;
+            }
+
+            // update mouse indicator
+            UpdateMouseIndicator();
+
         }
         else // ray did not collide, clear mouse over object
         {
@@ -69,7 +124,7 @@ public class MouseController : MonoBehaviour
 	 * */
     private void UpdateSelectObject(GameObject newSelection)
     {
-        if (newSelection != null)
+        if (newSelection != null && mouseMode == 0)
         {
             // traverse game object tree until we get a map tile
             while (newSelection.tag != "MapTile")
@@ -93,8 +148,7 @@ public class MouseController : MonoBehaviour
             else
             {
                 selectedObject = newSelection;
-                GameManager.instance.moveToTransform = newSelection.transform;
-                selectedObjectIndicator = Instantiate(selectedIndicator, selectedObject.transform);
+                    selectedObjectIndicator = Instantiate(selectedIndicator, selectedObject.transform);
             }
         }
     }

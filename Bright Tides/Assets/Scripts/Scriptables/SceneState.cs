@@ -19,6 +19,9 @@ public class SceneState : ScriptableObject  {
     public TextAsset mapDefinitionFile;
     public TileSet tileSet;
 
+    [Header("Scene Settings")]
+    public bool showUI;
+
     [Header("Scene Data")]
     public GameObject map;
     public bool mapGenerated = false;
