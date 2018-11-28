@@ -653,54 +653,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114779279873666832, guid: cba0ae215b73e4d40846888ea9f37feb,
-        type: 2}
-      propertyPath: gameManager
-      value: 
-      objectReference: {fileID: 1976966178}
-    - target: {fileID: 114779279873666832, guid: cba0ae215b73e4d40846888ea9f37feb,
-        type: 2}
-      propertyPath: mouseOverMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: aeec7b998d280b64a8781b2a02c118cd, type: 2}
-    - target: {fileID: 4949515307616154, guid: cba0ae215b73e4d40846888ea9f37feb, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4949515307616154, guid: cba0ae215b73e4d40846888ea9f37feb, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 23407773962885916, guid: cba0ae215b73e4d40846888ea9f37feb,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114779279873666832, guid: cba0ae215b73e4d40846888ea9f37feb,
-        type: 2}
-      propertyPath: invalidMoveLocationrMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 764a103562ebed8468dcac2c290c6816, type: 2}
-    - target: {fileID: 114779279873666832, guid: cba0ae215b73e4d40846888ea9f37feb,
-        type: 2}
-      propertyPath: validMoveLocationrMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 3283c11aa6bfee64197db67822a336db, type: 2}
-    - target: {fileID: 114779279873666832, guid: cba0ae215b73e4d40846888ea9f37feb,
-        type: 2}
-      propertyPath: defaultMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: aeec7b998d280b64a8781b2a02c118cd, type: 2}
-    - target: {fileID: 23407773962885916, guid: cba0ae215b73e4d40846888ea9f37feb,
-        type: 2}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 3283c11aa6bfee64197db67822a336db, type: 2}
-    - target: {fileID: 114779279873666832, guid: cba0ae215b73e4d40846888ea9f37feb,
-        type: 2}
-      propertyPath: targetModeMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 85c4464daa5af154b906338f1dcc6ce8, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cba0ae215b73e4d40846888ea9f37feb, type: 2}
   m_IsPrefabAsset: 0
@@ -1753,6 +1705,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1326133544}
   - component: {fileID: 1326133543}
+  - component: {fileID: 1326133545}
   m_Layer: 0
   m_Name: WaterReflectionMain Camera
   m_TagString: Untagged
@@ -1813,6 +1766,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!45 &1326133545
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1326133542}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 0}
 --- !u!1 &1344661181
 GameObject:
   m_ObjectHideFlags: 0

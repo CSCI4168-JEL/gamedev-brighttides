@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class MapGenerator {
 
-    [Header("Map File Asset")]
-    [Tooltip("The text file to read for a map. Must have valid dimensions.")]
-    public TextAsset mapFile;
-
-    [Header("Tile Set Asset")]
-    [Tooltip("The selection of tile prefabs that the map will use.")]
-    public TileSet tileSet;
-
-    private GameObject[,] tileMap; // Array of GameObjects (the map)
+    public TextAsset mapFile; // The text file to read for a map. Must have valid dimensions
+    public TileSet tileSet; // The selection of tile prefabs that the map will use
     
     private int mapWidth;
     private int mapHeight;
@@ -81,7 +74,6 @@ public class MapGenerator {
     }
 
     // The generator method that will produce the actual tile map from the 2D array
-    //private GameObject[,] GenerateTileMapFrom2DIntArray(int[,] intArray) {
     private GameObject GenerateTileMapFrom2DIntArray(int[,] intArray)
         {
             GameObject mapRoot = new GameObject(name: "Map");
@@ -96,7 +88,6 @@ public class MapGenerator {
 
                 Vector3 tilePosition = new Vector3(tileSize.x * i, mapRoot.transform.position.y, tileSize.z * -j); // Use the y value of the MapGenerator for tile height and use array position for x and z
                 GameObject generatedTile = tileSet.CreateTile(currentTileType, tilePosition, Quaternion.AngleAxis(0, Vector3.up), mapRoot.transform);
-                generatedTile.tag = "MapTile";
                 if (currentTileType == TileType.playerSpawnTile)
                 {
                     this.StartingPosition = generatedTile;
@@ -107,6 +98,5 @@ public class MapGenerator {
         }
 
         return mapRoot;
-        //return generatedTileMap; // Output the completed map
     }
 }
