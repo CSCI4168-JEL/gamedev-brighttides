@@ -29,9 +29,4 @@ public class SceneState : ScriptableObject  {
     public LEVELS previousLevel;
     public LEVELS nextLevel;
 
-
-    
-
-    
-
 }
