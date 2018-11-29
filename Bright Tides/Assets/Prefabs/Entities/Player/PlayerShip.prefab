@@ -70,6 +70,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4644425873235942}
+  - component: {fileID: 114345823171145896}
   m_Layer: 0
   m_Name: PlayerShip
   m_TagString: Player
@@ -331,3 +332,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1814917280303742}
   m_Mesh: {fileID: 4300004, guid: 0460997c11b634d43b357f678b294368, type: 3}
+--- !u!114 &114345823171145896
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1778929202013762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d776efb61540044a27d64728beb89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attributes: {fileID: 11400000, guid: 7d250f369273c384c9832bc212f7d35a, type: 2}
