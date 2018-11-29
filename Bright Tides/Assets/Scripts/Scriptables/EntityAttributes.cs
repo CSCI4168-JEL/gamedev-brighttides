@@ -14,7 +14,7 @@ public enum EntityType
 [CreateAssetMenu(menuName = "Bright Tides/Entity Attributes", fileName = "Entity Attributes", order = 1)]
 public class EntityAttributes : ScriptableObject {
 	public EntityType entityType;
-
+	
 	public string name;
 
 	public int level;
@@ -25,6 +25,7 @@ public class EntityAttributes : ScriptableObject {
 	public int gold;
 
 	public int actionsPerTurn;
+	public int actionsRemaining;
 	public float movementSpeed;
 
 	public float baseAttackRange;

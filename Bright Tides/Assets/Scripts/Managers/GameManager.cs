@@ -37,10 +37,11 @@ public class GameManager : MonoBehaviour {
 	private UnityEngine.UI.Text uiPlayerHealth;
 	private UnityEngine.UI.Text uiPlayerAmmo;
 	private UnityEngine.UI.Text uiPlayerGold;
+	private UnityEngine.UI.Text uiActionsRemaining;
 
 
-    // Use this for initialization
-    void Awake () {
+	// Use this for initialization
+	void Awake () {
         // set the singleton reference if it isn't already set, otherwise destroy
         // the object attempting to be instantiated
 	    if (instance == null)
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour {
 		uiPlayerHealth = playerInfoPanel.transform.Find("Health").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
 		uiPlayerAmmo = playerInfoPanel.transform.Find("Ammo").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
 		uiPlayerGold = playerInfoPanel.transform.Find("Gold").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+		uiActionsRemaining = playerInfoPanel.transform.Find("ActionsRemaining").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
 
 		DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
     }
@@ -224,9 +226,13 @@ public class GameManager : MonoBehaviour {
 
 	void updateUIPlayerInfo()
 	{
-		uiPlayerHealth.text = playerInstance.GetComponent<Entity>().attributes.health.ToString();
-		uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
-		uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
+		if (playerInstance != null)
+		{
+			uiPlayerHealth.text = playerInstance.GetComponent<Entity>().attributes.health.ToString();
+			uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
+			uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
+			uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
+		}
 	}
 
 }
