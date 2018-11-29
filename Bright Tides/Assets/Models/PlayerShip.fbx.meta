@@ -1,39 +1,31 @@
 fileFormatVersion: 2
-guid: 1c3786888dac094409695bde433168ed
+guid: 0460997c11b634d43b357f678b294368
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: boat
-    100002: cannon
-    100004: cannon_001
-    100006: cloth
-    100008: //RootNode
-    100010: ropes
+    100002: cannon.001
+    100004: cloth
+    100006: //RootNode
+    100008: ropes
     400000: boat
-    400002: cannon
-    400004: cannon_001
-    400006: cloth
-    400008: //RootNode
-    400010: ropes
-    2100000: ship_material__ship_diffuse_png
+    400002: cannon.001
+    400004: cloth
+    400006: //RootNode
+    400008: ropes
+    2100000: ship material
     2300000: boat
-    2300002: cannon
-    2300004: cannon_001
-    2300006: cloth
-    2300008: ropes
+    2300002: cannon.001
+    2300004: cloth
+    2300006: ropes
     3300000: boat
-    3300002: cannon
-    3300004: cannon_001
-    3300006: cloth
-    3300008: ropes
-    4300000: cannon_001
+    3300002: cannon.001
+    3300004: cloth
+    3300006: ropes
+    4300000: cannon.001
     4300002: ropes
-    4300004: cannon
-    4300006: boat
-    4300008: cloth
-    7400000: Default Take
-    9500000: //RootNode
-    2186277476908879412: ImportLogs
+    4300004: boat
+    4300006: cloth
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -86,7 +78,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
     previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -110,7 +102,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

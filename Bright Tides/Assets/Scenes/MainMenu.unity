@@ -373,10 +373,10 @@ RectTransform:
   m_Father: {fileID: 1247384667}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -28.5}
-  m_SizeDelta: {x: -14, y: 41}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -27.8}
+  m_SizeDelta: {x: 324, y: 41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &319798214
 MonoBehaviour:
@@ -1482,7 +1482,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 10, y: 10}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 338, y: 113.79999}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1247384668
@@ -1880,10 +1880,10 @@ RectTransform:
   m_Father: {fileID: 1247384667}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 29}
-  m_SizeDelta: {x: -14, y: 44}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 27.8}
+  m_SizeDelta: {x: 324, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1448295238
 MonoBehaviour:
@@ -2001,11 +2001,11 @@ RectTransform:
   m_Father: {fileID: 831541148}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.94}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 10, y: -67.575}
-  m_SizeDelta: {x: 1168.7, y: 115.149994}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 513.85, y: 142.78}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &1479879281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2029,11 +2029,11 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 004b01634d88e2740b88e6b3b563df56, type: 3}
     m_FontSize: 80
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 0
+    m_BestFit: 1
+    m_MinSize: 20
     m_MaxSize: 80
-    m_Alignment: 3
-    m_AlignByGeometry: 0
+    m_Alignment: 4
+    m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
@@ -2641,7 +2641,8 @@ MonoBehaviour:
   loadingGame: 1
   simulateTurn: 0
   scene: {fileID: 11400000, guid: 9ceb4280096255e4ba3e68f3ab95aaf0, type: 2}
-  playerModel: {fileID: 100008, guid: 1c3786888dac094409695bde433168ed, type: 3}
+  playerModel: {fileID: 1778929202013762, guid: e97b4ed190778e44c9e4f373b2b4afa3,
+    type: 2}
   playerInstance: {fileID: 0}
   movementSpeed: 0.5
   moveToTransform: {fileID: 0}
