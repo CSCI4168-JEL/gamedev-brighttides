@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4748481857781386}
   - component: {fileID: 143850221568894650}
-  - component: {fileID: 65315161098274010}
   - component: {fileID: 114728383985705784}
   m_Layer: 0
   m_Name: PlayerShip
@@ -157,7 +156,7 @@ Transform:
   m_GameObject: {fileID: 1001897922855434}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4323776724637224}
   - {fileID: 4026402084227478}
@@ -334,18 +333,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1314383894428900}
   m_Mesh: {fileID: 4300000, guid: 1c3786888dac094409695bde433168ed, type: 3}
---- !u!65 &65315161098274010
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1001897922855434}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114728383985705784
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -366,7 +353,7 @@ CharacterController:
   m_GameObject: {fileID: 1001897922855434}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.5

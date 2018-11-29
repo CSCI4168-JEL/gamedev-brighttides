@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum MouseMode {
     move, // player is in moving mode
@@ -106,8 +107,10 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // early exit condition: the game is loading a scene
-        if (GameManager.instance.loadingGame) return;
+		if (EventSystem.current.IsPointerOverGameObject()) return;
+
+		// early exit condition: the game is loading a scene
+		if (GameManager.instance.loadingGame) return;
 
         RaycastHit hit; // ray cast collision information
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // get a ray from camera center through mouse position

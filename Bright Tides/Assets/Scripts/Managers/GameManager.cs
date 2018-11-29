@@ -182,15 +182,12 @@ public class GameManager : MonoBehaviour {
             
             binaryFormatter.Serialize(saveFile, JsonUtility.ToJson(b));
         }
-        
-        
-
     }
 
     void MovePlayer()
     {
         Vector3 playerOffsetPosition = new Vector3(0, 0.52f, 0);
-        MoveEntity(playerInstance, moveToTransform.gameObject, playerOffsetPosition, movementSpeed);
+        MoveEntity(playerInstance, moveToTransform.gameObject, playerOffsetPosition, playerInstance.GetComponent<Entity>().attributes.movementSpeed);
 
         if (playerInstance.transform.position - playerOffsetPosition == moveToTransform.position)
         {
