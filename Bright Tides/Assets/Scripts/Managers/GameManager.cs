@@ -31,6 +31,13 @@ public class GameManager : MonoBehaviour {
 
     public Transform moveToTransform;
 
+	private GameObject userInterface;
+	private GameObject playerInfoPanel;
+
+	private UnityEngine.UI.Text uiPlayerHealth;
+	private UnityEngine.UI.Text uiPlayerAmmo;
+	private UnityEngine.UI.Text uiPlayerGold;
+
 
     // Use this for initialization
     void Awake () {
@@ -44,7 +51,13 @@ public class GameManager : MonoBehaviour {
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
+		userInterface = this.gameObject.transform.Find("UI").gameObject;
+		playerInfoPanel = userInterface.transform.Find("PlayerInfo").gameObject;
+		uiPlayerHealth = playerInfoPanel.transform.Find("Health").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+		uiPlayerAmmo = playerInfoPanel.transform.Find("Ammo").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+		uiPlayerGold = playerInfoPanel.transform.Find("Gold").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+
+		DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
     }
 	
 	/*
@@ -168,8 +181,9 @@ public class GameManager : MonoBehaviour {
 
     private void OnGUI()
     {
-        //GUI.Label(new Rect(10, 10, 400, 30), "Map Generated:" + this.scene.map.transform.childCount);
-    }
+		updateUIPlayerInfo();
+		//GUI.Label(new Rect(10, 10, 400, 30), "Map Generated:" + this.scene.map.transform.childCount);
+	}
 
     void SaveMapData()
     {
@@ -207,5 +221,12 @@ public class GameManager : MonoBehaviour {
             entity.transform.position = Vector3.MoveTowards(entity.transform.position, target.transform.position + positionAdjustment, speed * Time.deltaTime);
         }
     }
+
+	void updateUIPlayerInfo()
+	{
+		uiPlayerHealth.text = playerInstance.GetComponent<Entity>().attributes.health.ToString();
+		uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
+		uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
+	}
 
 }

@@ -5,34 +5,36 @@ using UnityEngine;
 
 public enum EntityType
 {
-    Player,
-    Enemy,
+	Player,
+	Enemy,
 	Interactable
 
 }
 
 [CreateAssetMenu(menuName = "Bright Tides/Entity Attributes", fileName = "Entity Attributes", order = 1)]
 public class EntityAttributes : ScriptableObject {
-    public EntityType entityType;
+	public EntityType entityType;
 
-    public string name;
+	public string name;
 
-    public int level;
-    public int experience;
+	public int level;
+	public int experience;
 
-    public float health;
+	public int health;
+	public int ammo;
+	public int gold;
 
-    public int movesPerTurn;
-    public float movementSpeed;
+	public int actionsPerTurn;
+	public float movementSpeed;
 
-    public float baseAttackRange;
+	public float baseAttackRange;
 
-    public float strength; // modifier for attack damage
-    public float agility; // modifier for taking damage reduction
-    public float dexterity; // modifier for successful hit
-    public float wisdom; // modifier for experience gain
-    public float luck; // modifier for critical damage, finding treasure, escaping combat, etc.
-    
+	public int strength; // modifier for attack damage
+	public int agility; // modifier for taking damage reduction
+	public int dexterity; // modifier for successful hit
+	public int wisdom; // modifier for experience gain
+	public int luck; // modifier for critical damage, finding treasure, escaping combat, etc.
+	
 
 
 }

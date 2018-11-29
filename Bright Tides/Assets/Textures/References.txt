@@ -1,2 +1,4 @@
-File			Source
-iconfinder_h5_19727 	http://www.icondrawer.com/
+File					Source
+iconfinder_h5_19727 			http://www.icondrawer.com/
+iconfinder_gold_bullion_17222		https://www.iconfinder.com/icons/17222/bar_bullion_gold_icon
+Cannonball_SS1				https://vignette.wikia.nocookie.net/serious/images/0/0d/Cannonball_SS1.png/revision/latest?cb=20180507170926
