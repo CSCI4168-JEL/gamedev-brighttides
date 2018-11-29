@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - MapTile
+  - Enemy
+  - Treasure
   layers:
   - Default
   - TransparentFX
