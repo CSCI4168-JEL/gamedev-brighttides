@@ -5,12 +5,14 @@ using UnityEngine;
 public class MapGenerator {
     private int mapWidth;
     private int mapHeight;
-    private TextAsset mapDefinitionFile;
-    private TileSet tileSet;
+    private readonly TextAsset mapDefinitionFile;
+    private readonly TileSet tileSet;
+    private readonly GameObject mapRoot;
 
-    public MapGenerator(TextAsset mapDefinitionFile, TileSet tileSet) {
+    public MapGenerator(TextAsset mapDefinitionFile, TileSet tileSet, GameObject mapRoot) {
         this.mapDefinitionFile = mapDefinitionFile;
         this.tileSet = tileSet;
+        this.mapRoot = mapRoot;
     }
 
     // Use this for initialization
@@ -19,7 +21,7 @@ public class MapGenerator {
         int[,] parsedmapDefinitionFile = ParseMapStringTo2DIntArray(mapDefinitionFileString); // Parse the string into 2d int array
 
         //tileMap = GenerateTileMapFrom2DIntArray(parsedmapDefinitionFile); // Generate the map and keep a reference
-        return GenerateTileMapFrom2DIntArray(parsedmapDefinitionFile, tileSet); // Generate the map and keep a reference
+        return GenerateTileMapFrom2DIntArray(parsedmapDefinitionFile); // Generate the map and keep a reference
     }
 
     // Return parsed text asset as a string array, but throw an exception if it does not contain the required characters
@@ -68,8 +70,7 @@ public class MapGenerator {
     }
 
     // The generator method that will produce the actual tile map from the 2D array
-    private GameObject[,] GenerateTileMapFrom2DIntArray(int[,] intArray, TileSet tileSet) {
-        GameObject mapRoot = new GameObject(name: "Map");
+    private GameObject[,] GenerateTileMapFrom2DIntArray(int[,] intArray) {
 
         Vector3 tileSize = Vector3.one;
 

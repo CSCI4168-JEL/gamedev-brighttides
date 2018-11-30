@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Name: PirateLevel1
   m_EditorClassIdentifier: 
   entityType: 1
-  name: Feeble Pirate Ship
+  model: {fileID: 1258014231385658, guid: ebbfdb7a63758a5499586db489c0189f, type: 2}
+  captainName: Capatin Bob
   level: 0
   experience: 0
-  health: 0
-  movesPerTurn: 0
+  health: 100
+  ammo: 0
+  gold: 0
+  actionsPerTurn: 0
+  actionsRemaining: 0
   movementSpeed: 0
   baseAttackRange: 0
   strength: 0

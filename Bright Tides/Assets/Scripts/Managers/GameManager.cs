@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour {
             instance = this;
         } else if (instance != this)
         {
+            Debug.Log("Other GameManager instance already assgined, destroying this.");
             Destroy(gameObject);
         }
 
@@ -125,8 +126,18 @@ public class GameManager : MonoBehaviour {
                 // if a new game is chosen, then map data would be erased
                 if (this.scene.mapGenerated == false)
                 {
+                    GameObject region = GameObject.FindGameObjectWithTag("Region");
+                    if (region == null) {
+                        Debug.Log("No Region GameObject present in scene, creating one now...");
+                        region = new GameObject("Region") {
+                            tag = "Region"
+                        };
+                        this.currentRegion = region.AddComponent<Region>(); // Attach the region script
+                    } else {
+                        this.currentRegion = region.GetComponent<Region>(); // Get the commponent from the region in the scene
+                    }
                     Debug.Log("First time in level, generating map...");
-                    this.InstantiatePlayer(this.ConstructMap().transform);
+                    this.currentRegion.Initialize(); // Call the initialize method for the region
                 } else
                 {
                     Debug.Log("Skipping map generation...");
@@ -155,19 +166,8 @@ public class GameManager : MonoBehaviour {
     public void InstantiatePlayer(Transform startingTileTransform)
     {
         playerInstance = Instantiate(playerModel, startingTileTransform);
-        playerInstance.transform.position += new Vector3(0, 0.52f, 0);
+        playerInstance.transform.position += new Vector3(0, 0.52f, 0); // To place the player above the water, not inside
         playerInstance.name = "Player";
-    }
-
-    GameObject ConstructMap()
-    {
-        MapGenerator mg = new MapGenerator(this.scene.mapDefinitionFile, this.scene.tileSet);
-        mg.Generate();
-        this.scene.map = mg.StartingPosition;
-        return mg.StartingPosition;
-        //this.SaveMapData();
-        //this.scene.mapGenerated = true;
-
     }
 
     private void Update()

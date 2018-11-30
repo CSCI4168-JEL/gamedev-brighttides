@@ -8,51 +8,52 @@ public enum EntityType : int {
     Treasure
 }
 
-// TODO: should this be set up similar to tile set? enemies should be populated from some rules set per region
-
 [CreateAssetMenuAttribute(menuName = "Bright Tides/Entity Set", fileName = "New EntitySet", order = 2)]
 public class EntitySet : ScriptableObject {
 
-    [Header("Player Model")]
-    [Tooltip("The player prefab.")]
-    public GameObject playerEntity;
-
     [Header("Enemy Entity List")]
-    [Tooltip("The list of all enemy prefabs. Must contain at least one element")]
-    public GameObject[] enemyPrefabs = new GameObject[1]; // Must contain at least one obstacle tile definition
+    [Tooltip("The list of all enemy entities for the region.")]
+    public EntityAttributes[] enemyEntities = new EntityAttributes[0];
 
     [Header("Treasure Entity List")]
-    [Tooltip("The list of all treasure prefabs. Must contain at least one element")]
-    public GameObject[] treasurePrefabs = new GameObject[1]; // Must contain at least one obstacle tile definition
+    [Tooltip("The list of all treasure entities for the region.")]
+    public EntityAttributes[] treasureEntities = new EntityAttributes[0];
 
     public GameObject CreateEntity(EntityType type, Transform parent) {
         switch (type) {
-            case EntityType.Player:
-                return CreatePlayerEntity(parent);
             case EntityType.Enemy:
+                if (enemyEntities.Length <= 0) {
+                    break;
+                }
                 return CreateEnemyEntity(parent);
             case EntityType.Treasure:
+                if (treasureEntities.Length <= 0) {
+                    break;
+                }
                 return CreateTreasureEntity(parent);
-            default:
-                return null;
         }
+
+        return null; // If nothing selected in the create swtich, return null
     }
 
+    // Type-specific creation methods. Separate to allow differences in how an entity is chosen from the set
+    private GameObject CreateEnemyEntity (Transform parent) {
+        EntityAttributes selectedAttributes = enemyEntities[Random.Range(0, enemyEntities.Length)]; // Choose randomly from all provided enemy attributes
+        GameObject entityInstance = Instantiate(selectedAttributes.model, parent); // Create an enemy using the selected model
+        entityInstance.transform.position += new Vector3(0, 0.52f, 0); // To place the enemy above the water, not inside
+        Entity entityComponent = entityInstance.AddComponent(typeof(Entity)) as Entity;
+        entityComponent.attributes = selectedAttributes; // Apply the attributes to the entity
 
-    GameObject CreatePlayerEntity(Transform parent) {
-        GameObject entity = Instantiate(playerEntity, parent);
-        return entity;
+        return entityInstance;
     }
 
-    GameObject CreateEnemyEntity (Transform parent) {
-        GameObject selectedPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)]; // Choose randomly from all provided enemy prefabs
-        GameObject entity = Instantiate(selectedPrefab, parent);
-        return entity;
-    }
+    private GameObject CreateTreasureEntity(Transform parent) {
+        EntityAttributes selectedAttributes = treasureEntities[Random.Range(0, treasureEntities.Length)]; // Choose randomly from all provided treasure attributes
+        GameObject entityInstance = Instantiate(selectedAttributes.model, parent); // Create an treasure using the selected model
+        entityInstance.transform.position += new Vector3(0, 0.52f, 0); // To place the treasure above the water, not inside
+        Entity entityComponent = entityInstance.AddComponent(typeof(Entity)) as Entity;
+        entityComponent.attributes = selectedAttributes; // Apply the attributes to the entity
 
-    GameObject CreateTreasureEntity(Transform parent) {
-        GameObject selectedPrefab = treasurePrefabs[Random.Range(0, enemyPrefabs.Length)]; // Choose randomly from all provided treasure prefabs
-        GameObject entity = Instantiate(selectedPrefab, parent);
-        return entity;
+        return entityInstance;
     }
 }
