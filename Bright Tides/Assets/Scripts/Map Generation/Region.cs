@@ -14,7 +14,7 @@ public class Region : MonoBehaviour {
 
     public void Awake() {
         // Get the scene information from the GameManager
-        SceneState scene = GameManager.instance.scene;
+        SceneState scene = GameManager.instance.sceneState;
         tileSet = scene.tileSet;
         entitySet = scene.entitySet;
         mapDefinitionFile = scene.mapDefinitionFile;

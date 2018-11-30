@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
     public bool simulateTurn = false; // are we currently actioning a turn
 
     [Header("Level State")]
-    public SceneState scene; // current scene data
+    public SceneState sceneState; // current scene data
     public Region currentRegion; // The currently loaded region
 
     [Header("Player Settings")]
@@ -68,9 +68,9 @@ public class GameManager : MonoBehaviour {
      * */
     public void LoadNextLevel()
     {
-        if (this.scene.nextLevel != LEVELS.none)
+        if (this.sceneState.nextLevel != LEVELS.none)
         {
-            this.LoadLevel(this.scene.nextLevel);
+            this.LoadLevel(this.sceneState.nextLevel);
         }
     }
 
@@ -79,9 +79,9 @@ public class GameManager : MonoBehaviour {
      * */
     public void LoadPreviousLevel()
     {
-        if (this.scene.previousLevel != LEVELS.none)
+        if (this.sceneState.previousLevel != LEVELS.none)
         {
-            this.LoadLevel(this.scene.previousLevel);
+            this.LoadLevel(this.sceneState.previousLevel);
         }
     }
 
@@ -118,13 +118,13 @@ public class GameManager : MonoBehaviour {
         switch (scene.buildIndex)
         {
             case (int) LEVELS.level1:
-                this.scene = (SceneState)Resources.Load("L1R1");
+                this.sceneState = (SceneState)Resources.Load("L1R1");
 
                 // TODO: add map data to scene state to allow for persistent maps
                 // add condition check if map data is empty, if so then generate map
                 // otherwise, do nothing unless a new game is chosen
                 // if a new game is chosen, then map data would be erased
-                if (this.scene.mapGenerated == false)
+                if (this.sceneState.mapGenerated == false)
                 {
                     GameObject region = GameObject.FindGameObjectWithTag("Region");
                     if (region == null) {
@@ -147,14 +147,14 @@ public class GameManager : MonoBehaviour {
                 
                 break;
             case (int) LEVELS.level2:
-                this.scene = (SceneState)Resources.Load("L2R1");
+                this.sceneState = (SceneState)Resources.Load("L2R1");
                 break;
             default:
                 Debug.LogError("GameManager.OnSceneLoaded: Unknown scene index.  Did you remember to update to LEVELS enum?");
                 break;
         }
 
-        if (this.scene.showUI)
+        if (this.sceneState.showUI)
         {
             this.gameObject.transform.Find("UI").gameObject.SetActive(true);
         }
@@ -190,9 +190,9 @@ public class GameManager : MonoBehaviour {
     void SaveMapData()
     {
         BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream saveFile = File.Open(Application.persistentDataPath + "/" + this.scene.name + ".dat", FileMode.OpenOrCreate);
+        FileStream saveFile = File.Open(Application.persistentDataPath + "/" + this.sceneState.name + ".dat", FileMode.OpenOrCreate);
 
-        foreach (Transform child in this.scene.map.transform)
+        foreach (Transform child in this.sceneState.map.transform)
         {
             Material b = child.gameObject.GetComponent<Material>();
             
