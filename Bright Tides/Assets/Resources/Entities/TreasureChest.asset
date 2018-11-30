@@ -28,3 +28,5 @@ MonoBehaviour:
   dexterity: 0
   wisdom: 0
   luck: 0
+  isPathableByPlayer: 1
+  isPathableByEnemy: 1

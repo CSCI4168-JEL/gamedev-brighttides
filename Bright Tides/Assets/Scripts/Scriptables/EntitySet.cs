@@ -19,41 +19,30 @@ public class EntitySet : ScriptableObject {
     [Tooltip("The list of all treasure entities for the region.")]
     public EntityAttributes[] treasureEntities = new EntityAttributes[0];
 
-    public GameObject CreateEntity(EntityType type, Transform parent) {
+    public EntityAttributes GetEntityAttributesForType(EntityType type) {
         switch (type) {
             case EntityType.Enemy:
-                if (enemyEntities.Length <= 0) {
-                    break;
+                if (enemyEntities.Length > 0) {
+                    return enemyEntities[Random.Range(0, enemyEntities.Length)]; // Choose randomly from all provided enemy attributes
                 }
-                return CreateEnemyEntity(parent);
+                break;
             case EntityType.Treasure:
-                if (treasureEntities.Length <= 0) {
-                    break;
+                if (treasureEntities.Length > 0) {
+                    return treasureEntities[Random.Range(0, enemyEntities.Length)]; // Choose randomly from all provided enemy attributes
                 }
-                return CreateTreasureEntity(parent);
+                break;
         }
 
         return null; // If nothing selected in the create swtich, return null
     }
 
-    // Type-specific creation methods. Separate to allow differences in how an entity is chosen from the set
-    private GameObject CreateEnemyEntity (Transform parent) {
-        EntityAttributes selectedAttributes = enemyEntities[Random.Range(0, enemyEntities.Length)]; // Choose randomly from all provided enemy attributes
-        GameObject entityInstance = Instantiate(selectedAttributes.model, parent); // Create an enemy using the selected model
-        entityInstance.transform.position += new Vector3(0, 0.52f, 0); // To place the enemy above the water, not inside
-        Entity entityComponent = entityInstance.AddComponent(typeof(Entity)) as Entity;
-        entityComponent.attributes = selectedAttributes; // Apply the attributes to the entity
-
-        return entityInstance;
-    }
-
-    private GameObject CreateTreasureEntity(Transform parent) {
-        EntityAttributes selectedAttributes = treasureEntities[Random.Range(0, treasureEntities.Length)]; // Choose randomly from all provided treasure attributes
-        GameObject entityInstance = Instantiate(selectedAttributes.model, parent); // Create an treasure using the selected model
-        entityInstance.transform.position += new Vector3(0, 0.52f, 0); // To place the treasure above the water, not inside
-        Entity entityComponent = entityInstance.AddComponent(typeof(Entity)) as Entity;
-        entityComponent.attributes = selectedAttributes; // Apply the attributes to the entity
-
-        return entityInstance;
+    public Entity CreateEntity(EntityAttributes entityAttributes) {
+        GameObject entityInstance = Instantiate(entityAttributes.model); // Create an entity using the selected model
+        Entity entityComponent = entityInstance.GetComponent<Entity>();
+        if (!entityComponent) {
+            entityComponent = entityInstance.AddComponent(typeof(Entity)) as Entity; // Create the entity instance component if it does not already exist on the prefab
+        }
+        entityComponent.attributes = entityAttributes; // Apply the attributes to the entity
+        return entityComponent;
     }
 }

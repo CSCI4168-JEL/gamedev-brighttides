@@ -81,7 +81,7 @@ public class MouseController : MonoBehaviour
         // otherwise, change to attacking or exploring material accordingly
         if (mouseMode == MouseMode.move)
         {
-            if (mouseOverObject.GetComponent<Tile>().TileProperties.IsPathable  && 
+            if (mouseOverObject.GetComponent<Tile>().TileProperties.IsPathableByPlayer  && 
                 Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
             {
                 //Debug.Log("Tile is traversible");
@@ -149,7 +149,7 @@ public class MouseController : MonoBehaviour
                         UpdateSelectObject(hit.transform.gameObject);
                         break;
                     case MouseMode.move:
-                        if (this.mouseOverObject.GetComponent<Tile>().TileProperties.IsPathable && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
+                        if (this.mouseOverObject.GetComponent<Tile>().TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
                         {
                             GameManager.instance.moveToTransform = mouseOverObject.transform;
                         }
@@ -275,7 +275,7 @@ public class MouseController : MonoBehaviour
             if (Physics.Raycast(playerTransform.position + startPoint, Vector3.down, out hitInfo, 10.0f))
             {
                 // if we are not colliding with a pathable game tile, then do nothing
-                if (findBaseTile(hitInfo.collider.gameObject).GetComponent<Tile>().TileProperties.IsPathable == false) { continue; }
+                if (findBaseTile(hitInfo.collider.gameObject).GetComponent<Tile>().TileProperties.IsPathableByPlayer == false) { continue; }
                 
                 // instance a movement indicator with the correct orientation
                 if (startPoint.x == 1 && startPoint.z == 0)

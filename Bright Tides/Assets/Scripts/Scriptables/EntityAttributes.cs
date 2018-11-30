@@ -29,4 +29,6 @@ public class EntityAttributes : ScriptableObject {
 	public int wisdom; // modifier for experience gain
 	public int luck; // modifier for critical damage, finding treasure, escaping combat, etc.
 
+    public bool isPathableByPlayer; // If the entity occupies a tile, can it be pathed through by the player
+    public bool isPathableByEnemy; // If the entity occupies a tile, can it be pathed through by the player
 }

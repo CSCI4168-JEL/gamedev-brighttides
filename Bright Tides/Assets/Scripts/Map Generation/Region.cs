@@ -8,7 +8,7 @@ public class Region : MonoBehaviour {
     private TileSet tileSet;
     private EntitySet entitySet;
     private TextAsset mapDefinitionFile;
-    private Dictionary<EntityType, List<GameObject>> entitySpawns;
+    private Dictionary<EntityType, List<Tile>> entitySpawns;
     private int enemyPopulation; // Number of enemies to spawn in the region
     private int treasurePopulation; // Number of treaures to spawn in the region
 
@@ -25,7 +25,7 @@ public class Region : MonoBehaviour {
         mapGenerator = new MapGenerator(mapDefinitionFile, tileSet, gameObject);
         entityGenerator = new EntityGenerator(entitySet, enemyPopulation, treasurePopulation);
 
-        entitySpawns = new Dictionary<EntityType, List<GameObject>>();
+        entitySpawns = new Dictionary<EntityType, List<Tile>>();
     }
 
     // Call this to generate the map and populate it
@@ -37,14 +37,14 @@ public class Region : MonoBehaviour {
         camera.objectBeingFollowed = GameManager.instance.playerInstance;
     }
 
-    public void RegisterSpawnTile(EntityType spawnType, GameObject tile) {
+    public void RegisterSpawnTile(EntityType spawnType, Tile tile) {
         GetSpawnListByType(spawnType).Add(tile); // Get the list by type and add the spawn tile to it
     }
 
     // Add a spawnpoint to a list 
-    private List<GameObject> GetSpawnListByType(EntityType spawnType) {
+    private List<Tile> GetSpawnListByType(EntityType spawnType) {
         if (!entitySpawns.ContainsKey(spawnType)) {
-            List<GameObject> spawnList = new List<GameObject>();
+            List<Tile> spawnList = new List<Tile>();
             entitySpawns.Add(spawnType, spawnList);
         }
 

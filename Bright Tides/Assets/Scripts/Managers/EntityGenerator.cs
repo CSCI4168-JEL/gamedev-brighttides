@@ -17,9 +17,9 @@ public class EntityGenerator {
         this.treasureCount = treasureCount;
     }
 
-    public void PopulateEntities(Dictionary<EntityType, List<GameObject>> entitySpawns) {
-        foreach (KeyValuePair<EntityType, List<GameObject>> entry in entitySpawns) {
-            List<GameObject> spawns = entry.Value;
+    public void PopulateEntities(Dictionary<EntityType, List<Tile>> entitySpawns) {
+        foreach (KeyValuePair<EntityType, List<Tile>> entry in entitySpawns) {
+            List<Tile> spawns = entry.Value;
             EntityType type = entry.Key;
 
             switch(type) {
@@ -30,11 +30,13 @@ public class EntityGenerator {
                     while (spawns.Count > 0 && enemyCount > 0) {
                         int index = Random.Range(0, spawns.Count);
 
-                        GameObject spawn = spawns[index]; // Get a spawn from the list using the chosen index
+                        Tile spawn = spawns[index]; // Get a spawn from the list using the chosen index
                         spawns.RemoveAt(index); // Remove that spawn from available spawns
 
                         if (enemyCount > 0) {
-                            entitySet.CreateEntity(type, spawn.transform); // Create the entity at the given tile
+                            EntityAttributes selectedAttributes = entitySet.GetEntityAttributesForType(type);
+                            Entity entityInstance = entitySet.CreateEntity(selectedAttributes); // Create the entity at the given tile
+                            spawn.SetTileAsParent(entityInstance); // Set the tile as the parent along with any side-effects
                             enemyCount--; // Reduce the enemies left to spawn
                         }
                         else {
@@ -46,15 +48,17 @@ public class EntityGenerator {
                     while (spawns.Count > 0 && treasureCount > 0) {
                         int index = Random.Range(0, spawns.Count);
 
-                        GameObject spawn = spawns[index]; // Get a spawn from the list using the chosen index
+                        Tile spawn = spawns[index]; // Get a spawn from the list using the chosen index
                         spawns.RemoveAt(index); // Remove that spawn from available spawns
 
-                        if (enemyCount > 0) {
-                            entitySet.CreateEntity(type, spawn.transform); // Create the entity at the given tile
-                            treasureCount--; // Reduce the enemies left to spawn
+                        if (treasureCount > 0) {
+                            EntityAttributes selectedAttributes = entitySet.GetEntityAttributesForType(type);
+                            Entity entityInstance = entitySet.CreateEntity(selectedAttributes); // Create the entity at the given tile
+                            spawn.SetTileAsParent(entityInstance); // Set the tile as the parent along with any side-effects
+                            treasureCount--; // Reduce the treasures left to spawn
                         }
                         else {
-                            continue; // No more enemies remain to place, leave the loop
+                            continue; // No more treasures remain to place, leave the loop
                         }
                     }
                     break;
