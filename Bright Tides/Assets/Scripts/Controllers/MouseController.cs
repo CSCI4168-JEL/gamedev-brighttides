@@ -123,7 +123,7 @@ public class MouseController : MonoBehaviour
             moveToIndicatorsDrawn = true;
         }
 
-        if (mouseMode != MouseMode.move || GameManager.instance.moveToTransform != null)
+        if (mouseMode != MouseMode.move || GameManager.instance.moveToTile != null)
         {
             moveToIndicatorsDrawn = false;
             ClearMovementIndicators();
@@ -149,9 +149,10 @@ public class MouseController : MonoBehaviour
                         UpdateSelectObject(hit.transform.gameObject);
                         break;
                     case MouseMode.move:
-                        if (this.mouseOverObject.GetComponent<Tile>().TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
+                        Tile selection = this.mouseOverObject.GetComponent<Tile>();
+                        if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
                         {
-                            GameManager.instance.moveToTransform = mouseOverObject.transform;
+                            GameManager.instance.moveToTile = selection; // Update the moveToTile with the selected, pathable tile
                         }
                         break;
                     default:
@@ -216,7 +217,7 @@ public class MouseController : MonoBehaviour
 	 * */
     private void ClearSelected()
     {
-        GameManager.instance.moveToTransform = null;
+        GameManager.instance.moveToTile = null;
         selectedObject = null;
     }
 

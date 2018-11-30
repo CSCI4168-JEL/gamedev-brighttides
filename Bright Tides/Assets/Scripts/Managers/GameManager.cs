@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour {
     public GameObject playerInstance;
     public float movementSpeed = 0.5f;
 
-    public Transform moveToTransform;
+    public Tile moveToTile;
 
 	private GameObject userInterface;
 	private GameObject playerInfoPanel;
@@ -174,9 +174,9 @@ public class GameManager : MonoBehaviour {
     {
         if (this.simulateTurn)
         {
-            if (this.moveToTransform != null)
+            if (this.moveToTile != null)
             {
-                MovePlayer();
+                MovePlayerToTile();
             }
         }
     }
@@ -200,27 +200,28 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void MovePlayer()
+    void MovePlayerToTile()
     {
-        Vector3 playerOffsetPosition = new Vector3(0, 0.52f, 0);
-        MoveEntity(playerInstance, moveToTransform.gameObject, playerOffsetPosition, playerInstance.GetComponent<Entity>().attributes.movementSpeed);
+        Entity playerEntity = playerInstance.GetComponent<Entity>();
+        MoveEntityToTile(playerEntity, moveToTile, playerEntity.attributes.movementSpeed);
 
-        if (playerInstance.transform.position - playerOffsetPosition == moveToTransform.position)
+        if (playerInstance.transform.parent == moveToTile.transform) // If the player has reached the tile, the tile becomes the parent
         {
-            this.moveToTransform = null;
+            this.moveToTile = null;
             // simulateTurn = false;
         }
     }
 
-    void MoveEntity(GameObject entity, GameObject target, Vector3 positionAdjustment, float speed)
+    void MoveEntityToTile(Entity entity, Tile target, float speed)
     {
-        if (entity.transform.position - positionAdjustment == target.transform.position)
+        if (entity.transform.position == target.tileTopPosition) // Move the entity towards the top of the tile
         {
             Debug.Log("Moving entitiy " + entity.name + " complete.");
+            target.SetTileAsParent(entity); // After the movement is complete, update the parent of the entity and the pathability of the tile
         }
         else
         {
-            entity.transform.position = Vector3.MoveTowards(entity.transform.position, target.transform.position + positionAdjustment, speed * Time.deltaTime);
+            entity.transform.position = Vector3.MoveTowards(entity.transform.position, target.tileTopPosition, speed * Time.deltaTime);
         }
     }
 
