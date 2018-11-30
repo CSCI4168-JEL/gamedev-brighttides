@@ -17,7 +17,8 @@ public class SceneState : ScriptableObject  {
     [Header("Scene Definition")]
     public string sceneName;
     public TextAsset mapDefinitionFile;
-    public TileSet tileSet;
+    public TileSet tileSet; // The tiles used in the scene
+    public EntitySet entitySet; // The entities used in the scene
 
     [Header("Scene Settings")]
     public bool showUI;

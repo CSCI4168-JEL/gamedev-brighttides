@@ -2,20 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public enum EntityType
-{
-	Player,
-	Enemy,
-	Interactable
-
-}
-
 [CreateAssetMenu(menuName = "Bright Tides/Entity Attributes", fileName = "Entity Attributes", order = 1)]
 public class EntityAttributes : ScriptableObject {
 	public EntityType entityType;
+
+    public GameObject model;
 	
-	public string name;
+	public string captainName;
 
 	public int level;
 	public int experience;
@@ -35,7 +28,5 @@ public class EntityAttributes : ScriptableObject {
 	public int dexterity; // modifier for successful hit
 	public int wisdom; // modifier for experience gain
 	public int luck; // modifier for critical damage, finding treasure, escaping combat, etc.
-	
-
 
 }

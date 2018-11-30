@@ -16,13 +16,13 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
     public static GameManager instance = null; // self reference for singleton pattern
     
-
     [Header("Game State")]
     public bool loadingGame = true; // is the game currently in a loading phase
     public bool simulateTurn = false; // are we currently actioning a turn
 
     [Header("Level State")]
     public SceneState scene; // current scene data
+    public Region currentRegion; // The currently loaded region
 
     [Header("Player Settings")]
     public GameObject playerModel;
@@ -162,8 +162,8 @@ public class GameManager : MonoBehaviour {
     GameObject ConstructMap()
     {
         MapGenerator mg = new MapGenerator(this.scene.mapDefinitionFile, this.scene.tileSet);
-        
-        this.scene.map = mg.Generate();
+        mg.Generate();
+        this.scene.map = mg.StartingPosition;
         return mg.StartingPosition;
         //this.SaveMapData();
         //this.scene.mapGenerated = true;

@@ -12,13 +12,7 @@ public enum TileType : int {
     treasureSpawnTile   // 5
 }
 
-[System.Serializable]
-public class TileTypeToPrefab {
-    public TileType type;
-    public GameObject prefab;
-}
-
-[CreateAssetMenuAttribute(menuName = "Bright Tides/Tile Set", fileName = "New TileSet")]
+[CreateAssetMenuAttribute(menuName = "Bright Tides/Tile Set", fileName = "New TileSet", order = 2)]
 public class TileSet : ScriptableObject {
 
     [Header("Water Tile")]
@@ -67,6 +61,7 @@ public class TileSet : ScriptableObject {
     GameObject CreatePlayerSpawnTile(Vector3 position, Quaternion rotation, Transform parent) {
         GameObject tile = Instantiate(waterTile, position, rotation, parent);
         tile.GetComponent<Tile>().TileProperties.IsPathable = true;
+        tile.GetComponent<Tile>().SetSpawnType(EntityType.Player); // Set the spawn type to player
         return tile;
     }
 
@@ -93,12 +88,14 @@ public class TileSet : ScriptableObject {
     GameObject CreateEnemySpawnTile(Vector3 position, Quaternion rotation, Transform parent) {
         GameObject tile = Instantiate(waterTile, position, rotation, parent);
         tile.GetComponent<Tile>().TileProperties.IsPathable = true;
+        tile.GetComponent<Tile>().SetSpawnType(EntityType.Enemy); // Set the spawn type to enemy
         return tile;
     }
 
     GameObject CreateTreasureSpawnTile(Vector3 position, Quaternion rotation, Transform parent) {
         GameObject tile = Instantiate(waterTile, position, rotation, parent);
         tile.GetComponent<Tile>().TileProperties.IsPathable = true;
+        tile.GetComponent<Tile>().SetSpawnType(EntityType.Treasure); // Set the spawn type to treasure
         return tile;
     }
 }
