@@ -13,4 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyEntities:
   - {fileID: 11400000, guid: e288f5419da8e33499d6fa4f91887150, type: 2}
-  treasureEntities: []
+  treasureEntities:
+  - {fileID: 11400000, guid: 9e6edb28c00f70c4b9a210e7d80eb4d7, type: 2}

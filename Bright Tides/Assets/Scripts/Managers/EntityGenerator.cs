@@ -27,23 +27,34 @@ public class EntityGenerator {
                     GameManager.instance.InstantiatePlayer(spawns[Random.Range(0, spawns.Count)].transform);
                     break;
                 case EntityType.Enemy: // Choose a spawn until all enemies are placed (or we run out of spawns)
-                    foreach(GameObject spawn in spawns) {
+                    while (spawns.Count > 0 && enemyCount > 0) {
+                        int index = Random.Range(0, spawns.Count);
+
+                        GameObject spawn = spawns[index]; // Get a spawn from the list using the chosen index
+                        spawns.RemoveAt(index); // Remove that spawn from available spawns
+
                         if (enemyCount > 0) {
                             entitySet.CreateEntity(type, spawn.transform); // Create the entity at the given tile
                             enemyCount--; // Reduce the enemies left to spawn
-                        } else {
+                        }
+                        else {
                             continue; // No more enemies remain to place, leave the loop
                         }
                     }
                     break;
                 case EntityType.Treasure: // Choose a spawn until all treasures are placed (or we run out of spawns)
-                    foreach (GameObject spawn in spawns) {
-                        if (treasureCount > 0) {
+                    while (spawns.Count > 0 && treasureCount > 0) {
+                        int index = Random.Range(0, spawns.Count);
+
+                        GameObject spawn = spawns[index]; // Get a spawn from the list using the chosen index
+                        spawns.RemoveAt(index); // Remove that spawn from available spawns
+
+                        if (enemyCount > 0) {
                             entitySet.CreateEntity(type, spawn.transform); // Create the entity at the given tile
-                            treasureCount--; // Reduce the treasure left to spawn
+                            treasureCount--; // Reduce the enemies left to spawn
                         }
                         else {
-                            continue; // No more treasure remain to place, leave the loop
+                            continue; // No more enemies remain to place, leave the loop
                         }
                     }
                     break;

@@ -21,7 +21,6 @@ public class Region : MonoBehaviour {
         enemyPopulation = scene.enemyPopulation;
         treasurePopulation = scene.treasurePopulation;
 
-
         // Create instances of the required region building classes
         mapGenerator = new MapGenerator(mapDefinitionFile, tileSet, gameObject);
         entityGenerator = new EntityGenerator(entitySet, enemyPopulation, treasurePopulation);

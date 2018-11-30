@@ -17,7 +17,7 @@ MonoBehaviour:
   entitySet: {fileID: 11400000, guid: 83ffc9bb78948994cb1e11b0e30418b7, type: 2}
   showUI: 1
   enemyPopulation: 1
-  treasurePopulation: 0
+  treasurePopulation: 1
   map: {fileID: 0}
   mapGenerated: 0
   previousLevel: 0
