@@ -120,24 +120,14 @@ public class GameManager : MonoBehaviour {
         Application.Quit();
     }
 
-    public void InstantiatePlayer(Transform startingTileTransform)
+    public void InstantiatePlayer(Tile startingTile)
     {
-		// only create a new player instance if one doesn't exist
-		// otherwise just update it's position
-		if (playerInstance == null )
-		{
-			playerInstance = Instantiate(playerModel, startingTileTransform);
-			playerInstance.name = "Player";
+		if (playerInstance == null) // Only create a new player instance if one doesn't exist
+        {
+			playerInstance = Instantiate(playerModel, startingTile.transform);
+            playerInstance.name = "Player";
 		}
-		else
-		{
-			playerInstance.transform.position = startingTileTransform.position;
-			playerInstance.transform.parent = startingTileTransform;
-		}
-        
-
-        playerInstance.transform.position += new Vector3(0, 0.52f, 0); // To place the player above the water, not inside
-        
+        startingTile.SetTileAsParent(playerInstance.GetComponent<Entity>()); // Update the player position and tile
     }
 
     private void Update()

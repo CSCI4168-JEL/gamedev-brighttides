@@ -24,7 +24,7 @@ public class EntityGenerator {
 
             switch(type) {
                 case EntityType.Player: // Choose one spawn randomly and place the player there
-                    GameManager.instance.InstantiatePlayer(spawns[Random.Range(0, spawns.Count)].transform);
+                    GameManager.instance.InstantiatePlayer(spawns[Random.Range(0, spawns.Count)]);
                     break;
                 case EntityType.Enemy: // Choose a spawn until all enemies are placed (or we run out of spawns)
                     while (spawns.Count > 0 && enemyCount > 0) {
