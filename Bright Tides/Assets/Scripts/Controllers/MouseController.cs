@@ -134,6 +134,27 @@ public class MouseController : MonoBehaviour
 						GameManager.instance.moveToTile = selection; // Update the moveToTile with the selected, pathable tile
 					}
 					break;
+				case MouseMode.attack:
+					Entity entity = mouseOverObject.GetComponentInChildren<Entity>();
+
+					if (entity != null && 
+						entity.attributes.entityType == EntityType.Enemy && 
+						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo > 0 &&
+						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining > 0)
+					{
+						
+						GameObject projectile = Instantiate(Resources.Load("Projectiles/CannonBall", typeof(GameObject)), GameManager.instance.playerInstance.transform) as GameObject;
+
+						projectile.GetComponent<Projectile>().MoveToTarget = entity.gameObject;
+						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo--;
+						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
+					} else
+					{
+						Debug.Log("No enemy at this location");
+					}
+					//Tile selection = this.mouseOverObject.GetComponent<Tile>();
+					
+					break;
 				default:
 					Debug.LogError("MouseController.Update() - Invalid mouse mode detected...");
 					break;

@@ -28,7 +28,7 @@ public class EntitySet : ScriptableObject {
                 break;
             case EntityType.Treasure:
                 if (treasureEntities.Length > 0) {
-                    return treasureEntities[Random.Range(0, enemyEntities.Length)]; // Choose randomly from all provided enemy attributes
+                    return treasureEntities[Random.Range(0, treasureEntities.Length)]; // Choose randomly from all provided treasure attributes
                 }
                 break;
         }

@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour {
     [Header("Player Settings")]
     public GameObject playerModel;
     public GameObject playerInstance;
+	
     public float movementSpeed = 0.5f;
 
     public Tile moveToTile;
@@ -172,11 +173,14 @@ public class GameManager : MonoBehaviour {
 
     void MovePlayerToTile()
     {
-        Entity playerEntity = playerInstance.GetComponent<Entity>();
+		if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
+
+		Entity playerEntity = playerInstance.GetComponent<Entity>();
         MoveEntityToTile(playerEntity, moveToTile, playerEntity.attributes.movementSpeed);
 
         if (playerInstance.transform.parent == moveToTile.transform) // If the player has reached the tile, the tile becomes the parent
         {
+			GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
 			if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
 			{
 				this.LoadNextLevel();

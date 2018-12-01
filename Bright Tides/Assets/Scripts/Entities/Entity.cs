@@ -4,6 +4,4 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour {
 	public EntityAttributes attributes;
-
-	
 }
