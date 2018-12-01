@@ -33,6 +33,8 @@ public class SceneState : ScriptableObject
 	public SceneState previousLevel;
 	public SceneState nextLevel;
 
+	private bool mapGenerated = false;
+
 
 
 	public void OnSceneTransition()
@@ -51,16 +53,41 @@ public class SceneState : ScriptableObject
 	{
 		Debug.Log("OnSceneLoaded: " + scene.name);
 
-		playerStartPosition = this.ConstructMap();
-
-		if (GameManager.instance.playerInstance == null)
+		if (this.mapGenerated == false)
 		{
-			GameManager.instance.InstantiatePlayer(playerStartPosition.transform);
+			GameObject region = GameObject.FindGameObjectWithTag("Region");
+			if (region == null)
+			{
+				Debug.Log("No Region GameObject present in scene, creating one now...");
+				region = new GameObject("Region")
+				{
+					tag = "Region"
+				};
+				GameManager.instance.currentRegion = region.AddComponent<Region>(); // Attach the region script
+			}
+			else
+			{
+				GameManager.instance.currentRegion = region.GetComponent<Region>(); // Get the commponent from the region in the scene
+			}
+			Debug.Log("First time in level, generating map...");
+			GameManager.instance.currentRegion.Initialize(); // Call the initialize method for the region
 		}
 		else
 		{
-			GameManager.instance.transform.position = playerStartPosition.transform.position;
+			Debug.Log("Skipping map generation...");
 		}
+
+
+		//playerStartPosition = this.ConstructMap();
+
+		//if (GameManager.instance.playerInstance == null)
+		//{
+		//	GameManager.instance.InstantiatePlayer(playerStartPosition.transform);
+		//}
+		//else
+		//{
+		//	GameManager.instance.transform.position = playerStartPosition.transform.position;
+		//}
 
 		if (this.showUI)
 		{
@@ -71,11 +98,11 @@ public class SceneState : ScriptableObject
 		GameManager.instance.loadingGame = false;
 	}
 
-	GameObject ConstructMap()
-	{
-		MapGenerator mg = new MapGenerator(this.mapDefinitionFile, this.tileSet);
+	//GameObject ConstructMap()
+	//{
+	//	MapGenerator mg = new MapGenerator(this.mapDefinitionFile, this.tileSet);
 
-		this.map = mg.Generate();
-		return mg.StartingPosition;
-	}
+	//	this.map = mg.Generate();
+	//	return mg.StartingPosition;
+	//}
 }
