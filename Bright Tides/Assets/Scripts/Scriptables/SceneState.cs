@@ -40,19 +40,17 @@ public class SceneState : ScriptableObject
 	public void OnSceneTransition()
 	{
 		Debug.Log("SceneState initializing..." + sceneName);
-		SceneManager.sceneLoaded += OnSceneLoaded;
-		SceneManager.LoadScene(sceneName);
+		if (GameManager.instance.playerInstance != null)
+		{
+			GameManager.instance.playerInstance.transform.parent = null;
+			DestroyImmediate(GameManager.instance.currentRegion.gameObject);
+		}
+
+		InitScene();
 	}
 
-	/*
-	* Call back function for when scene is finished loading.
-	* 
-	* This function handles additional loading and initialization of the scene
-	* */
-	void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	void InitScene()
 	{
-		Debug.Log("OnSceneLoaded: " + scene.name);
-
 		if (this.mapGenerated == false)
 		{
 			GameObject region = GameObject.FindGameObjectWithTag("Region");

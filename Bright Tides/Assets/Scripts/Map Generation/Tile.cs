@@ -33,6 +33,7 @@ public class TileProperties {
     public bool IsPathableByEnemy { get; set; }
     public bool IsSpawnPoint { get; set; }
     public EntityType spawnType;
+	public TileType tileType;
 
     // Default tile settings in the constructor
     public TileProperties() {

@@ -65,6 +65,13 @@ public class GameManager : MonoBehaviour {
 
 	public void StartGame()
 	{
+		SceneManager.sceneLoaded += OnSceneLoaded;
+		SceneManager.LoadScene("Game");
+		
+	}
+
+	void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
 		this.LoadLevel(this.sceneState.nextLevel);
 	}
 
@@ -115,9 +122,22 @@ public class GameManager : MonoBehaviour {
 
     public void InstantiatePlayer(Transform startingTileTransform)
     {
-        playerInstance = Instantiate(playerModel, startingTileTransform);
+		// only create a new player instance if one doesn't exist
+		// otherwise just update it's position
+		if (playerInstance == null )
+		{
+			playerInstance = Instantiate(playerModel, startingTileTransform);
+			playerInstance.name = "Player";
+		}
+		else
+		{
+			playerInstance.transform.position = startingTileTransform.position;
+			playerInstance.transform.parent = startingTileTransform;
+		}
+        
+
         playerInstance.transform.position += new Vector3(0, 0.52f, 0); // To place the player above the water, not inside
-        playerInstance.name = "Player";
+        
     }
 
     private void Update()
@@ -157,6 +177,11 @@ public class GameManager : MonoBehaviour {
 
         if (playerInstance.transform.parent == moveToTile.transform) // If the player has reached the tile, the tile becomes the parent
         {
+			if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
+			{
+				this.LoadNextLevel();
+			}
+
             this.moveToTile = null;
             // simulateTurn = false;
         }

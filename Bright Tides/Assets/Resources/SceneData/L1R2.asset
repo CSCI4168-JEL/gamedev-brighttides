@@ -11,14 +11,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e64b136b76c674c901fdcd204135e7, type: 3}
   m_Name: L1R2
   m_EditorClassIdentifier: 
-  sceneName: Level 1 Region 2
-  mapDefinitionFile: {fileID: 4900000, guid: 5e7e35d06c0c9a0499cee8b6e81dae2e, type: 3}
+  sceneName: Region2Level1
+  mapDefinitionFile: {fileID: 4900000, guid: 3e8de614c9be5e94080fdabb3e379d1c, type: 3}
   tileSet: {fileID: 11400000, guid: f6ca8a754b3585b498a4e4e8a680ac80, type: 2}
   entitySet: {fileID: 11400000, guid: 83ffc9bb78948994cb1e11b0e30418b7, type: 2}
   showUI: 1
   enemyPopulation: 0
   treasurePopulation: 0
   map: {fileID: 0}
-  mapGenerated: 0
-  previousLevel: 1
-  nextLevel: -1
+  playerStartPosition: {fileID: 0}
+  previousLevel: {fileID: 11400000, guid: 591498de56116464798609351d2e8651, type: 2}
+  nextLevel: {fileID: 11400000, guid: 591498de56116464798609351d2e8651, type: 2}
