@@ -8,7 +8,10 @@ public class Region : MonoBehaviour {
     private TileSet tileSet;
     private EntitySet entitySet;
     private TextAsset mapDefinitionFile;
+
     private Dictionary<EntityType, List<Tile>> entitySpawns;
+    public Tile[,] tileMap; // The reference to all tiles in the map
+
     private int enemyPopulation; // Number of enemies to spawn in the region
     private int treasurePopulation; // Number of treaures to spawn in the region
 
@@ -30,8 +33,9 @@ public class Region : MonoBehaviour {
 
     // Call this to generate the map and populate it
     public void Initialize() {
-        mapGenerator.Generate();
+        tileMap = mapGenerator.Generate();
         entityGenerator.PopulateEntities(entitySpawns); // Spawn the player, enemies and treasure
+        EnemyController enemyController = new EnemyController(tileMap); // Provide the map to the controller for pathfinding
         CameraController camera = GameObject.FindGameObjectWithTag("MainCamera").AddComponent<CameraController>(); // Attach the camera script after the player has been initialized
         camera.followPosition = new Vector3(-1f, 2f, 0.75f);
         camera.objectBeingFollowed = GameManager.instance.playerInstance;

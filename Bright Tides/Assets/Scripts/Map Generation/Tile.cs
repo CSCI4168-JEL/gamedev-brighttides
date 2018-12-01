@@ -8,6 +8,8 @@ public class Tile : MonoBehaviour {
 
     public Vector3 tileTopPosition; // The position where entities can spawn
 
+    public List<Tile> neighbours; // All direct neighbours of this tile
+
     private void Awake() {
         TileProperties = new TileProperties();
         tileTopPosition = transform.position + new Vector3(0f, 0.52f, 0f);

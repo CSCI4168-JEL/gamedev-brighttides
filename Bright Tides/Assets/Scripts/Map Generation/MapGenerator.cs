@@ -16,12 +16,52 @@ public class MapGenerator {
     }
 
     // Use this for initialization
-    public GameObject[,] Generate() {
+    public Tile[,] Generate() {
         string mapDefinitionFileString = ParseTextFileToMapString(mapDefinitionFile); // Validate and read the text file as string
         int[,] parsedmapDefinitionFile = ParseMapStringTo2DIntArray(mapDefinitionFileString); // Parse the string into 2d int array
 
-        //tileMap = GenerateTileMapFrom2DIntArray(parsedmapDefinitionFile); // Generate the map and keep a reference
-        return GenerateTileMapFrom2DIntArray(parsedmapDefinitionFile); // Generate the map and keep a reference
+        Tile[,] tileMap = GenerateTileMapFrom2DIntArray(parsedmapDefinitionFile); // Generate the map
+        IntializeTileNeighbours(tileMap); // Make sure each tile has a reference to its neighbours
+
+        return tileMap;
+    }
+
+    // Add references to the Tile's neighbours
+    private void IntializeTileNeighbours(Tile[,] tileMap) {
+        for (int i = 0; i < mapWidth; i++) {
+            for (int j = 0; j < mapHeight; j++) {
+                Tile currentTile = tileMap[i, j];
+                bool hasLeft = i > 0;
+                bool hasRight = i < mapWidth - 1;
+                bool hasDown = j > 0;
+                bool hasUp = j < mapHeight - 1;
+
+                if (hasLeft) {
+                    currentTile.neighbours.Add(tileMap[i - 1, j]);
+                }
+                if (hasRight) {
+                    currentTile.neighbours.Add(tileMap[i + 1, j]);
+                }
+                if (hasDown) {
+                    currentTile.neighbours.Add(tileMap[i, j - 1]);
+                }
+                if (hasUp) {
+                    currentTile.neighbours.Add(tileMap[i, j + 1]);
+                }
+                if (hasLeft && hasDown) {
+                    currentTile.neighbours.Add(tileMap[i - 1, j - 1]);
+                }
+                if (hasLeft && hasUp) {
+                    currentTile.neighbours.Add(tileMap[i - 1, j + 1]);
+                }
+                if (hasRight && hasDown) {
+                    currentTile.neighbours.Add(tileMap[i + 1, j - 1]);
+                }
+                if (hasRight && hasUp) {
+                    currentTile.neighbours.Add(tileMap[i + 1, j + 1]);
+                }
+            }
+        }
     }
 
     // Return parsed text asset as a string array, but throw an exception if it does not contain the required characters
@@ -70,18 +110,18 @@ public class MapGenerator {
     }
 
     // The generator method that will produce the actual tile map from the 2D array
-    private GameObject[,] GenerateTileMapFrom2DIntArray(int[,] intArray) {
+    private Tile[,] GenerateTileMapFrom2DIntArray(int[,] intArray) {
 
         Vector3 tileSize = Vector3.one;
 
-        GameObject[,] generatedTileMap = new GameObject[mapWidth, mapHeight]; // Instantiate the array with the proper size
+        Tile[,] generatedTileMap = new Tile[mapWidth, mapHeight]; // Instantiate the array with the proper size
 
         for (int i = 0; i < mapWidth; i++) {
             for (int j = 0; j < mapHeight; j++) {
                 TileType currentTileType = (TileType)intArray[i, j]; // Cast it to the enum type for easier reference
 
                 Vector3 tilePosition = new Vector3(tileSize.x * i, mapRoot.transform.position.y, tileSize.z * -j); // Use the y value of the MapGenerator for tile height and use array position for x and z
-                GameObject generatedTile = tileSet.CreateTile(currentTileType, tilePosition, Quaternion.AngleAxis(0, Vector3.up), mapRoot.transform);
+                Tile generatedTile = tileSet.CreateTile(currentTileType, tilePosition, Quaternion.AngleAxis(0, Vector3.up), mapRoot.transform);
 
                 generatedTileMap[i, j] = generatedTile; // Add the generated tile to the map
             }
