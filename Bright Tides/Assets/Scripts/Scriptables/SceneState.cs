@@ -77,18 +77,6 @@ public class SceneState : ScriptableObject
 			Debug.Log("Skipping map generation...");
 		}
 
-
-		//playerStartPosition = this.ConstructMap();
-
-		//if (GameManager.instance.playerInstance == null)
-		//{
-		//	GameManager.instance.InstantiatePlayer(playerStartPosition.transform);
-		//}
-		//else
-		//{
-		//	GameManager.instance.transform.position = playerStartPosition.transform.position;
-		//}
-
 		if (this.showUI)
 		{
 			GameManager.instance.gameObject.transform.Find("UI").gameObject.SetActive(this.showUI);
@@ -97,12 +85,4 @@ public class SceneState : ScriptableObject
 		// we have finished loading 
 		GameManager.instance.loadingGame = false;
 	}
-
-	//GameObject ConstructMap()
-	//{
-	//	MapGenerator mg = new MapGenerator(this.mapDefinitionFile, this.tileSet);
-
-	//	this.map = mg.Generate();
-	//	return mg.StartingPosition;
-	//}
 }
