@@ -1353,6 +1353,21 @@ Prefab:
       value: 
       objectReference: {fileID: 11400000, guid: 9ceb4280096255e4ba3e68f3ab95aaf0,
         type: 2}
+    - target: {fileID: 114209120902704182, guid: 9ece5676549143044a59c3de3fe57ba9,
+        type: 2}
+      propertyPath: m_FillCenter
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114209120902704182, guid: 9ece5676549143044a59c3de3fe57ba9,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114209120902704182, guid: 9ece5676549143044a59c3de3fe57ba9,
+        type: 2}
+      propertyPath: m_Color.a
+      value: 0.32941177
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ece5676549143044a59c3de3fe57ba9, type: 2}
   m_IsPrefabAsset: 0
