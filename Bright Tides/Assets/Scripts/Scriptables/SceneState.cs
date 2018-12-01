@@ -5,14 +5,26 @@ using UnityEngine.SceneManagement;
 
 [CreateAssetMenu(menuName = "Bright Tides/Scene Data", fileName = "Scene State", order = 1)]
 [System.Serializable]
-public class SceneState : ScriptableObject  {
+public class SceneState : ScriptableObject
+{
 	[Header("Scene Definition")]
 	public string sceneName;
 	public TextAsset mapDefinitionFile;
-	public TileSet tileSet;
+
+	[Tooltip("The set of tile prefabs chosen for the scene.")]
+	public TileSet tileSet; // The tiles used in the scene
+
+	[Tooltip("The set of entities chosen for the scene.")]
+	public EntitySet entitySet; // The entities used in the scene
 
 	[Header("Scene Settings")]
 	public bool showUI;
+
+	[Tooltip("The number of enemies to spawn in the map if the spawn points are available.")]
+	public int enemyPopulation;
+
+	[Tooltip("The number of treasures to spawn in the map if the spawn points are available.")]
+	public int treasurePopulation;
 
 	[Header("Scene Data")]
 	public GameObject map;
@@ -20,6 +32,8 @@ public class SceneState : ScriptableObject  {
 
 	public SceneState previousLevel;
 	public SceneState nextLevel;
+
+
 
 	public void OnSceneTransition()
 	{
@@ -56,7 +70,6 @@ public class SceneState : ScriptableObject  {
 		// we have finished loading 
 		GameManager.instance.loadingGame = false;
 	}
-
 
 	GameObject ConstructMap()
 	{

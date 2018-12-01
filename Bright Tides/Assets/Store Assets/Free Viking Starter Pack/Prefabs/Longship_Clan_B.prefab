@@ -170,6 +170,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4808781965382258}
+  - component: {fileID: 95214082554582494}
   m_Layer: 0
   m_Name: Longship_Clan_B
   m_TagString: Untagged
@@ -603,8 +604,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1605517799942346}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.52, y: 0, z: -0.164}
+  m_LocalRotation: {x: -0.029898204, y: 0.9673736, z: -0.006018821, w: -0.25151175}
+  m_LocalPosition: {x: -2.1736944, y: 1.8426356, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4174136776941372}
@@ -615,7 +616,7 @@ Transform:
   - {fileID: 4459276362967092}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 298.741, z: 0}
 --- !u!4 &4937449910242754
 Transform:
   m_ObjectHideFlags: 1
@@ -1231,7 +1232,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 814aa3d3555f1ea47a1558108dba195c, type: 2}
+  - {fileID: 2100000, guid: 4790034283bb7484681240f20a1ecc04, type: 2}
   - {fileID: 2100000, guid: fc505cad9be9ce3479c6ec08befa8c94, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -1413,3 +1414,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1569561732172268}
   m_Mesh: {fileID: 4300024, guid: f4f015d07c1021941864950af162bd95, type: 3}
+--- !u!95 &95214082554582494
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1605517799942346}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0b448c89c488cf24b869d8e43e972ed3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
