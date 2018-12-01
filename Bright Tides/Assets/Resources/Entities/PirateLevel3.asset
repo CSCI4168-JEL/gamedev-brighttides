@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Name: PirateLevel3
   m_EditorClassIdentifier: 
   entityType: 0
-  name: 
+  model: {fileID: 0}
+  captainName: 
   level: 0
   experience: 50
   health: 15
   ammo: 0
   gold: 0
   actionsPerTurn: 0
+  actionsRemaining: 0
   movementSpeed: 0
   baseAttackRange: 0
   strength: 0
@@ -26,3 +28,5 @@ MonoBehaviour:
   dexterity: 0
   wisdom: 0
   luck: 0
+  isPathableByPlayer: 0
+  isPathableByEnemy: 1

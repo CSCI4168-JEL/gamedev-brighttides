@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   entityType: 0
-  name: Player
+  model: {fileID: 0}
+  captainName: 
   level: 1
   experience: 0
   health: 85
@@ -27,3 +28,5 @@ MonoBehaviour:
   dexterity: 0
   wisdom: 0
   luck: 0
+  isPathableByPlayer: 1
+  isPathableByEnemy: 0

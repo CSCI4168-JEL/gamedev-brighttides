@@ -70,7 +70,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4644425873235942}
-  - component: {fileID: 114345823171145896}
+  - component: {fileID: 114864325352273848}
   m_Layer: 0
   m_Name: PlayerShip
   m_TagString: Player
@@ -332,7 +332,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1814917280303742}
   m_Mesh: {fileID: 4300004, guid: 0460997c11b634d43b357f678b294368, type: 3}
---- !u!114 &114345823171145896
+--- !u!114 &114864325352273848
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
