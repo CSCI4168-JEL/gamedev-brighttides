@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Name: MainMenu
   m_EditorClassIdentifier: 
   sceneName: Main Menu
-  previousLevel: -1
-  nextLevel: 1
-  playerModel: {fileID: 1001897922855434, guid: 7fc9f02a5a37c994682cdee7e36121f4,
-    type: 2}
-  playerInstance: {fileID: 0}
-  movementSpeed: 0.5
-  moveToTransform: {fileID: 0}
+  self: {fileID: 11400000}
+  mapDefinitionFile: {fileID: 0}
+  tileSet: {fileID: 0}
+  showUI: 0
+  map: {fileID: 0}
+  mapGenerated: 0
+  playerStartPosition: {fileID: 0}
+  previousLevel: {fileID: 0}
+  nextLevel: {fileID: 11400000, guid: 591498de56116464798609351d2e8651, type: 2}

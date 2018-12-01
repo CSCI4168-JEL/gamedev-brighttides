@@ -11,11 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e64b136b76c674c901fdcd204135e7, type: 3}
   m_Name: L1R1
   m_EditorClassIdentifier: 
-  sceneName: Level 1 Region 1
+  sceneName: LeeTesting
+  self: {fileID: 11400000}
   mapDefinitionFile: {fileID: 4900000, guid: 5e7e35d06c0c9a0499cee8b6e81dae2e, type: 3}
   tileSet: {fileID: 11400000, guid: f6ca8a754b3585b498a4e4e8a680ac80, type: 2}
   showUI: 1
   map: {fileID: 0}
   mapGenerated: 0
-  previousLevel: 0
-  nextLevel: 2
+  playerStartPosition: {fileID: 0}
+  previousLevel: {fileID: 11400000, guid: 9ceb4280096255e4ba3e68f3ab95aaf0, type: 2}
+  nextLevel: {fileID: 11400000, guid: f4dd60ad71589c84dba06d581da03591, type: 2}
