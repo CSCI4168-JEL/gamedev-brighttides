@@ -196,6 +196,7 @@ public class GameManager : MonoBehaviour {
 
         if (playerInstance.transform.parent == moveToTile.transform) // If the player has reached the tile, the tile becomes the parent
         {
+			GameManager.instance.isPerformingAction = false;
 			GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
 			if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
 			{
