@@ -21,8 +21,8 @@ MonoBehaviour:
   gold: 0
   actionsPerTurn: 1
   actionsRemaining: 1
-  movementSpeed: 1
-  baseAttackRange: 0
+  movementSpeed: 0.25
+  baseAttackRange: 1
   strength: 0
   agility: 0
   dexterity: 0
