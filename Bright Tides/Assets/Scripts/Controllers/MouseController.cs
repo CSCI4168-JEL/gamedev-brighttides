@@ -84,12 +84,10 @@ public class MouseController : MonoBehaviour
             if (mouseOverObject.GetComponent<Tile>().TileProperties.IsPathableByPlayer  && 
                 Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
             {
-                //Debug.Log("Tile is traversible");
                 this.GetComponent<Renderer>().material = this.validMoveLocationrMaterial;
             }
             else
             {
-                //Debug.Log("Tile is blocked");
                 this.GetComponent<Renderer>().material = this.invalidMoveLocationrMaterial;
             }
         }
@@ -104,65 +102,86 @@ public class MouseController : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+	void DrawOrDestroyMoveIndicators()
+	{
+		if (mouseMode == MouseMode.move && !moveToIndicatorsDrawn)
+		{
+			HighlightMoveToTiles();
+			moveToIndicatorsDrawn = true;
+		}
+
+		if (mouseMode != MouseMode.move || GameManager.instance.moveToTile != null)
+		{
+			moveToIndicatorsDrawn = false;
+			ClearMovementIndicators();
+		}
+	}
+
+	private void HandleMouseClick(GameObject hitObject)
+	{
+		// if the fire button clicked, either select or deselect the tile that the mouse is over
+		if (Input.GetButtonDown("Fire1"))
+		{
+			switch (mouseMode)
+			{
+				case MouseMode.explore:
+					UpdateSelectObject(hitObject);
+					break;
+				case MouseMode.move:
+					Tile selection = this.mouseOverObject.GetComponent<Tile>();
+					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
+					{
+						GameManager.instance.moveToTile = selection; // Update the moveToTile with the selected, pathable tile
+					}
+					break;
+				case MouseMode.attack:
+					Entity entity = mouseOverObject.GetComponentInChildren<Entity>();
+
+					if (entity != null && 
+						entity.attributes.entityType == EntityType.Enemy && 
+						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo > 0 &&
+						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining > 0)
+					{
+						
+						GameObject projectile = Instantiate(Resources.Load("Projectiles/CannonBall", typeof(GameObject)), GameManager.instance.playerInstance.transform) as GameObject;
+
+						projectile.GetComponent<Projectile>().MoveToTarget = entity.gameObject;
+						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo--;
+						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
+					} else
+					{
+						Debug.Log("No enemy at this location");
+					}
+					//Tile selection = this.mouseOverObject.GetComponent<Tile>();
+					
+					break;
+				default:
+					Debug.LogError("MouseController.Update() - Invalid mouse mode detected...");
+					break;
+			}
+		}
+	}
+
+	// Update is called once per frame
+	void Update()
     {
-		if (EventSystem.current.IsPointerOverGameObject()) return;
+		if (GameManager.instance.loadingGame) return; // early exit condition: the game is loading a scene
+		if (EventSystem.current.IsPointerOverGameObject()) return; // early exit condition: prevent UI click through
 
-		// early exit condition: the game is loading a scene
-		if (GameManager.instance.loadingGame) return;
+		DrawOrDestroyMoveIndicators(); // create or destroy tile overlays for moving as appropriate
 
-        RaycastHit hit; // ray cast collision information
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // get a ray from camera center through mouse position
 
-        if (mouseMode == MouseMode.move && !moveToIndicatorsDrawn)
+		RaycastHit hit; // ray cast collision information
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // get a ray from camera center through mouse position
+
+
+		// compute if the ray collides with an object with a collider
+		// if doesn't, clear the current mouse over object, othwerise continue processing
+		if (Physics.Raycast(ray, out hit))
         {
-            
-
-            HighlightMoveToTiles();
-            moveToIndicatorsDrawn = true;
-        }
-
-        if (mouseMode != MouseMode.move || GameManager.instance.moveToTile != null)
-        {
-            moveToIndicatorsDrawn = false;
-            ClearMovementIndicators();
-        }
-
-
-
-        // compute if the ray collides with an object with a collider
-        // if doesn't, clear the current mouse over object, othwerise continue processing
-        if (Physics.Raycast(ray, out hit))
-        {
-            // update visual of where mouse is on the game map
-            SetMouseOverObject(hit.transform.gameObject);
-            this.gameObject.GetComponent<Renderer>().enabled = true;
-            this.gameObject.transform.position = new Vector3(mouseOverObject.transform.position.x, this.transform.position.y, mouseOverObject.transform.position.z);
-
-            // if the fire button clicked, either select or deselect the tile that the mouse is over
-            if (Input.GetButtonDown("Fire1"))
-            {
-                switch (mouseMode)
-                {
-                    case MouseMode.explore:
-                        UpdateSelectObject(hit.transform.gameObject);
-                        break;
-                    case MouseMode.move:
-                        Tile selection = this.mouseOverObject.GetComponent<Tile>();
-                        if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
-                        {
-                            GameManager.instance.moveToTile = selection; // Update the moveToTile with the selected, pathable tile
-                        }
-                        break;
-                    default:
-                        Debug.LogError("MouseController.Update() - Invalid mouse mode detected...");
-                        break;
-                }
-            }
-
-            // update mouse indicator
-            UpdateMouseIndicator();
+            SetMouseOverObject(hit.transform.gameObject); // update visual of where mouse is on the game map
+			HandleMouseClick(hit.transform.gameObject);
+            UpdateMouseIndicator(); // update the mouse indicator appearance 
         }
         else // ray did not collide, clear mouse over object
         {
@@ -207,7 +226,7 @@ public class MouseController : MonoBehaviour
             else
             {
                 selectedObject = newSelection;
-                    selectedObjectIndicator = Instantiate(selectedIndicator, selectedObject.transform);
+				selectedObjectIndicator = Instantiate(selectedIndicator, selectedObject.transform);
             }
         }
     }
@@ -246,8 +265,11 @@ public class MouseController : MonoBehaviour
             ClearMouseOverObject();
         }
 
-        mouseOverObject = newObject;        
-    }
+        mouseOverObject = newObject;
+
+		this.gameObject.GetComponent<Renderer>().enabled = true;
+		this.gameObject.transform.position = new Vector3(mouseOverObject.transform.position.x, this.transform.position.y, mouseOverObject.transform.position.z);
+	}
     
     /*
      * Creates movement indicator game objects on tiles that the player can make a valid move to
@@ -339,9 +361,5 @@ public class MouseController : MonoBehaviour
         }
 
         movementIndicators.Clear();
-
     }
-
-
-
 }

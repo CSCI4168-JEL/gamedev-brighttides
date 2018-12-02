@@ -7,7 +7,7 @@ public class EntityAttributes : ScriptableObject {
 	public EntityType entityType;
 
     public GameObject model;
-	
+		
 	public string captainName;
 
 	public int level;

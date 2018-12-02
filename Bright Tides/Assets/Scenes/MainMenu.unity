@@ -1093,8 +1093,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1490391558}
-  m_LocalRotation: {x: -0.11490029, y: -0.602661, z: 0.088241, w: -0.7847364}
-  m_LocalPosition: {x: -22.35, y: -1.86, z: -8}
+  m_LocalRotation: {x: -0.12679763, y: 0.62044096, z: 0.1025538, w: 0.7671102}
+  m_LocalPosition: {x: -4.3423843, y: -1.2957278, z: -0.017289877}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1353,6 +1353,25 @@ Prefab:
       value: 
       objectReference: {fileID: 11400000, guid: 9ceb4280096255e4ba3e68f3ab95aaf0,
         type: 2}
+    - target: {fileID: 114209120902704182, guid: 9ece5676549143044a59c3de3fe57ba9,
+        type: 2}
+      propertyPath: m_FillCenter
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114209120902704182, guid: 9ece5676549143044a59c3de3fe57ba9,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114209120902704182, guid: 9ece5676549143044a59c3de3fe57ba9,
+        type: 2}
+      propertyPath: m_Color.a
+      value: 0.32941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 1506908350109936, guid: 9ece5676549143044a59c3de3fe57ba9, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ece5676549143044a59c3de3fe57ba9, type: 2}
   m_IsPrefabAsset: 0
