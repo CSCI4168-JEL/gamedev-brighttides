@@ -7,6 +7,8 @@ public class Item : ScriptableObject
 {
     public EntityType entityType;
 
+    public bool inUse;
+
     public string itemName;
     public string description;
     public int price;

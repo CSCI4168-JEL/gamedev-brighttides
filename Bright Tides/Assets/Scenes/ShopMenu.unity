@@ -281,10 +281,10 @@ RectTransform:
   m_Father: {fileID: 1980126815}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -45, y: -0.000061035156}
-  m_SizeDelta: {x: -110, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -20, y: -0.000061035156}
+  m_SizeDelta: {x: 340, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &70141564
 MonoBehaviour:
@@ -709,6 +709,12 @@ Prefab:
       value: 
       objectReference: {fileID: 1778929202013762, guid: e97b4ed190778e44c9e4f373b2b4afa3,
         type: 2}
+    - target: {fileID: 114564935796956972, guid: 9ece5676549143044a59c3de3fe57ba9,
+        type: 2}
+      propertyPath: sceneState
+      value: 
+      objectReference: {fileID: 11400000, guid: bd8a2d20ab05ddd4db871f1dec53ff67,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ece5676549143044a59c3de3fe57ba9, type: 2}
   m_IsPrefabAsset: 0
@@ -817,10 +823,10 @@ RectTransform:
   m_Father: {fileID: 1978376517}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -45, y: -0.000061035156}
-  m_SizeDelta: {x: -110, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -20, y: -0.000061035156}
+  m_SizeDelta: {x: 340, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &634348280
 MonoBehaviour:
@@ -1012,7 +1018,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 744194557}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114564935796956972, guid: 9ece5676549143044a59c3de3fe57ba9,
+          type: 2}
+        m_MethodName: LoadNextLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &744194557
@@ -1225,10 +1243,10 @@ RectTransform:
   m_Father: {fileID: 1410469619}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -45, y: -0.000061035156}
-  m_SizeDelta: {x: -110, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -20, y: -0.000061035156}
+  m_SizeDelta: {x: 340, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &869715212
 MonoBehaviour:
@@ -1463,10 +1481,10 @@ RectTransform:
   m_Father: {fileID: 1668129926}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -45, y: -0.000061035156}
-  m_SizeDelta: {x: -110, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -20, y: -0.000061035156}
+  m_SizeDelta: {x: 340, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1006638400
 MonoBehaviour:
@@ -1711,10 +1729,10 @@ RectTransform:
   m_Father: {fileID: 152926154}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -45, y: -0.000061035156}
-  m_SizeDelta: {x: -110, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -20, y: -0.000061035156}
+  m_SizeDelta: {x: 340, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1341101568
 MonoBehaviour:
@@ -1877,8 +1895,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2c402d145e0db4296aa13c0c0b21d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
-  itemIcon: {fileID: 481244111}
+  item: {fileID: 11400000, guid: 2d8a1488804794c4cb3efc9f6ed30ac0, type: 2}
+  itemIcon: {fileID: 1668129928}
   itemName: {fileID: 2129567976}
   purchasePrice: {fileID: 869715212}
 --- !u!114 &1410469621
@@ -2238,7 +2256,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1668129928}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114564935796956972, guid: 9ece5676549143044a59c3de3fe57ba9,
+          type: 2}
+        m_MethodName: addPlayerItem
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: dd64efff69c028f419f1fed336d25c1d,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Item, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1668129928
@@ -2286,7 +2317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2c402d145e0db4296aa13c0c0b21d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: dd64efff69c028f419f1fed336d25c1d, type: 2}
   itemIcon: {fileID: 846247907}
   itemName: {fileID: 1562725741}
   purchasePrice: {fileID: 1006638400}
@@ -2637,7 +2668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2c402d145e0db4296aa13c0c0b21d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
+  item: {fileID: 11400000, guid: 6849d5dcf13626544a38240af51c4a2a, type: 2}
   itemIcon: {fileID: 85745450}
   itemName: {fileID: 1819864144}
   purchasePrice: {fileID: 634348280}

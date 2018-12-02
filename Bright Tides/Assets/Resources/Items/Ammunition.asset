@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Name: Ammunition
   m_EditorClassIdentifier: 
   entityType: 0
+  inUse: 0
   itemName: Ammunition
   description: 50 cannonballs
   price: 50
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5827a60da063cea43906c32520d6ea84, type: 3}
   rangeModifier: 0
   damageModifier: 0
   speedModifier: 0

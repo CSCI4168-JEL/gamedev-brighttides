@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: Health Upgrade
   m_EditorClassIdentifier: 
   entityType: 0
+  inUse: 0
   itemName: Health Upgrade
   description: Increases the maximum health of your ship
   price: 100

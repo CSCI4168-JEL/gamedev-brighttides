@@ -227,16 +227,16 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-	void updateUIPlayerInfo()
-	{
-		if (playerInstance != null)
-		{
-			uiPlayerHealth.text = playerInstance.GetComponent<Entity>().attributes.health.ToString();
-			uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
-			uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
-			uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
-			
-		}
-	}
+    void updateUIPlayerInfo()
+    {
+        if (playerInstance != null)
+        {
+            uiPlayerHealth.text = playerInstance.GetComponent<Entity>().attributes.health.ToString();
+            uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
+            uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
+            uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
+
+        }
+    }
 
 }

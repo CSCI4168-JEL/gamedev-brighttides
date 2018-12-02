@@ -13,9 +13,16 @@ public class ItemDisplay : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        itemName.text = item.itemName;
-        itemIcon.sprite = item.icon;
-        purchasePrice.text = item.price.ToString();
+        if (item != null)
+        {
+            itemName.text = item.itemName;
+            itemIcon.sprite = item.icon;
+            purchasePrice.text = item.price.ToString();
+        }
+        else
+        {
+            Debug.Log("No item found.");
+        }
 	}
 	
 	

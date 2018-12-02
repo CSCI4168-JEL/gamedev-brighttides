@@ -17,6 +17,8 @@ public class EntityAttributes : ScriptableObject {
 	public int ammo;
 	public int gold;
 
+    public Item[] inventory;
+
 	public int actionsPerTurn;
 	public int actionsRemaining;
 	public float movementSpeed;
