@@ -28,7 +28,7 @@ public class EntitySet : ScriptableObject {
                 break;
             case EntityType.Treasure:
                 if (treasureEntities.Length > 0) {
-                    return treasureEntities[Random.Range(0, enemyEntities.Length)]; // Choose randomly from all provided enemy attributes
+                    return treasureEntities[Random.Range(0, treasureEntities.Length)]; // Choose randomly from all provided treasure attributes
                 }
                 break;
         }
@@ -39,10 +39,13 @@ public class EntitySet : ScriptableObject {
     public Entity CreateEntity(EntityAttributes entityAttributes) {
         GameObject entityInstance = Instantiate(entityAttributes.model); // Create an entity using the selected model
         Entity entityComponent = entityInstance.GetComponent<Entity>();
-        if (!entityComponent) {
+		
+		if (!entityComponent) {
             entityComponent = entityInstance.AddComponent(typeof(Entity)) as Entity; // Create the entity instance component if it does not already exist on the prefab
         }
-        entityComponent.attributes = entityAttributes; // Apply the attributes to the entity
-        return entityComponent;
+
+		entityComponent.AttributesTemplate = entityAttributes; // Apply the attributes to the entity
+
+		return entityComponent;
     }
 }

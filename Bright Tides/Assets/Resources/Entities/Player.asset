@@ -16,13 +16,14 @@ MonoBehaviour:
   captainName: 
   level: 1
   experience: 0
-  health: 85
-  ammo: 38
-  gold: 1058
-  actionsPerTurn: 0
-  actionsRemaining: 2
+  health: 100
+  ammo: 30
+  gold: 0
+  actionsPerTurn: 5
+  actionsRemaining: 5
   movementSpeed: 1
   baseAttackRange: 1
+  baseAttackDamage: 5
   strength: 0
   agility: 0
   dexterity: 0
