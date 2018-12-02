@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour {
 
 	public void Simulate()
 	{
-		this.simulateTurn = true; // turn on turn simulation to prevent user actions
+		GameManager.instance.simulateTurn = true; // turn on turn simulation to prevent user actions
 
 		EntityAttributes playerAttributes = GameManager.instance.playerInstance.GetComponent<Entity>().attributes;
 
@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour {
 		int turnCount = int.Parse(instance.uiTurnCount.text);
 
 		GameManager.instance.uiTurnCount.text = (++turnCount).ToString();
+		GameManager.instance.simulateTurn = false; // turn is over, let player do stuff
 	}
 
 
