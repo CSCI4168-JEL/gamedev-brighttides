@@ -45,8 +45,8 @@ public class Projectile : MonoBehaviour {
 				MoveToTarget.GetComponent<Entity>().attributes.health -= (int) (baseDamage * Random.Range(damageModifier, 1.0f));
 				if (MoveToTarget.GetComponent<Entity>().attributes.health <= 0)
 				{
-					GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold += MoveToTarget.GetComponent<Entity>().attributes.gold;
-					GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold += MoveToTarget.GetComponent<Entity>().attributes.ammo;
+					transform.parent.GetComponent<Entity>().attributes.gold += MoveToTarget.GetComponent<Entity>().attributes.gold;
+					transform.parent.GetComponent<Entity>().attributes.gold += MoveToTarget.GetComponent<Entity>().attributes.ammo;
 					Destroy(MoveToTarget);
 				}
 				Destroy(this.gameObject);
