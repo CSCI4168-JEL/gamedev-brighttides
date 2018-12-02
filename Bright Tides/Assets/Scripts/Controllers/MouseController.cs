@@ -128,6 +128,9 @@ public class MouseController : MonoBehaviour
 					UpdateSelectObject(hitObject);
 					break;
 				case MouseMode.move:
+					// no moves allowed if no actions in this turn allowed
+					if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
+
 					Tile selection = this.mouseOverObject.GetComponent<Tile>();
 					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
 					{
@@ -167,6 +170,7 @@ public class MouseController : MonoBehaviour
     {
 		if (GameManager.instance.loadingGame) return; // early exit condition: the game is loading a scene
 		if (EventSystem.current.IsPointerOverGameObject()) return; // early exit condition: prevent UI click through
+		if (GameManager.instance.simulateTurn) return; // early exit condition: game is simulating a turn
 
 		DrawOrDestroyMoveIndicators(); // create or destroy tile overlays for moving as appropriate
 
