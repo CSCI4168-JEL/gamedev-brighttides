@@ -155,8 +155,8 @@ public class GameManager : MonoBehaviour {
 			playerInstance = Instantiate(playerModel, startingTileTransform);
 			playerInstance.GetComponent<Entity>().AttributesTemplate = ScriptableObject.Instantiate(GameManager.instance.playerAttributesTemplates);
 			playerInstance.name = "Player";
-            GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory = new Item[5];
-            GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold = 200;
+           // GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory = new Item[5];
+           // GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold = 200;
 
         }
 		else
@@ -248,8 +248,25 @@ public class GameManager : MonoBehaviour {
 
     public void addPlayerItem(Item purchased)
     {
-        GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 0);
+        if (purchased.price > GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold)
+        {
+            Debug.Log("Not enough gold");
+            return;
+        }
+
         GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold -= purchased.price;
+        switch (purchased.itemType)
+        {
+            case ItemType.Restore:
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo += purchased.ammoModifier;
+                int healthMod = Math.Min(purchased.healthModifier, GameManager.instance.playerInstance.GetComponent<Entity>().attributes.maxHealth - GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health);
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health += healthMod;
+                break;
+                
+        }
+        
+            GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 0);
+        
     }
 
 }
