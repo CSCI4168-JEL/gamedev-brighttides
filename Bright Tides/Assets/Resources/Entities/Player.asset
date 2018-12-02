@@ -17,12 +17,13 @@ MonoBehaviour:
   level: 1
   experience: 0
   health: 100
-  ammo: 20
+  ammo: 30
   gold: 0
-  actionsPerTurn: 2
-  actionsRemaining: 2
+  actionsPerTurn: 5
+  actionsRemaining: 5
   movementSpeed: 1
   baseAttackRange: 1
+  baseAttackDamage: 5
   strength: 0
   agility: 0
   dexterity: 0
