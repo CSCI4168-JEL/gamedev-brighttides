@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemType : int
+{
+    Range,
+    Damage,
+    Speed,
+    Health
+}
+
 [CreateAssetMenu(menuName = "Bright Tides/Item", fileName = "New Item", order = 1)]
 public class Item : ScriptableObject
 {
-    public EntityType entityType;
-
-    public bool inUse;
+    public ItemType itemType;
 
     public string itemName;
     public string description;

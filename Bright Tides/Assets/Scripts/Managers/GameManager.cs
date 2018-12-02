@@ -152,7 +152,10 @@ public class GameManager : MonoBehaviour {
 		{
 			playerInstance = Instantiate(playerModel, startingTileTransform);
 			playerInstance.name = "Player";
-		}
+            GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory = new Item[5];
+            GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold = 200;
+
+        }
 		else
 		{
 			playerInstance.transform.position = startingTileTransform.position;
@@ -206,7 +209,8 @@ public class GameManager : MonoBehaviour {
 			GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
 			if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
 			{
-				this.LoadNextLevel();
+                SceneManager.LoadScene("ShopMenu");
+				//this.LoadNextLevel();
 			}
 
             this.moveToTile = null;
@@ -227,16 +231,22 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void updateUIPlayerInfo()
-    {
-        if (playerInstance != null)
-        {
-            uiPlayerHealth.text = playerInstance.GetComponent<Entity>().attributes.health.ToString();
-            uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
-            uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
-            uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
+	void updateUIPlayerInfo()
+	{
+		if (playerInstance != null)
+		{
+			uiPlayerHealth.text = playerInstance.GetComponent<Entity>().attributes.health.ToString();
+			uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
+			uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
+			uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
+			
+		}
+	}
 
-        }
+    public void addPlayerItem(Item purchased)
+    {
+        GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 0);
+        GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold -= purchased.price;
     }
 
 }
