@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   entityType: 0
-  name: Player
+  model: {fileID: 0}
+  captainName: 
   level: 1
   experience: 0
-  health: 85
-  ammo: 38
-  gold: 1058
-  actionsPerTurn: 0
+  health: 100
+  ammo: 20
+  gold: 0
+  actionsPerTurn: 2
   actionsRemaining: 2
   movementSpeed: 1
   baseAttackRange: 1
@@ -27,3 +28,5 @@ MonoBehaviour:
   dexterity: 0
   wisdom: 0
   luck: 0
+  isPathableByPlayer: 1
+  isPathableByEnemy: 0

@@ -16,20 +16,21 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
     public static GameManager instance = null; // self reference for singleton pattern
     
-
     [Header("Game State")]
     public bool loadingGame = true; // is the game currently in a loading phase
     public bool simulateTurn = false; // are we currently actioning a turn
 
     [Header("Level State")]
-    public SceneState scene; // current scene data
+    public SceneState sceneState; // current scene data
+    public Region currentRegion; // The currently loaded region
 
     [Header("Player Settings")]
     public GameObject playerModel;
     public GameObject playerInstance;
+	
     public float movementSpeed = 0.5f;
 
-    public Transform moveToTransform;
+    public Tile moveToTile;
 
 	private GameObject userInterface;
 	private GameObject playerInfoPanel;
@@ -38,6 +39,9 @@ public class GameManager : MonoBehaviour {
 	private UnityEngine.UI.Text uiPlayerAmmo;
 	private UnityEngine.UI.Text uiPlayerGold;
 	private UnityEngine.UI.Text uiActionsRemaining;
+
+	private UnityEngine.UI.Text uiTurnCount;
+	private int turnCount;
 
 
 	// Use this for initialization
@@ -49,6 +53,7 @@ public class GameManager : MonoBehaviour {
             instance = this;
         } else if (instance != this)
         {
+            Debug.Log("Other GameManager instance already assgined, destroying this.");
             Destroy(gameObject);
         }
 
@@ -59,18 +64,51 @@ public class GameManager : MonoBehaviour {
 		uiPlayerGold = playerInfoPanel.transform.Find("Gold").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
 		uiActionsRemaining = playerInfoPanel.transform.Find("ActionsRemaining").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
 
+		uiTurnCount = playerInfoPanel.transform.Find("TurnCount").Find("Count").gameObject.GetComponent<UnityEngine.UI.Text>();
+		
+
 		DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
     }
-	
+
+	public void Simulate()
+	{
+		GameManager.instance.simulateTurn = true; // turn on turn simulation to prevent user actions
+
+		EntityAttributes playerAttributes = GameManager.instance.playerInstance.GetComponent<Entity>().attributes;
+
+		// update player attributes before ending turn
+		playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
+		int turnCount = int.Parse(instance.uiTurnCount.text);
+
+		GameManager.instance.uiTurnCount.text = (++turnCount).ToString();
+		GameManager.instance.simulateTurn = false; // turn is over, let player do stuff
+	}
+
+
+
+
+	public void StartGame()
+	{
+		SceneManager.sceneLoaded += OnSceneLoaded;
+		SceneManager.LoadScene("Game");
+		
+	}
+
+	void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		this.LoadLevel(this.sceneState.nextLevel);
+	}
+
 	/*
      * Loads the next scene indicated by the scene data
      * */
-    public void LoadNextLevel()
+	public void LoadNextLevel()
     {
-        if (this.scene.nextLevel != LEVELS.none)
-        {
-            this.LoadLevel(this.scene.nextLevel);
-        }
+		if (this.sceneState.nextLevel != null)
+		{
+			Debug.Log("LoadNextLevel()");
+			this.LoadLevel(this.sceneState.nextLevel);
+		}
     }
 
     /*
@@ -78,22 +116,24 @@ public class GameManager : MonoBehaviour {
      * */
     public void LoadPreviousLevel()
     {
-        if (this.scene.previousLevel != LEVELS.none)
-        {
-            this.LoadLevel(this.scene.previousLevel);
+		Debug.Log("LoadPreviousLevel()");
+		if (this.sceneState.previousLevel != null)
+		{
+            this.LoadLevel(this.sceneState.previousLevel);
         }
     }
 
-    /*
+	/*
      * Loads the specific scene by index value.
      * 
      * Index values are defined in the build settings (File | Build Settings)
      * */
-    private void LoadLevel(LEVELS levelIndex)
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.LoadScene((int)levelIndex);
-    }
+	private void LoadLevel(SceneState sceneState)
+	{
+		Debug.Log("LoadLevel()");
+		this.sceneState = sceneState;
+		this.sceneState.OnSceneTransition();
+	}
 
 
     /*
@@ -104,79 +144,33 @@ public class GameManager : MonoBehaviour {
         Application.Quit();
     }
 
-    /*
-     * Call back function for when scene is finished loading.
-     * 
-     * This function handles additional loading and initialization of the scene
-     * */
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        Debug.Log("OnSceneLoaded: " + scene.name);
-
-        // update the scene state in the game manager
-        switch (scene.buildIndex)
-        {
-            case (int) LEVELS.level1:
-                this.scene = (SceneState)Resources.Load("L1R1");
-
-                // TODO: add map data to scene state to allow for persistent maps
-                // add condition check if map data is empty, if so then generate map
-                // otherwise, do nothing unless a new game is chosen
-                // if a new game is chosen, then map data would be erased
-                if (this.scene.mapGenerated == false)
-                {
-                    Debug.Log("First time in level, generating map...");
-                    this.InstantiatePlayer(this.ConstructMap().transform);
-                } else
-                {
-                    Debug.Log("Skipping map generation...");
-                }
-
-                
-                
-                break;
-            case (int) LEVELS.level2:
-                this.scene = (SceneState)Resources.Load("L2R1");
-                break;
-            default:
-                Debug.LogError("GameManager.OnSceneLoaded: Unknown scene index.  Did you remember to update to LEVELS enum?");
-                break;
-        }
-
-        if (this.scene.showUI)
-        {
-            this.gameObject.transform.Find("UI").gameObject.SetActive(true);
-        }
-
-        // we have finished loading 
-        this.loadingGame = false;        
-    }
-
     public void InstantiatePlayer(Transform startingTileTransform)
     {
-        playerInstance = Instantiate(playerModel, startingTileTransform);
-        playerInstance.transform.position += new Vector3(0, 0.52f, 0);
-        playerInstance.name = "Player";
-    }
-
-    GameObject ConstructMap()
-    {
-        MapGenerator mg = new MapGenerator(this.scene.mapDefinitionFile, this.scene.tileSet);
+		// only create a new player instance if one doesn't exist
+		// otherwise just update it's position
+		if (playerInstance == null )
+		{
+			playerInstance = Instantiate(playerModel, startingTileTransform);
+			playerInstance.name = "Player";
+		}
+		else
+		{
+			playerInstance.transform.position = startingTileTransform.position;
+			playerInstance.transform.parent = startingTileTransform;
+		}
         
-        this.scene.map = mg.Generate();
-        return mg.StartingPosition;
-        //this.SaveMapData();
-        //this.scene.mapGenerated = true;
 
+        playerInstance.transform.position += new Vector3(0, 0.52f, 0); // To place the player above the water, not inside
+        
     }
 
     private void Update()
     {
-        if (this.simulateTurn)
+        if (!this.simulateTurn)
         {
-            if (this.moveToTransform != null)
+            if (this.moveToTile != null)
             {
-                MovePlayer();
+                MovePlayerToTile();
             }
         }
     }
@@ -190,9 +184,9 @@ public class GameManager : MonoBehaviour {
     void SaveMapData()
     {
         BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream saveFile = File.Open(Application.persistentDataPath + "/" + this.scene.name + ".dat", FileMode.OpenOrCreate);
+        FileStream saveFile = File.Open(Application.persistentDataPath + "/" + this.sceneState.name + ".dat", FileMode.OpenOrCreate);
 
-        foreach (Transform child in this.scene.map.transform)
+        foreach (Transform child in this.sceneState.map.transform)
         {
             Material b = child.gameObject.GetComponent<Material>();
             
@@ -200,27 +194,36 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void MovePlayer()
+    void MovePlayerToTile()
     {
-        Vector3 playerOffsetPosition = new Vector3(0, 0.52f, 0);
-        MoveEntity(playerInstance, moveToTransform.gameObject, playerOffsetPosition, playerInstance.GetComponent<Entity>().attributes.movementSpeed);
+		if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
 
-        if (playerInstance.transform.position - playerOffsetPosition == moveToTransform.position)
+		Entity playerEntity = playerInstance.GetComponent<Entity>();
+        MoveEntityToTile(playerEntity, moveToTile, playerEntity.attributes.movementSpeed);
+
+        if (playerInstance.transform.parent == moveToTile.transform) // If the player has reached the tile, the tile becomes the parent
         {
-            this.moveToTransform = null;
+			GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
+			if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
+			{
+				this.LoadNextLevel();
+			}
+
+            this.moveToTile = null;
             // simulateTurn = false;
         }
     }
 
-    void MoveEntity(GameObject entity, GameObject target, Vector3 positionAdjustment, float speed)
+    void MoveEntityToTile(Entity entity, Tile target, float speed)
     {
-        if (entity.transform.position - positionAdjustment == target.transform.position)
+        if (entity.transform.position == target.tileTopPosition) // Move the entity towards the top of the tile
         {
             Debug.Log("Moving entitiy " + entity.name + " complete.");
+            target.SetTileAsParent(entity); // After the movement is complete, update the parent of the entity and the pathability of the tile
         }
         else
         {
-            entity.transform.position = Vector3.MoveTowards(entity.transform.position, target.transform.position + positionAdjustment, speed * Time.deltaTime);
+            entity.transform.position = Vector3.MoveTowards(entity.transform.position, target.tileTopPosition, speed * Time.deltaTime);
         }
     }
 
@@ -232,6 +235,7 @@ public class GameManager : MonoBehaviour {
 			uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
 			uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
 			uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
+			
 		}
 	}
 

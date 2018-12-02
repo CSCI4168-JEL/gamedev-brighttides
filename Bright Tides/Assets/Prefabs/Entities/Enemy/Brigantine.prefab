@@ -36,6 +36,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4133480259466764}
+  - component: {fileID: 114186538709245030}
   m_Layer: 0
   m_Name: Brigantine
   m_TagString: Enemy
@@ -331,3 +332,15 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1212711202192514}
   m_Mesh: {fileID: 4300000, guid: 0460997c11b634d43b357f678b294368, type: 3}
+--- !u!114 &114186538709245030
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1258014231385658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d776efb61540044a27d64728beb89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attributes: {fileID: 0}

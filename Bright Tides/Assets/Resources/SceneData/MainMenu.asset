@@ -9,13 +9,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7e64b136b76c674c901fdcd204135e7, type: 3}
-  m_Name: L1R2
+  m_Name: MainMenu
   m_EditorClassIdentifier: 
-  sceneName: 
+  sceneName: Main Menu
+  self: {fileID: 11400000}
   mapDefinitionFile: {fileID: 0}
   tileSet: {fileID: 0}
   showUI: 0
   map: {fileID: 0}
   mapGenerated: 0
-  previousLevel: 1
-  nextLevel: -1
+  playerStartPosition: {fileID: 0}
+  previousLevel: {fileID: 0}
+  nextLevel: {fileID: 11400000, guid: 591498de56116464798609351d2e8651, type: 2}
