@@ -343,4 +343,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d776efb61540044a27d64728beb89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attributesTemplate: {fileID: 11400000, guid: 7d250f369273c384c9832bc212f7d35a, type: 2}
   attributes: {fileID: 11400000, guid: 7d250f369273c384c9832bc212f7d35a, type: 2}

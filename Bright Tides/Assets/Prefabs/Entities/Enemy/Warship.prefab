@@ -124,4 +124,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d776efb61540044a27d64728beb89e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attributesTemplate: {fileID: 11400000, guid: 42fd2e5f7f17f1e4c921c4c25dc8a737, type: 2}
   attributes: {fileID: 0}
