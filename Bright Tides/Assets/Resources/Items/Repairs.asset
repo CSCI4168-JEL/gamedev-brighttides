@@ -11,12 +11,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a12aeb28b7d5da4a8a88da849f78851, type: 3}
   m_Name: Repairs
   m_EditorClassIdentifier: 
-  entityType: 0
-  inUse: 0
+  itemType: 4
   itemName: Repairs
   description: Heals your ship's health by 100 points
   price: 50
-  icon: {fileID: 21300000, guid: c8d19c3c25e463542806417b2c3bd83e, type: 3}
+  icon: {fileID: 0}
   rangeModifier: 0
   damageModifier: 0
   speedModifier: 0

@@ -6,8 +6,8 @@ public enum ItemType : int
 {
     Range,
     Damage,
-    Speed,
     Health,
+    Speed,
     Restore
 }
 

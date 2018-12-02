@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a12aeb28b7d5da4a8a88da849f78851, type: 3}
   m_Name: Speed Upgrade
   m_EditorClassIdentifier: 
-  entityType: 0
+  itemType: 2
   itemName: Speed Upgrade
   description: Increases your ship's movement speed per turn
   price: 100

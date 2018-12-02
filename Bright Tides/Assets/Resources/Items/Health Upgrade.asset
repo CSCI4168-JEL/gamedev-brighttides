@@ -11,12 +11,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a12aeb28b7d5da4a8a88da849f78851, type: 3}
   m_Name: Health Upgrade
   m_EditorClassIdentifier: 
-  entityType: 0
-  inUse: 0
+  itemType: 3
   itemName: Health Upgrade
   description: Increases the maximum health of your ship
   price: 100
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c8d19c3c25e463542806417b2c3bd83e, type: 3}
   rangeModifier: 0
   damageModifier: 0
   speedModifier: 0

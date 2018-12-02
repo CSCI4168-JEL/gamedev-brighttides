@@ -211,9 +211,9 @@ public class GameManager : MonoBehaviour {
 			GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
 			if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
 			{
-                SceneManager.LoadScene("ShopMenu");
-				//this.LoadNextLevel();
-			}
+                this.LoadNextLevel();
+                SceneManager.LoadScene(3); // Must remove. Used to test shop.
+            }
 
             this.moveToTile = null;
             // simulateTurn = false;
@@ -247,6 +247,9 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+    public void exitShop() { } // Method called to proceed to next level
+
+    // Adds the selected item to the player's inventory if they have enough gold
     public void addPlayerItem(Item purchased)
     {
         if (purchased.price > GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold)
@@ -263,10 +266,25 @@ public class GameManager : MonoBehaviour {
                 int healthMod = Math.Min(purchased.healthModifier, GameManager.instance.playerInstance.GetComponent<Entity>().attributes.maxHealth - GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health);
                 GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health += healthMod;
                 break;
-                
+
+            case ItemType.Range:
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.baseAttackRange += purchased.rangeModifier;
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 0);
+                break;
+            case ItemType.Damage:
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.baseAttackDamage += purchased.damageModifier;
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 1);
+                break;
+            case ItemType.Health:
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.maxHealth += purchased.maxHealthModifier;
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 2);
+                break;
+            case ItemType.Speed:
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.movementSpeed += purchased.speedModifier;
+                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 3);
+                break;
+
         }
-        
-            GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 0);
         
     }
 

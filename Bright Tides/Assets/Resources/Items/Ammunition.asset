@@ -11,8 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a12aeb28b7d5da4a8a88da849f78851, type: 3}
   m_Name: Ammunition
   m_EditorClassIdentifier: 
-  entityType: 0
-  inUse: 0
+  itemType: 4
   itemName: Ammunition
   description: 50 cannonballs
   price: 50
