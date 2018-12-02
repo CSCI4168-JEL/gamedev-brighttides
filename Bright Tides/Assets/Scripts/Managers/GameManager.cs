@@ -212,7 +212,7 @@ public class GameManager : MonoBehaviour {
 			if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
 			{
                 this.LoadNextLevel();
-                SceneManager.LoadScene(3); // Must remove. Used to test shop.
+                //SceneManager.LoadScene(3); // Must remove. Used to test shop.
             }
 
             this.moveToTile = null;
@@ -247,7 +247,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-    public void exitShop() { } // Method called to proceed to next level
+    //public void exitShop() { SceneManager.UnloadSceneAsync(3); } // Method called to proceed to next level
 
     // Adds the selected item to the player's inventory if they have enough gold
     public void addPlayerItem(Item purchased)
