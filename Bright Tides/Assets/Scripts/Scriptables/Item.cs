@@ -7,7 +7,8 @@ public enum ItemType : int
     Range,
     Damage,
     Speed,
-    Health
+    Health,
+    Restore
 }
 
 [CreateAssetMenu(menuName = "Bright Tides/Item", fileName = "New Item", order = 1)]
