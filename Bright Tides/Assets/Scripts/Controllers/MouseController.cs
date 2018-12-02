@@ -134,6 +134,7 @@ public class MouseController : MonoBehaviour
 					Tile selection = this.mouseOverObject.GetComponent<Tile>();
 					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
 					{
+						
 						GameManager.instance.moveToTile = selection; // Update the moveToTile with the selected, pathable tile
 					}
 					break;
@@ -171,10 +172,10 @@ public class MouseController : MonoBehaviour
 		if (GameManager.instance.loadingGame) return; // early exit condition: the game is loading a scene
 		if (EventSystem.current.IsPointerOverGameObject()) return; // early exit condition: prevent UI click through
 		if (GameManager.instance.simulateTurn) return; // early exit condition: game is simulating a turn
-		if (GameManager.instance.isPerformingAction == true) return; // early exit condition: game action underway
 
 		DrawOrDestroyMoveIndicators(); // create or destroy tile overlays for moving as appropriate
 
+		if (GameManager.instance.isPerformingAction == true) return; // early exit condition: game action underway
 
 		RaycastHit hit; // ray cast collision information
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // get a ray from camera center through mouse position

@@ -207,6 +207,7 @@ public class GameManager : MonoBehaviour {
 
         if (playerInstance.transform.parent == moveToTile.transform) // If the player has reached the tile, the tile becomes the parent
         {
+			GameManager.instance.isPerformingAction = false;
 			GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
 			if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
 			{
@@ -221,11 +222,13 @@ public class GameManager : MonoBehaviour {
 
     void MoveEntityToTile(Entity entity, Tile target, float speed)
     {
-        if (entity.transform.position == target.tileTopPosition) // Move the entity towards the top of the tile
+		GameManager.instance.isPerformingAction = true;
+		if (entity.transform.position == target.tileTopPosition) // Move the entity towards the top of the tile
         {
             Debug.Log("Moving entitiy " + entity.name + " complete.");
             target.SetTileAsParent(entity); // After the movement is complete, update the parent of the entity and the pathability of the tile
-        }
+			GameManager.instance.isPerformingAction = false;
+		}
         else
         {
             entity.transform.position = Vector3.MoveTowards(entity.transform.position, target.tileTopPosition, speed * Time.deltaTime);
