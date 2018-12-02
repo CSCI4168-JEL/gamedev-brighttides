@@ -16,13 +16,14 @@ MonoBehaviour:
   captainName: Capatin Bob
   level: 0
   experience: 0
-  health: 100
+  health: 10
   ammo: 0
-  gold: 0
+  gold: 25
   actionsPerTurn: 0
   actionsRemaining: 0
   movementSpeed: 0
   baseAttackRange: 0
+  baseAttackDamage: 0
   strength: 0
   agility: 0
   dexterity: 0

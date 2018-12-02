@@ -53,7 +53,7 @@ public class EntityGenerator {
 
                         if (treasureCount > 0) {
                             EntityAttributes selectedAttributes = entitySet.GetEntityAttributesForType(type);
-                            Entity entityInstance = entitySet.CreateEntity(selectedAttributes); // Create the entity at the given tile
+                            Entity entityInstance = ScriptableObject.Instantiate(entitySet.CreateEntity(selectedAttributes)); // Create the entity at the given tile
                             spawn.SetTileAsParent(entityInstance); // Set the tile as the parent along with any side-effects
                             treasureCount--; // Reduce the treasures left to spawn
                         }

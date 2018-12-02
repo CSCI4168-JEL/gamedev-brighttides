@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour {
     [Header("Player Settings")]
     public GameObject playerModel;
     public GameObject playerInstance;
+	public EntityAttributes playerAttributesTemplates;
 	
     public float movementSpeed = 0.5f;
 
@@ -151,6 +152,7 @@ public class GameManager : MonoBehaviour {
 		if (playerInstance == null )
 		{
 			playerInstance = Instantiate(playerModel, startingTileTransform);
+			playerInstance.GetComponent<Entity>().AttributesTemplate = ScriptableObject.Instantiate(GameManager.instance.playerAttributesTemplates);
 			playerInstance.name = "Player";
 		}
 		else
