@@ -171,6 +171,7 @@ public class MouseController : MonoBehaviour
 		if (GameManager.instance.loadingGame) return; // early exit condition: the game is loading a scene
 		if (EventSystem.current.IsPointerOverGameObject()) return; // early exit condition: prevent UI click through
 		if (GameManager.instance.simulateTurn) return; // early exit condition: game is simulating a turn
+		if (GameManager.instance.isPerformingAction == true) return; // early exit condition: game action underway
 
 		DrawOrDestroyMoveIndicators(); // create or destroy tile overlays for moving as appropriate
 

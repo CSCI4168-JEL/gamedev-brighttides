@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     [Header("Game State")]
     public bool loadingGame = true; // is the game currently in a loading phase
     public bool simulateTurn = false; // are we currently actioning a turn
+	public bool isPerformingAction = false; // is an action (such as attacking or moving) currently happening
 
     [Header("Level State")]
     public SceneState sceneState; // current scene data

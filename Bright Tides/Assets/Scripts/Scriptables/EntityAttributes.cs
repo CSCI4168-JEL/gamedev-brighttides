@@ -22,6 +22,7 @@ public class EntityAttributes : ScriptableObject {
 	public float movementSpeed;
 
 	public float baseAttackRange;
+	public int baseAttackDamage;
 
 	public int strength; // modifier for attack damage
 	public int agility; // modifier for taking damage reduction

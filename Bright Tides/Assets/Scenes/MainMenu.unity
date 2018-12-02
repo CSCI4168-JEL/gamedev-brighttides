@@ -1322,8 +1322,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1490391558}
-  m_LocalRotation: {x: -0.12679763, y: 0.62044096, z: 0.1025538, w: 0.7671102}
-  m_LocalPosition: {x: -4.3423843, y: -1.2957278, z: -0.017289877}
+  m_LocalRotation: {x: -0.15238698, y: 0.83246094, z: 0.27986035, w: 0.45328268}
+  m_LocalPosition: {x: -0.29738045, y: -2.1836107, z: -1.3785334}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1641,6 +1641,12 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 114564935796956972, guid: 9ece5676549143044a59c3de3fe57ba9,
+        type: 2}
+      propertyPath: playerAttributesTemplates
+      value: 
+      objectReference: {fileID: 11400000, guid: 7d250f369273c384c9832bc212f7d35a,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ece5676549143044a59c3de3fe57ba9, type: 2}
   m_IsPrefabAsset: 0

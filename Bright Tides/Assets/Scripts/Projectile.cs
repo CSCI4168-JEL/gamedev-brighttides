@@ -12,14 +12,19 @@ public class Projectile : MonoBehaviour {
 	private Vector3 newPosition;
 	private float travelDistance = -1f;
 	private float startTime;
+
+	private int baseDamage;
+	private float damageModifier;
 	
 	
 
 	// Use this for initialization
 	void Awake () {
-		startPosition = GameManager.instance.playerInstance.transform.position;// this.transform.position;
-		startTime = Time.time;
-		
+		GameManager.instance.isPerformingAction = true;
+		startPosition = transform.parent.position;
+		baseDamage = transform.parent.gameObject.GetComponent<Entity>().attributes.baseAttackDamage;
+		damageModifier = 0.4f;
+		startTime = Time.time;		
 		
 	}
 	
@@ -37,7 +42,15 @@ public class Projectile : MonoBehaviour {
 
 			if (percentComplete > 1.0f)
 			{
+				MoveToTarget.GetComponent<Entity>().attributes.health -= (int) (baseDamage * Random.Range(damageModifier, 1.0f));
+				if (MoveToTarget.GetComponent<Entity>().attributes.health <= 0)
+				{
+					transform.parent.GetComponent<Entity>().attributes.gold += MoveToTarget.GetComponent<Entity>().attributes.gold;
+					transform.parent.GetComponent<Entity>().attributes.gold += MoveToTarget.GetComponent<Entity>().attributes.ammo;
+					Destroy(MoveToTarget);
+				}
 				Destroy(this.gameObject);
+				GameManager.instance.isPerformingAction = false;
 			}
 			else
 			{
