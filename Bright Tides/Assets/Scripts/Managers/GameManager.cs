@@ -137,6 +137,8 @@ public class GameManager : MonoBehaviour {
             if (this.moveToTile != null)
             {
                 MovePlayerToTile();
+            } else if (currentRegion != null && currentRegion.enemyController != null) {
+                currentRegion.enemyController.PerformEnemyTurn();
             }
         }
     }

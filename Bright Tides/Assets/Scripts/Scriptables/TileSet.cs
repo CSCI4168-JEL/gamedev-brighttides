@@ -63,7 +63,8 @@ public class TileSet : ScriptableObject {
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.playerSpawnTile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.playerSpawnTile;
 
 		tileComponent.SetSpawnType(EntityType.Player); // Set the spawn type to player
 		
@@ -75,7 +76,8 @@ public class TileSet : ScriptableObject {
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.playerExitTile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.playerExitTile;
 		return tileComponent;
 	}
 
@@ -84,7 +86,8 @@ public class TileSet : ScriptableObject {
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.waterTile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.waterTile;
 		return tileComponent;
 	}
 
@@ -94,6 +97,7 @@ public class TileSet : ScriptableObject {
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = false;
+		tileComponent.TileProperties.IsPathableByEnemy = false;
 		tileComponent.TileProperties.tileType = TileType.obstacleTile;
 		return tileComponent;
 	}
@@ -103,7 +107,8 @@ public class TileSet : ScriptableObject {
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.enemySpawnTile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.enemySpawnTile;
 
 		tileComponent.SetSpawnType(EntityType.Enemy); // Set the spawn type to enemy
 		return tileComponent;
@@ -114,7 +119,8 @@ public class TileSet : ScriptableObject {
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.treasureSpawnTile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.treasureSpawnTile;
 
 		tileComponent.SetSpawnType(EntityType.Treasure); // Set the spawn type to treasure
 		return tileComponent;

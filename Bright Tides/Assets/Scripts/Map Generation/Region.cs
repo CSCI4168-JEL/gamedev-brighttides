@@ -5,6 +5,7 @@ using UnityEngine;
 public class Region : MonoBehaviour {
     private MapGenerator mapGenerator;
     private EntityGenerator entityGenerator;
+    public EnemyController enemyController;
     private TileSet tileSet;
     private EntitySet entitySet;
     private TextAsset mapDefinitionFile;
@@ -34,8 +35,8 @@ public class Region : MonoBehaviour {
     // Call this to generate the map and populate it
     public void Initialize() {
         tileMap = mapGenerator.Generate();
+        enemyController = new EnemyController(tileMap); // Provide the map to the controller for pathfinding
         entityGenerator.PopulateEntities(entitySpawns); // Spawn the player, enemies and treasure
-        EnemyController enemyController = new EnemyController(tileMap); // Provide the map to the controller for pathfinding
         CameraController camera = GameObject.FindGameObjectWithTag("MainCamera").AddComponent<CameraController>(); // Attach the camera script after the player has been initialized
         camera.followPosition = new Vector3(-1f, 2f, 0.75f);
         camera.objectBeingFollowed = GameManager.instance.playerInstance;

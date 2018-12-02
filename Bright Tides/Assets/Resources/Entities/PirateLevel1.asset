@@ -13,15 +13,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityType: 1
   model: {fileID: 1258014231385658, guid: ebbfdb7a63758a5499586db489c0189f, type: 2}
-  captainName: Capatin Bob
+  captainName: Captain Bob
   level: 0
   experience: 0
   health: 100
   ammo: 0
   gold: 0
-  actionsPerTurn: 0
-  actionsRemaining: 0
-  movementSpeed: 0
+  actionsPerTurn: 1
+  actionsRemaining: 1
+  movementSpeed: 1
   baseAttackRange: 0
   strength: 0
   agility: 0

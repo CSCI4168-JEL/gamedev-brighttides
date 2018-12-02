@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,13 @@ public class Tile : MonoBehaviour {
     public Vector3 tileTopPosition; // The position where entities can spawn
 
     public List<Tile> neighbours; // All direct neighbours of this tile
+
+    public static float CalculateChessboardDistance(Tile origin, Tile destination) {
+        Vector3 originPos = origin.transform.position;
+        Vector3 destinationPos = destination.transform.position;
+
+        return Math.Max(Math.Abs(destinationPos.x - originPos.x), Math.Abs(destinationPos.z - originPos.z));
+    }
 
     private void Awake() {
         TileProperties = new TileProperties();
@@ -26,6 +34,11 @@ public class Tile : MonoBehaviour {
         entity.transform.position = tileTopPosition; // Move the entity to the top of the tile
         TileProperties.IsPathableByPlayer = entity.attributes.isPathableByPlayer; // Update if the tile is pathable by the player
         TileProperties.IsPathableByEnemy = entity.attributes.isPathableByEnemy; // Update if the tile is pathable by an enemy
+    }
+
+    public void LeaveTile(Entity entity) {
+        TileProperties.IsPathableByPlayer = true; // Restore the tile pathability
+        TileProperties.IsPathableByEnemy = true; // Restore the tile pathability
     }
 }
 

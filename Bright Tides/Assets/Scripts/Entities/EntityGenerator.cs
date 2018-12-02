@@ -37,6 +37,7 @@ public class EntityGenerator {
                             EntityAttributes selectedAttributes = entitySet.GetEntityAttributesForType(type);
                             Entity entityInstance = entitySet.CreateEntity(selectedAttributes); // Create the entity at the given tile
                             spawn.SetTileAsParent(entityInstance); // Set the tile as the parent along with any side-effects
+                            GameManager.instance.currentRegion.enemyController.RegisterEnemyEntity(entityInstance); // Register the enemy with the controller
                             enemyCount--; // Reduce the enemies left to spawn
                         }
                         else {
