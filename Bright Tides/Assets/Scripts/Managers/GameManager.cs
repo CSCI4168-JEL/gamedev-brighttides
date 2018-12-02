@@ -155,8 +155,6 @@ public class GameManager : MonoBehaviour {
 			playerInstance = Instantiate(playerModel, startingTileTransform);
 			playerInstance.GetComponent<Entity>().AttributesTemplate = ScriptableObject.Instantiate(GameManager.instance.playerAttributesTemplates);
 			playerInstance.name = "Player";
-           // GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory = new Item[5];
-           // GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold = 200;
 
         }
 		else
