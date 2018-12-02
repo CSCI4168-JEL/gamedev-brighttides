@@ -40,6 +40,9 @@ public class GameManager : MonoBehaviour {
 	private UnityEngine.UI.Text uiPlayerGold;
 	private UnityEngine.UI.Text uiActionsRemaining;
 
+	private UnityEngine.UI.Text uiTurnCount;
+	private int turnCount;
+
 
 	// Use this for initialization
 	void Awake () {
@@ -61,8 +64,28 @@ public class GameManager : MonoBehaviour {
 		uiPlayerGold = playerInfoPanel.transform.Find("Gold").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
 		uiActionsRemaining = playerInfoPanel.transform.Find("ActionsRemaining").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
 
+		uiTurnCount = playerInfoPanel.transform.Find("TurnCount").Find("Count").gameObject.GetComponent<UnityEngine.UI.Text>();
+		
+
 		DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
     }
+
+	public void Simulate()
+	{
+		GameManager.instance.simulateTurn = true; // turn on turn simulation to prevent user actions
+
+		EntityAttributes playerAttributes = GameManager.instance.playerInstance.GetComponent<Entity>().attributes;
+
+		// update player attributes before ending turn
+		playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
+		int turnCount = int.Parse(instance.uiTurnCount.text);
+
+		GameManager.instance.uiTurnCount.text = (++turnCount).ToString();
+		GameManager.instance.simulateTurn = false; // turn is over, let player do stuff
+	}
+
+
+
 
 	public void StartGame()
 	{
@@ -143,7 +166,7 @@ public class GameManager : MonoBehaviour {
 
     private void Update()
     {
-        if (this.simulateTurn)
+        if (!this.simulateTurn)
         {
             if (this.moveToTile != null)
             {
@@ -212,6 +235,7 @@ public class GameManager : MonoBehaviour {
 			uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
 			uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
 			uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
+			
 		}
 	}
 

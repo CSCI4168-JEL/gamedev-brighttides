@@ -37,7 +37,7 @@ public class Projectile : MonoBehaviour {
 
 			if (percentComplete > 1.0f)
 			{
-				DestroyImmediate(this.gameObject);
+				Destroy(this.gameObject);
 			}
 			else
 			{
@@ -46,7 +46,6 @@ public class Projectile : MonoBehaviour {
 
 				transform.LookAt(MoveToTarget.transform, Vector3.up);
 				transform.position = newPosition;
-
 			}
 		}
 	}
