@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e64b136b76c674c901fdcd204135e7, type: 3}
+  m_Name: ShopMenu
+  m_EditorClassIdentifier: 
+  sceneName: Shop Menu
+  mapDefinitionFile: {fileID: 0}
+  tileSet: {fileID: 0}
+  entitySet: {fileID: 0}
+  showUI: 0
+  enemyPopulation: 0
+  treasurePopulation: 0
+  map: {fileID: 0}
+  playerStartPosition: {fileID: 0}
+  previousLevel: {fileID: 0}
+  nextLevel: {fileID: 0}

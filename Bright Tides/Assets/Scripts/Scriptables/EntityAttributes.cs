@@ -13,9 +13,12 @@ public class EntityAttributes : ScriptableObject {
 	public int level;
 	public int experience;
 
+    public int maxHealth;
 	public int health;
 	public int ammo;
 	public int gold;
+
+    public Item[] inventory;
 
 	public int actionsPerTurn;
 	public int actionsRemaining;

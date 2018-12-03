@@ -46,7 +46,6 @@ public class EnemyController: MonoBehaviour {
     }
 
     public void UpdateEnemyList() {
-        List<Entity> enemiesToRemove = new List<Entity>();
         enemies.RemoveAll(item => item == null); // Clear any null references from the list in case any enemies were destroyed
         foreach (Entity enemy in enemies) {
             enemy.RefreshRemainingActions(); // Make sure each enemy has all available moves

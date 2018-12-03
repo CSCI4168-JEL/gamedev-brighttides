@@ -16,9 +16,15 @@ MonoBehaviour:
   captainName: 
   level: 1
   experience: 0
+  maxHealth: 100
   health: 100
   ammo: 30
-  gold: 0
+  gold: 200
+  inventory:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   actionsPerTurn: 5
   actionsRemaining: 5
   movementSpeed: 1

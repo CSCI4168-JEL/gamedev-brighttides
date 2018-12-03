@@ -23,10 +23,11 @@ MonoBehaviour:
   actionsRemaining: 1
   movementSpeed: 0.25
   baseAttackRange: 1
+  baseAttackDamage: 0
   strength: 0
   agility: 0
   dexterity: 0
   wisdom: 0
   luck: 0
   isPathableByPlayer: 0
-  isPathableByEnemy: 1
+  isPathableByEnemy: 0

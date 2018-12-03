@@ -19,6 +19,7 @@ public class SceneState : ScriptableObject
 
 	[Header("Scene Settings")]
 	public bool showUI;
+	public bool showShopOnLoad;
 
 	[Tooltip("The number of enemies to spawn in the map if the spawn points are available.")]
 	public int enemyPopulation;
@@ -34,8 +35,7 @@ public class SceneState : ScriptableObject
 	public SceneState nextLevel;
 
 	private bool mapGenerated = false;
-
-
+	private GameObject ui;
 
 	public void OnSceneTransition()
 	{
@@ -47,6 +47,11 @@ public class SceneState : ScriptableObject
 		}
 
 		InitScene();
+
+		if (showShopOnLoad)
+		{
+			SceneManager.LoadSceneAsync("ShopMenu", LoadSceneMode.Additive);
+		}
 	}
 
 	void InitScene()
