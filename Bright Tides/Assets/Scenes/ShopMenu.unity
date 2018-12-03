@@ -1034,7 +1034,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 114564935796956972, guid: 9ece5676549143044a59c3de3fe57ba9,
           type: 2}
-        m_MethodName: FixedUpdate
+        m_MethodName: exitShop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
