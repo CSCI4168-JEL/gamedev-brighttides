@@ -9,6 +9,8 @@ public class EnemyController: MonoBehaviour {
     public List<Entity> enemies; // The list of all enemies in the region
     private Tile[,] tileMap;
 
+    private bool isPerformingActions = false; // The flag to track if the controller is currently scheduling or performing actions
+
     // Class for the A* pathfinding
     private class PathDistanceValue : IComparable<PathDistanceValue>{
         public float pathCost; // The total distance from the starting node to this node
@@ -26,6 +28,12 @@ public class EnemyController: MonoBehaviour {
         }
     }
 
+    private void Update() {
+        if (GameManager.instance.simulateTurn && !isPerformingActions) {
+            GameManager.instance.StartPlayerTurn(); // Once the enemy turns are complete, start the player's turn
+        }
+    }
+
     // Method to start this component correctly
     public void Initialize(Tile[,] tileMap) {
         this.tileMap = tileMap;
@@ -37,48 +45,54 @@ public class EnemyController: MonoBehaviour {
         enemies.Add(enemy);
     }
 
-    public void StartEnemyTurn() {
+    public void UpdateEnemyList() {
+        List<Entity> enemiesToRemove = new List<Entity>();
+        enemies.RemoveAll(item => item == null); // Clear any null references from the list in case any enemies were destroyed
         foreach (Entity enemy in enemies) {
             enemy.RefreshRemainingActions(); // Make sure each enemy has all available moves
         }
-        PerformEnemyTurn(); // Begin the actions for the turn
+    }
+
+    public void StartEnemyTurn() {
+        Entity player = GameManager.instance.playerInstance.GetComponent<Entity>();
+        if (player == null) {
+            Debug.LogError("No player entity found! Enemies cannot take a turn!");
+            return;
+        }
+
+        if (!GameManager.instance.simulateTurn) {
+            Debug.LogError("Enemies were asked to take turn, but it is still the player's turn!");
+            return;
+        }
+
+        isPerformingActions = true; // Ensure that the enemy controller state is updated
+        UpdateEnemyList(); // Ensure that the list of enemies is up-to-date
+        StartCoroutine(PerformEnemyTurn(player)); // Begin planning/performing actions for the turn
     }
 
     // The private method for the enemies to perform their turn
-    private void PerformEnemyTurn() {
-        Entity player = GameManager.instance.playerInstance.GetComponent<Entity>();
+    private IEnumerator PerformEnemyTurn(Entity player) {
+        foreach (Entity enemy in enemies) {
+            while (enemy.attributes.actionsRemaining > 0) {
+                Tile enemyTile = enemy.transform.GetComponentInParent<Tile>(); // Get the tiles from the entities in question
+                Tile playerTile = player.transform.GetComponentInParent<Tile>();
 
-        if (GameManager.instance.simulateTurn) {
-            if (player == null) {
-                Debug.LogError("No player entity found! Enemies cannot take a turn!");
-            } else {
-                foreach (Entity enemy in enemies) {
-                    while (enemy.attributes.actionsRemaining > 0) {
-                        Tile enemyTile = enemy.transform.GetComponentInParent<Tile>(); // Get the tiles from the entities in question
-                        Tile playerTile = player.transform.GetComponentInParent<Tile>();
-
-                        if (enemyTile && playerTile) { // Both tiles were successfully retrieved
-                            double distanceFromPlayer = Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position));
-                            if (enemy.attributes.baseAttackRange >= distanceFromPlayer) { // Enemy is within firing range of the player
-                                Debug.Log(enemy.attributes.captainName + " is firing upon " + player.attributes.captainName);
-                            }
-                            else {
-                                List<Tile> moves = AStarPathfinding(playerTile, enemyTile); // Find the best path to the player. Calculating the path from the player to the enemy prevents loops in movement
-                                if (moves != null) { // If the algorithm found a path
-                                    StartCoroutine(enemy.MoveToTileCoroutine(moves[1])); // 0 is the enemy's tile, and 1 is the next step
-                                }
-                            }
-                        }
-
-                        enemy.attributes.actionsRemaining--; // Reduce the number of actions for the enemy
+                if (enemyTile && playerTile) { // Both tiles were successfully retrieved
+                    double distanceFromPlayer = Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position));
+                    if (enemy.attributes.baseAttackRange >= distanceFromPlayer) { // Enemy is within firing range of the player
+                        Debug.Log(enemy.attributes.captainName + " is firing upon " + player.attributes.captainName);
                     }
-                   
+                    else {
+                        List<Tile> moves = AStarPathfinding(enemyTile, playerTile); // Find the best path to the player. Calculating the path from the player to the enemy prevents loops in movement
+                        if (moves != null) { // If the algorithm found a path
+                            yield return enemy.MoveToTileCoroutine(moves[1]); // The second element is the next step in the path
+                        }
+                    }
                 }
-            }
-            GameManager.instance.StartPlayerTurn(); // Once the enemy turns are complete, start the player's turn
-        } else {
-            Debug.LogError("Enemies were asked to take turn, but it is still the player's turn!");
+                enemy.attributes.actionsRemaining--; // Reduce the number of actions for the enemy
+            }  
         }
+        isPerformingActions = false; // Finish taking actions
     }
 
     // A* pathfinding algorithm adapted from Dr. Heywood's lectures and from the wikipedia entry for A*
@@ -145,6 +159,7 @@ public class EnemyController: MonoBehaviour {
             current = connectedTiles[current]; // Get the best neighbour of current
             bestPath.Add(current);
         }
+        bestPath.Reverse(); // Reverse the path so that it starts at the starting tile
         return bestPath;
     }
 
