@@ -54,7 +54,7 @@ public class Entity : MonoBehaviour {
                 }
             }
         }
-        Destroy(this); // Entity is a goner
+        Destroy(gameObject); // If GameObject is a goner, Entity is a goner
     }
 
     private void Awake() {
