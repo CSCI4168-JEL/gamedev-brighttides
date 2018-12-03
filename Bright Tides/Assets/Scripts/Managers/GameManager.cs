@@ -213,8 +213,8 @@ public class GameManager : MonoBehaviour
             GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
             if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
             {
-                //this.LoadNextLevel();
-                SceneManager.LoadSceneAsync("ShopMenu", LoadSceneMode.Additive); // Must remove. Used to test shop.
+                this.LoadNextLevel();
+                //SceneManager.LoadSceneAsync("ShopMenu", LoadSceneMode.Additive); // Must remove. Used to test shop.
             }
 
             this.moveToTile = null;
@@ -255,8 +255,11 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetSceneByBuildIndex(3).isLoaded)
         {
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(3));
-            this.LoadNextLevel();
-        }
+			if (sceneState.showUI)
+			{
+				GameManager.instance.gameObject.transform.Find("UI").gameObject.SetActive(true);
+			}
+		}
         else
         {
             Debug.Log("Shop scene is not currently loaded");
