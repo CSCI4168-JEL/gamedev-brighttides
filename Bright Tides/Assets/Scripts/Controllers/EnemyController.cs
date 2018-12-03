@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class EnemyController {
+public class EnemyController: MonoBehaviour {
 
     public List<Entity> enemies; // The list of all enemies in the region
-    private readonly Tile[,] tileMap;
-
-    private bool isTakingTurn = false; // If the enemies are performing their turn
+    private Tile[,] tileMap;
 
     // Class for the A* pathfinding
     private class PathDistanceValue : IComparable<PathDistanceValue>{
@@ -28,7 +26,8 @@ public class EnemyController {
         }
     }
 
-    public EnemyController(Tile[,] tileMap) {
+    // Method to start this component correctly
+    public void Initialize(Tile[,] tileMap) {
         this.tileMap = tileMap;
         enemies = new List<Entity>();
     }
@@ -38,33 +37,47 @@ public class EnemyController {
         enemies.Add(enemy);
     }
 
-    // The public method to call when the enemies should take their turn
-    public void PerformEnemyTurn() {
+    public void StartEnemyTurn() {
+        foreach (Entity enemy in enemies) {
+            enemy.RefreshRemainingActions(); // Make sure each enemy has all available moves
+        }
+        PerformEnemyTurn(); // Begin the actions for the turn
+    }
+
+    // The private method for the enemies to perform their turn
+    private void PerformEnemyTurn() {
         Entity player = GameManager.instance.playerInstance.GetComponent<Entity>();
 
-        if (player == null) {
-            Debug.LogError("No player entity found! Enemies cannot take a turn!");
-            isTakingTurn = false;
-        }
+        if (GameManager.instance.simulateTurn) {
+            if (player == null) {
+                Debug.LogError("No player entity found! Enemies cannot take a turn!");
+            } else {
+                foreach (Entity enemy in enemies) {
+                    while (enemy.attributes.actionsRemaining > 0) {
+                        Tile enemyTile = enemy.transform.GetComponentInParent<Tile>(); // Get the tiles from the entities in question
+                        Tile playerTile = player.transform.GetComponentInParent<Tile>();
 
-        if (!isTakingTurn) {
-            isTakingTurn = true; // Start the turn
-            foreach (Entity enemy in enemies) {
-                Tile enemyTile = enemy.transform.GetComponentInParent<Tile>();
-                Tile playerTile = player.transform.GetComponentInParent<Tile>();
-                if (enemyTile && playerTile) {
-                    float distanceFromPlayer = Tile.CalculateChessboardDistance(enemyTile, playerTile);
-                    if (enemy.attributes.baseAttackRange >= Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position))) { // Enemy is within firing range of the player
-                        Debug.Log(enemy.attributes.captainName + " is firing upon " + player.attributes.captainName);
-                    } else {
-                        List<Tile> moves = AStarPathfinding(playerTile, enemyTile); // Find the best path to the player. Calculating the path from the player to the enemy prevents loops in movement
-                        if (moves != null) { // If the algorithm found a path
-                            enemy.MoveToTileBlocking(moves[1], enemy.attributes.movementSpeed); // 0 is the enemy's tile, and 1 is the next step
+                        if (enemyTile && playerTile) { // Both tiles were successfully retrieved
+                            double distanceFromPlayer = Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position));
+                            if (enemy.attributes.baseAttackRange >= distanceFromPlayer) { // Enemy is within firing range of the player
+                                Debug.Log(enemy.attributes.captainName + " is firing upon " + player.attributes.captainName);
+                            }
+                            else {
+                                List<Tile> moves = AStarPathfinding(playerTile, enemyTile); // Find the best path to the player. Calculating the path from the player to the enemy prevents loops in movement
+                                if (moves != null) { // If the algorithm found a path
+                                    StartCoroutine(enemy.MoveToTileCoroutine(moves[1])); // 0 is the enemy's tile, and 1 is the next step
+                                }
+                            }
                         }
+
+                        enemy.attributes.actionsRemaining--; // Reduce the number of actions for the enemy
                     }
+                   
                 }
             }
-            isTakingTurn = false;
+            GameManager.instance.StartPlayerTurn(); // Once the enemy turns are complete, start the player's turn
+        } else {
+            Debug.LogError("Enemies were asked to take turn, but it is still the player's turn!");
         }
     }
 
@@ -116,7 +129,7 @@ public class EnemyController {
                     pathCost = pendingPathCost, // The path cost for this tile
                     specificDistance = pendingPathCost + HeuristicCostEstimate(neighbour, target) // Total cost with heuristic estimate
                 };
-                nodes[neighbour] = currentNodePDV; // Assign the updated entry in the dictionary
+                nodes[neighbour] = neighbourPDV; // Assign the updated entry in the dictionary
             }
         }
 

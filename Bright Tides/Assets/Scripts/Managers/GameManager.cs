@@ -29,10 +29,8 @@ public class GameManager : MonoBehaviour {
     public GameObject playerModel;
     public GameObject playerInstance;
 	public EntityAttributes playerAttributesTemplates;
-	
-    public float movementSpeed = 0.5f;
 
-    public Tile moveToTile;
+    public Tile selectedMovementTile;
 
 	private GameObject userInterface;
 	private GameObject playerInfoPanel;
@@ -68,25 +66,32 @@ public class GameManager : MonoBehaviour {
 
 		uiTurnCount = playerInfoPanel.transform.Find("TurnCount").Find("Count").gameObject.GetComponent<UnityEngine.UI.Text>();
 		
-
 		DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
     }
 
-	public void Simulate()
+    // This is called to take control from the player for the enemy turn
+	public void EndPlayerTurn()
 	{
-		GameManager.instance.simulateTurn = true; // turn on turn simulation to prevent user actions
+		simulateTurn = true; // turn on turn simulation to prevent user actions
+        if (currentRegion != null && currentRegion.enemyController != null) {
+            currentRegion.enemyController.StartEnemyTurn(); // Begin the enemy turn
+        } else {
+            StartPlayerTurn(); // Enemies cannot take a turn, so start the player's next turn
+        }
 
-		EntityAttributes playerAttributes = GameManager.instance.playerInstance.GetComponent<Entity>().attributes;
+    }
 
-		// update player attributes before ending turn
-		playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
-		int turnCount = int.Parse(instance.uiTurnCount.text);
+    // This is called to give the player control again
+    public void StartPlayerTurn() {
+        EntityAttributes playerAttributes = playerInstance.GetComponent<Entity>().attributes;
 
-		GameManager.instance.uiTurnCount.text = (++turnCount).ToString();
-		GameManager.instance.simulateTurn = false; // turn is over, let player do stuff
-	}
+        // update player attributes before ending turn
+        playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
+        int turnCount = int.Parse(uiTurnCount.text);
 
-
+        uiTurnCount.text = (++turnCount).ToString();
+        simulateTurn = false; // turn is over, let player do stuff
+    }
 
 
 	public void StartGame()
@@ -151,6 +156,7 @@ public class GameManager : MonoBehaviour {
 		if (playerInstance == null) // Only create a new player instance if one doesn't exist
         {
 			playerInstance = Instantiate(playerModel, startingTile.transform);
+            playerInstance.GetComponent<Entity>().AttributesTemplate = ScriptableObject.Instantiate(GameManager.instance.playerAttributesTemplates);
             playerInstance.name = "Player";
 		}
         startingTile.SetTileAsParent(playerInstance.GetComponent<Entity>()); // Update the player position and tile
@@ -160,11 +166,9 @@ public class GameManager : MonoBehaviour {
     {
         if (!this.simulateTurn)
         {
-            if (this.moveToTile != null)
+            if (this.selectedMovementTile != null)
             {
                 MovePlayerToTile();
-            } else if (currentRegion != null && currentRegion.enemyController != null) {
-                currentRegion.enemyController.PerformEnemyTurn();
             }
         }
     }
@@ -192,18 +196,18 @@ public class GameManager : MonoBehaviour {
     {
         if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
         Entity playerEntity = playerInstance.GetComponent<Entity>();
-        playerEntity.MoveToTile(moveToTile, playerEntity.attributes.movementSpeed);
+        playerEntity.MoveToTile(selectedMovementTile);
 
-        if (playerInstance.transform.parent == moveToTile.transform) // If the player has reached the tile, the tile becomes the parent
+        if (playerInstance.transform.parent == selectedMovementTile.transform) // If the player has reached the tile, the tile becomes the parent
         {
 			GameManager.instance.isPerformingAction = false;
 			GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
-			if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
+			if (selectedMovementTile.TileProperties.tileType == TileType.playerExitTile)
 			{
 				this.LoadNextLevel();
 			}
 
-            this.moveToTile = null;
+            this.selectedMovementTile = null;
             // simulateTurn = false;
         }
     }

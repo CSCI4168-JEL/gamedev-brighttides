@@ -5,6 +5,9 @@ using UnityEngine;
 public class Entity : MonoBehaviour {
 	private EntityAttributes attributesTemplate;
 
+    public bool isMoving = false; // Track if the entity is moving
+    public Tile desinationTile; // The tile that the entity is moving towards
+
 	public EntityAttributes AttributesTemplate
 	{
 		get { return this.attributesTemplate; }
@@ -27,30 +30,55 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    public void MoveToTile(Tile target, float speed) {
-        if (transform.position == target.tileTopPosition) // Move the entity towards the top of the tile
-        {
-            Debug.Log("Moving entitiy " + name + " complete.");
-            target.SetTileAsParent(this); // After the movement is complete, update the parent of the entity and the pathability of the tile
+    private void Update() {
+        MovementUpdate(); // Update the movement
+    }
+
+    // Method to reset the remaining moves for an entity
+    public void RefreshRemainingActions() {
+        attributes.actionsRemaining = attributes.actionsPerTurn;
+    }
+
+    // Starts a movement and returns true if it was able to commence a movement
+    public bool MoveToTile(Tile target) {
+        if (attributes.movementSpeed > 0) {
+            desinationTile = target;
+            isMoving = true; // Begin the movement in the next update
+        } else {
+            Debug.LogWarning("Attempted to move an entity that has no movement speed!");
         }
-        else {
-            transform.position = Vector3.MoveTowards(transform.position, target.tileTopPosition, speed * Time.deltaTime);
+
+        return isMoving;
+    }
+
+    public IEnumerator MoveToTileCoroutine(Tile target) {
+        while (target != null) {
+            if (transform.position == target.tileTopPosition) {
+                Debug.Log("Moving entitiy " + name + " complete.");
+                GetComponentInParent<Tile>().LeaveTile(this); // Remove this from the previous tile
+                target.SetTileAsParent(this); // After the movement is complete, update the parent of the entity and the pathability of the tile
+                target = null; // Clear the reference to the tile
+                yield return true;
+            }
+            else {
+                transform.position = Vector3.MoveTowards(transform.position, target.tileTopPosition, attributes.movementSpeed * Time.deltaTime);
+                yield return new WaitForEndOfFrame();
+            }
         }
     }
 
-    // Completes the movement from the entity's position in a blocking loop. Temporary method to allow for AI testing
-    public void MoveToTileBlocking(Tile target, float speed) {
-        if (speed <= 0) {
-            Debug.LogWarning("The entity's speed is 0, so it cannot move");
-            return;
+    // Move the entity towards the top of the tile
+    private void MovementUpdate() {
+        if (isMoving && desinationTile != null) {
+            if (transform.position == desinationTile.tileTopPosition) {
+                Debug.Log("Moving entitiy " + name + " complete.");
+                desinationTile.SetTileAsParent(this); // After the movement is complete, update the parent of the entity and the pathability of the tile
+                desinationTile = null; // Clear the reference to the tile
+                isMoving = false;
+            }
+            else {
+                transform.position = Vector3.MoveTowards(transform.position, desinationTile.tileTopPosition, attributes.movementSpeed * Time.deltaTime);
+            }
         }
-
-        while (transform.position != target.tileTopPosition) {
-            GetComponentInParent<Tile>().LeaveTile(this); // Get the parent tile and remove it
-            transform.position = Vector3.MoveTowards(transform.position, target.tileTopPosition, speed); // Move the entity towards the top of the tile
-        }
-
-        Debug.Log("Moving entitiy " + name + " complete.");
-        target.SetTileAsParent(this); // After the movement is complete, update the parent of the entity and the pathability of the tile
     }
 }

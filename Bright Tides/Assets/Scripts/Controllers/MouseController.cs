@@ -110,7 +110,7 @@ public class MouseController : MonoBehaviour
 			moveToIndicatorsDrawn = true;
 		}
 
-		if (mouseMode != MouseMode.move || GameManager.instance.moveToTile != null)
+		if (mouseMode != MouseMode.move || GameManager.instance.selectedMovementTile != null)
 		{
 			moveToIndicatorsDrawn = false;
 			ClearMovementIndicators();
@@ -135,7 +135,7 @@ public class MouseController : MonoBehaviour
 					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
 					{
 						
-						GameManager.instance.moveToTile = selection; // Update the moveToTile with the selected, pathable tile
+						GameManager.instance.selectedMovementTile = selection; // Update the moveToTile with the selected, pathable tile
 					}
 					break;
 				case MouseMode.attack:
@@ -242,7 +242,7 @@ public class MouseController : MonoBehaviour
 	 * */
     private void ClearSelected()
     {
-        GameManager.instance.moveToTile = null;
+        GameManager.instance.selectedMovementTile = null;
         selectedObject = null;
     }
 
