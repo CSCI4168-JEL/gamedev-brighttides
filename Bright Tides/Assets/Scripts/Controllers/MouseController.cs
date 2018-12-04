@@ -110,7 +110,7 @@ public class MouseController : MonoBehaviour
 			moveToIndicatorsDrawn = true;
 		}
 
-		if (mouseMode != MouseMode.move || GameManager.instance.selectedMovementTile != null)
+        if (mouseMode != MouseMode.move || GameManager.instance.isPerformingAction)
 		{
 			moveToIndicatorsDrawn = false;
 			ClearMovementIndicators();
@@ -134,8 +134,7 @@ public class MouseController : MonoBehaviour
 					Tile selection = this.mouseOverObject.GetComponent<Tile>();
 					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
 					{
-						
-						GameManager.instance.selectedMovementTile = selection; // Update the moveToTile with the selected, pathable tile
+						GameManager.instance.PlayerMoveToTile(selection); // Make the player move to this tile
 					}
 					break;
 				case MouseMode.attack:
@@ -143,7 +142,7 @@ public class MouseController : MonoBehaviour
 
 					if (entity != null && entity.attributes.entityType == EntityType.Enemy)
 					{
-                        GameManager.instance.MakePlayerAttack(entity); // Make the player attack this entity
+                        GameManager.instance.PlayerAttackEntity(entity); // Make the player attack this entity
 					} else
 					{
 						Debug.Log("No enemy at this location");
@@ -188,7 +187,7 @@ public class MouseController : MonoBehaviour
         }
     }
 
-    private GameObject findBaseTile(GameObject obj)
+    private GameObject FindBaseTile(GameObject obj)
     {
         // traverse game object tree until we get a map tile
         while (obj.tag != "MapTile")
@@ -206,7 +205,7 @@ public class MouseController : MonoBehaviour
     {
         if (newSelection != null && mouseMode == MouseMode.explore)
         {
-            newSelection = findBaseTile(newSelection);
+            newSelection = FindBaseTile(newSelection);
 
             // clear the selection indicator on the currently selected object if one exists
             if (selectedObject != null)
@@ -234,7 +233,6 @@ public class MouseController : MonoBehaviour
 	 * */
     private void ClearSelected()
     {
-        GameManager.instance.selectedMovementTile = null;
         selectedObject = null;
     }
 
@@ -296,7 +294,7 @@ public class MouseController : MonoBehaviour
             if (Physics.Raycast(playerTransform.position + startPoint, Vector3.down, out hitInfo, 10.0f))
             {
                 // if we are not colliding with a pathable game tile, then do nothing
-                if (findBaseTile(hitInfo.collider.gameObject).GetComponent<Tile>().TileProperties.IsPathableByPlayer == false) { continue; }
+                if (FindBaseTile(hitInfo.collider.gameObject).GetComponent<Tile>().TileProperties.IsPathableByPlayer == false) { continue; }
                 
                 // instance a movement indicator with the correct orientation
                 if (startPoint.x == 1 && startPoint.z == 0)

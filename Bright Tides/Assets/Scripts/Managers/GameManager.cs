@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public GameObject playerInstance;
 	public EntityAttributes playerAttributesTemplates;
 
-    public Tile selectedMovementTile;
+    // public Tile selectedMovementTile;
 
     private GameObject userInterface;
     private GameObject playerInfoPanel;
@@ -74,13 +74,23 @@ public class GameManager : MonoBehaviour
     // This is called to take control from the player for the enemy turn
 	public void EndPlayerTurn()
 	{
-		simulateTurn = true; // turn on turn simulation to prevent user actions
-        if (currentRegion != null && currentRegion.enemyController != null) {
-            currentRegion.enemyController.StartEnemyTurn(); // Begin the enemy turn
-        } else {
-            StartPlayerTurn(); // Enemies cannot take a turn, so start the player's next turn
+        if (isPerformingAction) {
+            Debug.LogWarning("Player attempted to end turn in the middle of an action... Be patient :)");
+            return;
         }
 
+        if (simulateTurn) {
+            Debug.LogWarning("Player attempted to end turn during the enemy's turn. Wow, rude.");
+            return;
+        }
+
+        simulateTurn = true; // turn on turn simulation to prevent user actions
+        if (currentRegion != null && currentRegion.enemyController != null) {
+            currentRegion.enemyController.StartEnemyTurn(); // Begin the enemy turn
+        }
+        else {
+            StartPlayerTurn(); // Enemies cannot take a turn, so start the player's next turn
+        }
     }
 
     // This is called to give the player control again
@@ -164,17 +174,6 @@ public class GameManager : MonoBehaviour
         startingTile.SetTileAsParent(playerInstance.GetComponent<Entity>()); // Update the player position and tile
     }
 
-    private void Update()
-    {
-        if (!this.simulateTurn)
-        {
-            if (this.selectedMovementTile != null)
-            {
-                MovePlayerToTile();
-            }
-        }
-    }
-
     private void OnGUI()
     {
         UpdateUIPlayerInfo();
@@ -194,33 +193,44 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void MovePlayerToTile()
+    public void PlayerMoveToTile(Tile destination)
     {
-        if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
-        isPerformingAction = true; // Prevent further actions from starting
         Entity playerEntity = playerInstance.GetComponent<Entity>();
-        playerEntity.MoveToTile(selectedMovementTile);
 
-        if (playerInstance.transform.parent == selectedMovementTile.transform) // If the player has reached the tile, the tile becomes the parent
-        {
-			isPerformingAction = false;
-			playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
-			if (selectedMovementTile.TileProperties.tileType == TileType.playerExitTile)
-			{
-				this.LoadNextLevel();
+        StartCoroutine(PlayerPerformAction(playerEntity.MoveToTileCoroutine(destination), () => {
+            if (destination.TileProperties.tileType == TileType.playerExitTile) {
+                this.LoadNextLevel();
             }
+        }));
+    }
 
-            this.selectedMovementTile = null;
+    public void PlayerAttackEntity(Entity target) {
+        Entity playerEntity = playerInstance.GetComponent<Entity>();
+        if (playerEntity.attributes.ammo > 0) {
+            Action callback = () => {
+            };
+
+            StartCoroutine(PlayerPerformAction(playerEntity.AttackCoroutine(target), () => {
+                playerEntity.attributes.ammo--; // Reduce the ammo
+            }));
         }
     }
 
-    public void MakePlayerAttack(Entity target) {
-        Entity playerEntity = playerInstance.GetComponent<Entity>();
-        if (playerEntity.attributes.ammo > 0 && playerEntity.attributes.actionsRemaining > 0) {
-            playerEntity.Attack(target); // Perform the actual attack
-            playerEntity.attributes.ammo--; // Reduce the ammo
-            playerEntity.attributes.actionsRemaining--; // Use a remaining turn
+    // Wrapper method for state-controlled player actions
+    private IEnumerator PlayerPerformAction(IEnumerator actionCallback, Action afterCallback) {
+        if (playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) {
+            Debug.Log("Unable to perform player action");
+            yield return null; // Exit early since no moves remain
         }
+        Entity playerEntity = playerInstance.GetComponent<Entity>();
+
+        isPerformingAction = true; // Prevent further actions from starting
+        yield return StartCoroutine(actionCallback); // Perform the specified action
+        isPerformingAction = false; // The action is complete
+
+        playerInstance.GetComponent<Entity>().attributes.actionsRemaining--; // Reduce remaining actions
+
+        afterCallback();
     }
 
     void UpdateUIPlayerInfo()

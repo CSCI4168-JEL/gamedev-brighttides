@@ -34,17 +34,10 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    private void Update() {
-        MovementUpdate(); // Update the movement
-    }
-
-    public void Attack(Entity target) {
-        Projectile.CreateProjectile(gameObject, target.gameObject); // Create a projectile heading towards the target
-    }
-
     // Method to directly deal damage to an Entity
     public void DealDamage(int damage) {
         attributes.health -= damage;
+        Debug.Log(name + " just took " + damage + " damage!");
         if (attributes.health <= 0) { // If fatal damage was dealt
             KillEntity(); // Kill self and cause any side-effects
         }
@@ -91,6 +84,8 @@ public class Entity : MonoBehaviour {
         return isMoving;
     }
 
+    /** Entity Actions **/
+
     // MoveToTile as a coroutine to allow for frame updates while moving the entity. Moves at a fixed speed
     public IEnumerator MoveToTileCoroutine(Tile target) {
         float totalDistance = Vector3.Distance(transform.position, target.tileTopPosition);
@@ -101,27 +96,21 @@ public class Entity : MonoBehaviour {
                 GetComponentInParent<Tile>().LeaveTile(this); // Remove this from the previous tile
                 target.SetTileAsParent(this); // After the movement is complete, update the parent of the entity and the pathability of the tile
                 target = null; // Clear the reference to the tile
-                yield return null;
+                yield return null;  // Exit the coroutine
             }
             else {
                 transform.position = Vector3.MoveTowards(transform.position, target.tileTopPosition, totalDistance * Time.deltaTime);
-                yield return waitForEndOfFrame; // Wait til frame advances, then continue
+                yield return waitForEndOfFrame; // Wait until frame advances, then continue
             }
         }
     }
 
-    // Move the entity towards the top of the tile via update. Kept this to allow mousecontroller to work, but could change player movement to use the coroutine as well
-    private void MovementUpdate() {
-        if (isMoving && desinationTile != null) {
-            if (transform.position == desinationTile.tileTopPosition) {
-                Debug.Log("Moving entitiy " + name + " complete.");
-                desinationTile.SetTileAsParent(this); // After the movement is complete, update the parent of the entity and the pathability of the tile
-                desinationTile = null; // Clear the reference to the tile
-                isMoving = false;
-            }
-            else {
-                transform.position = Vector3.MoveTowards(transform.position, desinationTile.tileTopPosition, attributes.movementSpeed * Time.deltaTime);
-            }
+    public IEnumerator AttackCoroutine(Entity target) {
+        Projectile projectile = Projectile.CreateProjectile(this, target); // Create a projectile heading towards the target
+        while (projectile != null) {
+            yield return waitForEndOfFrame; // Allow the projectile to live out its lifetime
         }
+
+        yield return null; // Exit the coroutine
     }
 }

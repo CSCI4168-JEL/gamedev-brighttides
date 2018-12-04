@@ -21,6 +21,7 @@ public class EntityAttributes : ScriptableObject {
     public Item[] inventory;
 
 	public int actionsPerTurn;
+    [HideInInspector]
 	public int actionsRemaining;
 	public float movementSpeed;
 
