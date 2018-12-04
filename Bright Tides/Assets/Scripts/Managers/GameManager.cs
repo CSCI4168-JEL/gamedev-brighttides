@@ -196,6 +196,7 @@ public class GameManager : MonoBehaviour
     void MovePlayerToTile()
     {
         if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
+        isPerformingAction = true; // Prevent further actions from starting
         Entity playerEntity = playerInstance.GetComponent<Entity>();
         playerEntity.MoveToTile(selectedMovementTile);
 
