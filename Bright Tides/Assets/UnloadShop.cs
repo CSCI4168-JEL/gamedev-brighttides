@@ -9,6 +9,6 @@ public class UnloadShop : MonoBehaviour {
 	}
 	public void OnProceedClick()
 	{
-		GameManager.instance.exitShop();
+		GameManager.instance.ExitShop();
 	}
 }

@@ -36,4 +36,4 @@ MonoBehaviour:
   wisdom: 0
   luck: 0
   isPathableByPlayer: 1
-  isPathableByEnemy: 0
+  isPathableByEnemy: 1

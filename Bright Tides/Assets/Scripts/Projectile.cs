@@ -42,14 +42,9 @@ public class Projectile : MonoBehaviour {
 
 			if (percentComplete > 1.0f)
 			{
-				MoveToTarget.GetComponent<Entity>().attributes.health -= (int) (baseDamage * Random.Range(damageModifier, 1.0f));
-				if (MoveToTarget.GetComponent<Entity>().attributes.health <= 0)
-				{
-					transform.parent.GetComponent<Entity>().attributes.gold += MoveToTarget.GetComponent<Entity>().attributes.gold;
-					transform.parent.GetComponent<Entity>().attributes.gold += MoveToTarget.GetComponent<Entity>().attributes.ammo;
-					Destroy(MoveToTarget);
-				}
-				Destroy(this.gameObject);
+
+				MoveToTarget.GetComponent<Entity>().DealDamage((int) (baseDamage * Random.Range(damageModifier, 1.0f))); // Deal the appropriate damage to the target on impact
+				Destroy(this.gameObject); // Remove the projectile. Apply earth-shattering kaboom here?
 				GameManager.instance.isPerformingAction = false;
 			}
 			else

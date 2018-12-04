@@ -29,11 +29,9 @@ public class GameManager : MonoBehaviour
     [Header("Player Settings")]
     public GameObject playerModel;
     public GameObject playerInstance;
-    public EntityAttributes playerAttributesTemplates;
+	public EntityAttributes playerAttributesTemplates;
 
-    public float movementSpeed = 0.5f;
-
-    public Tile moveToTile;
+    public Tile selectedMovementTile;
 
     private GameObject userInterface;
     private GameObject playerInfoPanel;
@@ -69,27 +67,33 @@ public class GameManager : MonoBehaviour
         uiActionsRemaining = playerInfoPanel.transform.Find("ActionsRemaining").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
 
         uiTurnCount = playerInfoPanel.transform.Find("TurnCount").Find("Count").gameObject.GetComponent<UnityEngine.UI.Text>();
-
-
-        DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
+		
+		DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
     }
 
-    public void Simulate()
-    {
-        GameManager.instance.simulateTurn = true; // turn on turn simulation to prevent user actions
+    // This is called to take control from the player for the enemy turn
+	public void EndPlayerTurn()
+	{
+		simulateTurn = true; // turn on turn simulation to prevent user actions
+        if (currentRegion != null && currentRegion.enemyController != null) {
+            currentRegion.enemyController.StartEnemyTurn(); // Begin the enemy turn
+        } else {
+            StartPlayerTurn(); // Enemies cannot take a turn, so start the player's next turn
+        }
 
-        EntityAttributes playerAttributes = GameManager.instance.playerInstance.GetComponent<Entity>().attributes;
+    }
+
+    // This is called to give the player control again
+    public void StartPlayerTurn() {
+        EntityAttributes playerAttributes = playerInstance.GetComponent<Entity>().attributes;
 
         // update player attributes before ending turn
         playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
-        int turnCount = int.Parse(instance.uiTurnCount.text);
+        int turnCount = int.Parse(uiTurnCount.text);
 
-        GameManager.instance.uiTurnCount.text = (++turnCount).ToString();
-        GameManager.instance.simulateTurn = false; // turn is over, let player do stuff
+        uiTurnCount.text = (++turnCount).ToString();
+        simulateTurn = false; // turn is over, let player do stuff
     }
-
-
-
 
     public void StartGame()
     {
@@ -148,33 +152,22 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void InstantiatePlayer(Transform startingTileTransform)
+    public void InstantiatePlayer(Tile startingTile)
     {
-        // only create a new player instance if one doesn't exist
-        // otherwise just update it's position
-        if (playerInstance == null)
+		if (playerInstance == null) // Only create a new player instance if one doesn't exist
         {
-            playerInstance = Instantiate(playerModel, startingTileTransform);
+			playerInstance = Instantiate(playerModel, startingTile.transform);
             playerInstance.GetComponent<Entity>().AttributesTemplate = ScriptableObject.Instantiate(GameManager.instance.playerAttributesTemplates);
             playerInstance.name = "Player";
-
-        }
-        else
-        {
-            playerInstance.transform.position = startingTileTransform.position;
-            playerInstance.transform.parent = startingTileTransform;
-        }
-
-
-        playerInstance.transform.position += new Vector3(0, 0.52f, 0); // To place the player above the water, not inside
-
+		}
+        startingTile.SetTileAsParent(playerInstance.GetComponent<Entity>()); // Update the player position and tile
     }
 
     private void Update()
     {
         if (!this.simulateTurn)
         {
-            if (this.moveToTile != null)
+            if (this.selectedMovementTile != null)
             {
                 MovePlayerToTile();
             }
@@ -183,7 +176,7 @@ public class GameManager : MonoBehaviour
 
     private void OnGUI()
     {
-        updateUIPlayerInfo();
+        UpdateUIPlayerInfo();
         //GUI.Label(new Rect(10, 10, 400, 30), "Map Generated:" + this.scene.map.transform.childCount);
     }
 
@@ -203,41 +196,25 @@ public class GameManager : MonoBehaviour
     void MovePlayerToTile()
     {
         if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
-
         Entity playerEntity = playerInstance.GetComponent<Entity>();
-        MoveEntityToTile(playerEntity, moveToTile, playerEntity.attributes.movementSpeed);
+        playerEntity.MoveToTile(selectedMovementTile);
 
-        if (playerInstance.transform.parent == moveToTile.transform) // If the player has reached the tile, the tile becomes the parent
+        if (playerInstance.transform.parent == selectedMovementTile.transform) // If the player has reached the tile, the tile becomes the parent
         {
-            GameManager.instance.isPerformingAction = false;
-            GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
-            if (moveToTile.TileProperties.tileType == TileType.playerExitTile)
-            {
-                this.LoadNextLevel();
+			isPerformingAction = false;
+			playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
+			if (selectedMovementTile.TileProperties.tileType == TileType.playerExitTile)
+			{
+				this.LoadNextLevel();
                 //SceneManager.LoadSceneAsync("ShopMenu", LoadSceneMode.Additive); // Must remove. Used to test shop.
             }
 
-            this.moveToTile = null;
+            this.selectedMovementTile = null;
             // simulateTurn = false;
         }
-    }
+    }	
 
-    void MoveEntityToTile(Entity entity, Tile target, float speed)
-    {
-        GameManager.instance.isPerformingAction = true;
-        if (entity.transform.position == target.tileTopPosition) // Move the entity towards the top of the tile
-        {
-            Debug.Log("Moving entitiy " + entity.name + " complete.");
-            target.SetTileAsParent(entity); // After the movement is complete, update the parent of the entity and the pathability of the tile
-            GameManager.instance.isPerformingAction = false;
-        }
-        else
-        {
-            entity.transform.position = Vector3.MoveTowards(entity.transform.position, target.tileTopPosition, speed * Time.deltaTime);
-        }
-    }
-
-    void updateUIPlayerInfo()
+    void UpdateUIPlayerInfo()
     {
         if (playerInstance != null)
         {
@@ -250,7 +227,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Method called to proceed to next level
-    public void exitShop()
+    public void ExitShop()
     {
         if (SceneManager.GetSceneByBuildIndex(3).isLoaded)
         {
@@ -267,7 +244,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Adds the selected item to the player's inventory if they have enough gold
-    public void addPlayerItem(Item purchased)
+    public void AddPlayerItem(Item purchased)
     {
         if (purchased.price > GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold)
         {
@@ -275,7 +252,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold -= purchased.price;
+        playerInstance.GetComponent<Entity>().attributes.gold -= purchased.price;
 
         Debug.Log("Purchase successful");
         switch (purchased.itemType)

@@ -27,7 +27,7 @@ public class TileSet : ScriptableObject {
 	[Tooltip("The list of all non-pathable tile prefabs. Must contain at least one element")]
 	public GameObject[] obstacleTiles = new GameObject[1]; // Must contain at least one obstacle tile definition
 
-	public GameObject CreateTile(TileType type, Vector3 position, Quaternion rotation, Transform parent) {
+	public Tile CreateTile(TileType type, Vector3 position, Quaternion rotation, Transform parent) {
 		switch (type) {
 			case TileType.waterTile:
 				return CreateWaterTile(position, rotation, parent);
@@ -58,65 +58,71 @@ public class TileSet : ScriptableObject {
 	 * TODO: Make these distinctly choose the different properties/behaviors
 	 */
 
-	GameObject CreatePlayerSpawnTile(Vector3 position, Quaternion rotation, Transform parent) {
+	Tile CreatePlayerSpawnTile(Vector3 position, Quaternion rotation, Transform parent) {
 		GameObject tile = Instantiate(waterTile, position, rotation, parent);
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.playerSpawnTile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.playerSpawnTile;
 
 		tileComponent.SetSpawnType(EntityType.Player); // Set the spawn type to player
 		
-		return tile;
+		return tileComponent;
 	}
 
-	GameObject CreatePlayerExitTile(Vector3 position, Quaternion rotation, Transform parent) {
+    Tile CreatePlayerExitTile(Vector3 position, Quaternion rotation, Transform parent) {
 		GameObject tile = Instantiate(playerExitTile, position, rotation, parent);
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.playerExitTile;
-		return tile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.playerExitTile;
+		return tileComponent;
 	}
 
-	GameObject CreateWaterTile(Vector3 position, Quaternion rotation, Transform parent) {
+    Tile CreateWaterTile(Vector3 position, Quaternion rotation, Transform parent) {
 		GameObject tile = Instantiate(waterTile, position, rotation, parent);
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.waterTile;
-		return tile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.waterTile;
+		return tileComponent;
 	}
 
-	GameObject CreateObstacleTile(Vector3 position, Quaternion rotation, Transform parent) {
+    Tile CreateObstacleTile(Vector3 position, Quaternion rotation, Transform parent) {
 		GameObject selectedPrefab = obstacleTiles[Random.Range(0, obstacleTiles.Length)]; // Choose randomly from all provided obstacle tile prefabs
 		GameObject tile = Instantiate(selectedPrefab, position, rotation, parent);
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = false;
+		tileComponent.TileProperties.IsPathableByEnemy = false;
 		tileComponent.TileProperties.tileType = TileType.obstacleTile;
-		return tile;
+		return tileComponent;
 	}
 
-	GameObject CreateEnemySpawnTile(Vector3 position, Quaternion rotation, Transform parent) {
+    Tile CreateEnemySpawnTile(Vector3 position, Quaternion rotation, Transform parent) {
 		GameObject tile = Instantiate(waterTile, position, rotation, parent);
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.enemySpawnTile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.enemySpawnTile;
 
 		tileComponent.SetSpawnType(EntityType.Enemy); // Set the spawn type to enemy
-		return tile;
+		return tileComponent;
 	}
 
-	GameObject CreateTreasureSpawnTile(Vector3 position, Quaternion rotation, Transform parent) {
+    Tile CreateTreasureSpawnTile(Vector3 position, Quaternion rotation, Transform parent) {
 		GameObject tile = Instantiate(waterTile, position, rotation, parent);
 		Tile tileComponent = tile.GetComponent<Tile>();
 
 		tileComponent.TileProperties.IsPathableByPlayer = true;
-		tileComponent.TileProperties.tileType = TileType.treasureSpawnTile;
+        tileComponent.TileProperties.IsPathableByEnemy = true;
+        tileComponent.TileProperties.tileType = TileType.treasureSpawnTile;
 
 		tileComponent.SetSpawnType(EntityType.Treasure); // Set the spawn type to treasure
-		return tile;
+		return tileComponent;
 	}
 }
