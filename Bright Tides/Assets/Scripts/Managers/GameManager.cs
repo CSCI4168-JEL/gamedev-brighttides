@@ -73,8 +73,31 @@ public class GameManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
     }
 
+
+    private void Update() {
+        if (!this.simulateTurn) {
+            if (this.selectedMovementTile != null) {
+                MovePlayerToTile();
+            }
+        }
+    }
+
+    private void OnGUI() {
+        UpdateUIPlayerInfo();
+        //GUI.Label(new Rect(10, 10, 400, 30), "Map Generated:" + this.scene.map.transform.childCount);
+    }
+
+    // Method to enable/disable the UI for the current scene
+    public void ToggleUI(bool enabled) {
+        if (userInterface) { // Get the current userInterface reference
+            userInterface.gameObject.SetActive(enabled);
+        } else {
+            Debug.LogError("No UI found in the scene, cannot toggle its status!");
+        }
+    }
+
     // This is called to take control from the player for the enemy turn
-	public void EndPlayerTurn()
+    public void EndPlayerTurn()
 	{
 		simulateTurn = true; // turn on turn simulation to prevent user actions
         if (currentRegion != null && currentRegion.enemyController != null) {
@@ -118,12 +141,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        this.LoadLevel(this.sceneState.nextLevel);
-		SceneManager.sceneLoaded -= OnSceneLoaded;
-	}
-
     /*
      * Loads the next scene indicated by the scene data
      * */
@@ -160,6 +177,11 @@ public class GameManager : MonoBehaviour
         this.sceneState.OnSceneTransition();
     }
 
+    // Callback for when a scene is loaded
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        this.LoadLevel(this.sceneState.nextLevel);
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 
     /*
      * Exits the game
@@ -180,24 +202,7 @@ public class GameManager : MonoBehaviour
         startingTile.SetTileAsParent(playerInstance.GetComponent<Entity>()); // Update the player position and tile
     }
 
-    private void Update()
-    {
-        if (!this.simulateTurn)
-        {
-            if (this.selectedMovementTile != null)
-            {
-                MovePlayerToTile();
-            }
-        }
-    }
-
-    private void OnGUI()
-    {
-        UpdateUIPlayerInfo();
-        //GUI.Label(new Rect(10, 10, 400, 30), "Map Generated:" + this.scene.map.transform.childCount);
-    }
-
-    void SaveMapData()
+    private void SaveMapData()
     {
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream saveFile = File.Open(Application.persistentDataPath + "/" + this.sceneState.name + ".dat", FileMode.OpenOrCreate);
@@ -210,7 +215,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void MovePlayerToTile()
+    private void MovePlayerToTile()
     {
         if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
         isPerformingAction = true; // Prevent further actions from starting
@@ -230,9 +235,9 @@ public class GameManager : MonoBehaviour
             this.selectedMovementTile = null;
             // simulateTurn = false;
         }
-    }	
+    }
 
-    void UpdateUIPlayerInfo()
+    private void UpdateUIPlayerInfo()
     {
         if (playerInstance != null)
         {
@@ -244,7 +249,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Method called to proceed to next level
+    // Method called to proceed to next level from the shop
     public void ExitShop()
     {
         if (SceneManager.GetSceneByBuildIndex(3).isLoaded)
@@ -252,51 +257,12 @@ public class GameManager : MonoBehaviour
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(3));
 			if (sceneState.showUI)
 			{
-				GameManager.instance.gameObject.transform.Find("UI").gameObject.SetActive(true);
+                ToggleUI(sceneState.showUI);
 			}
 		}
         else
         {
             Debug.Log("Shop scene is not currently loaded");
-        }
-    }
-
-    // Adds the selected item to the player's inventory if they have enough gold
-    public void AddPlayerItem(Item purchased)
-    {
-        if (purchased.price > GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold)
-        {
-            Debug.Log("Not enough gold");
-            return;
-        }
-
-        playerInstance.GetComponent<Entity>().attributes.gold -= purchased.price;
-
-        Debug.Log("Purchase successful");
-        switch (purchased.itemType)
-        {
-            case ItemType.Restore:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo += purchased.ammoModifier;
-                int healthMod = Math.Min(purchased.healthModifier, GameManager.instance.playerInstance.GetComponent<Entity>().attributes.maxHealth - GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health);
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health += healthMod;
-                break;
-
-            case ItemType.Range:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.baseAttackRange += purchased.rangeModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 0);
-                break;
-            case ItemType.Damage:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.baseAttackDamage += purchased.damageModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 1);
-                break;
-            case ItemType.Health:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.maxHealth += purchased.maxHealthModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 2);
-                break;
-            case ItemType.Speed:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.movementSpeed += purchased.speedModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 3);
-                break;
         }
     }
 }

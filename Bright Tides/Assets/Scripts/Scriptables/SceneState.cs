@@ -80,10 +80,7 @@ public class SceneState : ScriptableObject
 			Debug.Log("Skipping map generation...");
 		}
 
-		if (this.showUI)
-		{
-			GameManager.instance.gameObject.transform.Find("UI").gameObject.SetActive(this.showUI);
-		}
+        GameManager.instance.ToggleUI(showUI); // Toggle the UI based on this scene settings
 
 		// we have finished loading 
 		GameManager.instance.loadingGame = false;
