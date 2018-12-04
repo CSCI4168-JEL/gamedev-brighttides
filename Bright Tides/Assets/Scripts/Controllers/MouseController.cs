@@ -141,17 +141,9 @@ public class MouseController : MonoBehaviour
 				case MouseMode.attack:
 					Entity entity = mouseOverObject.GetComponentInChildren<Entity>();
 
-					if (entity != null && 
-						entity.attributes.entityType == EntityType.Enemy && 
-						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo > 0 &&
-						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining > 0)
+					if (entity != null && entity.attributes.entityType == EntityType.Enemy)
 					{
-						
-						GameObject projectile = Instantiate(Resources.Load("Projectiles/CannonBall", typeof(GameObject)), GameManager.instance.playerInstance.transform) as GameObject;
-
-						projectile.GetComponent<Projectile>().MoveToTarget = entity.gameObject;
-						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo--;
-						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
+                        GameManager.instance.MakePlayerAttack(entity); // Make the player attack this entity
 					} else
 					{
 						Debug.Log("No enemy at this location");

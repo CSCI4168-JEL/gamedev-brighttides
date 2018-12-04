@@ -208,13 +208,20 @@ public class GameManager : MonoBehaviour
 			if (selectedMovementTile.TileProperties.tileType == TileType.playerExitTile)
 			{
 				this.LoadNextLevel();
-                //SceneManager.LoadSceneAsync("ShopMenu", LoadSceneMode.Additive); // Must remove. Used to test shop.
             }
 
             this.selectedMovementTile = null;
-            // simulateTurn = false;
         }
-    }	
+    }
+
+    public void MakePlayerAttack(Entity target) {
+        Entity playerEntity = playerInstance.GetComponent<Entity>();
+        if (playerEntity.attributes.ammo > 0 && playerEntity.attributes.actionsRemaining > 0) {
+            playerEntity.Attack(target); // Perform the actual attack
+            playerEntity.attributes.ammo--; // Reduce the ammo
+            playerEntity.attributes.actionsRemaining--; // Use a remaining turn
+        }
+    }
 
     void UpdateUIPlayerInfo()
     {

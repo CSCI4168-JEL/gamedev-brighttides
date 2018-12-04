@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour {
+    public static GameObject cannonballAsset;
+
 	private const float RAD_DEGREES = Mathf.PI / 180;
 
 	public GameObject MoveToTarget { get; set; }
@@ -15,8 +17,6 @@ public class Projectile : MonoBehaviour {
 
 	private int baseDamage;
 	private float damageModifier;
-	
-	
 
 	// Use this for initialization
 	void Awake () {
@@ -27,6 +27,17 @@ public class Projectile : MonoBehaviour {
 		startTime = Time.time;		
 		
 	}
+
+    public static void CreateProjectile(GameObject parent, GameObject target) {
+        if (!cannonballAsset) {
+            cannonballAsset = (GameObject)Resources.Load("Projectiles/CannonBall", typeof(GameObject)); // Load the resource for the projectile and keep it in memory
+        }
+
+        GameObject projectile = Instantiate(cannonballAsset, parent.transform) as GameObject;
+        Projectile projectileInstance = projectile.GetComponent<Projectile>();
+
+        projectileInstance.MoveToTarget = target;
+    }
 	
 	// Update is called once per frame
 	void Update () {

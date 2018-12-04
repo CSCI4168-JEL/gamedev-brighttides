@@ -26,6 +26,23 @@ public class Entity : MonoBehaviour {
 
 	public EntityAttributes attributes;
 
+
+    private void Awake() {
+        Debug.Log("Setting attributes for " + gameObject.name);
+        if (attributesTemplate != null) {
+            attributes = ScriptableObject.Instantiate(attributesTemplate);
+        }
+    }
+
+    private void Update() {
+        MovementUpdate(); // Update the movement
+    }
+
+    public void Attack(Entity target) {
+        Projectile.CreateProjectile(gameObject, target.gameObject); // Create a projectile heading towards the target
+    }
+
+    // Method to directly deal damage to an Entity
     public void DealDamage(int damage) {
         attributes.health -= damage;
         if (attributes.health <= 0) { // If fatal damage was dealt
@@ -55,17 +72,6 @@ public class Entity : MonoBehaviour {
             }
         }
         Destroy(gameObject); // If GameObject is a goner, Entity is a goner
-    }
-
-    private void Awake() {
-        Debug.Log("Setting attributes for " + gameObject.name);
-        if (attributesTemplate != null) {
-            attributes = ScriptableObject.Instantiate(attributesTemplate);
-        }
-    }
-
-    private void Update() {
-        MovementUpdate(); // Update the movement
     }
 
     // Method to reset the remaining moves for an entity
