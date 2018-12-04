@@ -105,7 +105,8 @@ public class GameManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         this.LoadLevel(this.sceneState.nextLevel);
-    }
+		SceneManager.sceneLoaded -= OnSceneLoaded;
+	}
 
     /*
      * Loads the next scene indicated by the scene data
