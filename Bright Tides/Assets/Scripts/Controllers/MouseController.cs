@@ -147,7 +147,7 @@ public class MouseController : MonoBehaviour
 						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining > 0)
 					{
 						
-						GameObject projectile = Instantiate(Resources.Load("Projectiles/CannonBall", typeof(GameObject)), GameManager.instance.playerInstance.transform) as GameObject;
+						GameObject projectile = Instantiate(Resources.Load("Prefabs/Projectiles/CannonBall", typeof(GameObject)), GameManager.instance.playerInstance.transform) as GameObject;
 
 						projectile.GetComponent<Projectile>().MoveToTarget = entity.gameObject;
 						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo--;
