@@ -10,7 +10,7 @@ public class ShopManager : MonoBehaviour {
         if (GameManager.instance) {
             GameManager.instance.ToggleUI(false); // Disable the UI
         } else {
-            Debug.LogError("Unable to find GameManager... Are you trying to run the Shop Scene on its own?")
+            Debug.LogError("Unable to find GameManager... Are you trying to run the Shop Scene on its own?");
         }
     }
 
