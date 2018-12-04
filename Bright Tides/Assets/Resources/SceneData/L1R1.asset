@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e64b136b76c674c901fdcd204135e7, type: 3}
+  m_Name: L1R1
+  m_EditorClassIdentifier: 
+  sceneName: Region1Level1
+  mapDefinitionFile: {fileID: 4900000, guid: ad0a53e80ffd49a4c9eaca78387cff1c, type: 3}
+  tileSet: {fileID: 11400000, guid: f6ca8a754b3585b498a4e4e8a680ac80, type: 2}
+  entitySet: {fileID: 11400000, guid: 83ffc9bb78948994cb1e11b0e30418b7, type: 2}
+  showUI: 1
+  enemyPopulation: 5
+  treasurePopulation: 3
+  map: {fileID: 0}
+  playerStartPosition: {fileID: 0}
+  previousLevel: {fileID: 11400000, guid: 9ceb4280096255e4ba3e68f3ab95aaf0, type: 2}
+  nextLevel: {fileID: 11400000, guid: f4dd60ad71589c84dba06d581da03591, type: 2}

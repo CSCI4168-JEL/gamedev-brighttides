@@ -76,5 +76,6 @@ public class CameraController : MonoBehaviour
         }
 
         transform.LookAt(objectBeingFollowedTransform.position);
+		
     }
 }

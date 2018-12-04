@@ -97,6 +97,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedIndicator: {fileID: 1693755192500270, guid: 0cdce2c21389e6348bcdcd8b0939fb0f,
     type: 2}
+  straightMovementIndicator: {fileID: 1964516321489318, guid: 9c7f5e195b3012e4c997e8159043688e,
+    type: 2}
+  diagonalMovementIndicator: {fileID: 1899681857979462, guid: 36e88e5f90a794a4f9080490c8bead4f,
+    type: 2}
   defaultMaterial: {fileID: 2100000, guid: aeec7b998d280b64a8781b2a02c118cd, type: 2}
   mouseOverMaterial: {fileID: 2100000, guid: aeec7b998d280b64a8781b2a02c118cd, type: 2}
   validMoveLocationrMaterial: {fileID: 2100000, guid: 3283c11aa6bfee64197db67822a336db,
