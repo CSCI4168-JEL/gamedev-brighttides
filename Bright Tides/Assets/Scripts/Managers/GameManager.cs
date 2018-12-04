@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
 
 	public static void AddFloatingText(Vector3 position, Vector3 offset, string text, string materialName)
 	{
-		GameObject floatingText = Instantiate(Resources.Load<GameObject>("UI/FloatingText"));
+		GameObject floatingText = Instantiate(Resources.Load<GameObject>("Prefabs/UI/FloatingText"));
 		floatingText.transform.position = position + offset;
 		
 		if (materialName != null)
