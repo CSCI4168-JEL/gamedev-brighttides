@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Projectile : MonoBehaviour {
 	private const float RAD_DEGREES = Mathf.PI / 180;
@@ -27,7 +28,7 @@ public class Projectile : MonoBehaviour {
 		startTime = Time.time;		
 		
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if (MoveToTarget != null)
@@ -42,8 +43,11 @@ public class Projectile : MonoBehaviour {
 
 			if (percentComplete > 1.0f)
 			{
+				int dmg = (int)(baseDamage * Random.Range(damageModifier, 1.0f));
+				MoveToTarget.GetComponent<Entity>().DealDamage(dmg); // Deal the appropriate damage to the target on impact
 
-				MoveToTarget.GetComponent<Entity>().DealDamage((int) (baseDamage * Random.Range(damageModifier, 1.0f))); // Deal the appropriate damage to the target on impact
+				GameManager.AddFloatingText(MoveToTarget.transform.position, new Vector3(0, 0.4f, 0), "-" + dmg + " HP", "TMP_Negative");
+
 				Destroy(this.gameObject); // Remove the projectile. Apply earth-shattering kaboom here?
 				GameManager.instance.isPerformingAction = false;
 			}

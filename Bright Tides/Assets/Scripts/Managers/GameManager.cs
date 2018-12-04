@@ -7,6 +7,8 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+using TMPro;
+
 /*
  * Game Manager class definition
  * 
@@ -94,6 +96,20 @@ public class GameManager : MonoBehaviour
         uiTurnCount.text = (++turnCount).ToString();
         simulateTurn = false; // turn is over, let player do stuff
     }
+
+	public static void AddFloatingText(Vector3 position, Vector3 offset, string text, string materialName)
+	{
+		GameObject floatingText = Instantiate(Resources.Load<GameObject>("UI/FloatingText"));
+		floatingText.transform.position = position + offset;
+		
+		if (materialName != null)
+		{
+			Material customMaterial = Resources.Load<Material>("Materials/UI/" + materialName);
+			floatingText.GetComponent<Renderer>().material = customMaterial;
+		}
+		
+		floatingText.GetComponent<TextMeshPro>().text = text;
+	}
 
     public void StartGame()
     {
