@@ -35,9 +35,11 @@ public class Entity : MonoBehaviour {
 
     // Method to give loot from one entity to another
     public void TransferLoot(Entity looter) {
+		GameManager.AddFloatingText(GameManager.instance.playerInstance.transform.position, new Vector3(0.3f, 0.4f, 0), "+" + attributes.gold + " gold!", "TMP_Positive");
         looter.attributes.gold += attributes.gold;
         looter.attributes.gold += attributes.ammo;
-        attributes.gold = 0;
+		GameManager.AddFloatingText(GameManager.instance.playerInstance.transform.position, new Vector3(0.0f, 0.4f, 0.3f), "+" + attributes.ammo + " ammo!", "TMP_Positive");
+		attributes.gold = 0;
         attributes.ammo = 0;
     }
 
