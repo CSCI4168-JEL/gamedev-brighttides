@@ -61,9 +61,18 @@ public class Entity : MonoBehaviour {
                     Entity player = playerObject.GetComponent<Entity>();
                     TransferLoot(player); // Give the loot of this entity to the player
                 }
-            }
+
+				// note: We destroy the entity game object here to avoid prematurely removing the player instance
+				// from the world on a game over condition
+				Destroy(gameObject); // If GameObject is a goner, Entity is a goner
+			}
+			else // player is kaput...
+			{
+				GameManager.instance.GameOver(GameManager.EndState.Lose);
+			}
         }
-        Destroy(gameObject); // If GameObject is a goner, Entity is a goner
+
+        
     }
 
     // Method to reset the remaining moves for an entity

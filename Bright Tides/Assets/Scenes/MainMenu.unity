@@ -403,8 +403,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1976966178}
-        m_MethodName: StartGame
+      - m_Target: {fileID: 1745089802}
+        m_MethodName: OnStartGameButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5227,7 +5227,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 429776138}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2132423434}
+        m_MethodName: OnInventoryButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &429776138
@@ -6557,8 +6568,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1077413025}
-  m_LocalRotation: {x: -0.01152917, y: -0.9627913, z: 0.04160924, w: -0.26677454}
-  m_LocalPosition: {x: -32.447906, y: -1.2019585, z: 12.701502}
+  m_LocalRotation: {x: -0.166513, y: -0.5939497, z: 0.12733182, w: -0.77671355}
+  m_LocalPosition: {x: -22.35, y: -0.96000004, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6679,7 +6690,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1198215451}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2132423434}
+        m_MethodName: OnRestButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1198215451
@@ -7010,8 +7032,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1976966178}
-        m_MethodName: QuitGame
+      - m_Target: {fileID: 1745089802}
+        m_MethodName: OnQuitButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7203,8 +7225,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1490391558}
-  m_LocalRotation: {x: -0.05291859, y: 0.7993484, z: 0.071177915, w: 0.5942857}
-  m_LocalPosition: {x: -1.5474687, y: -2.1697469, z: -0.9374184}
+  m_LocalRotation: {x: -0.166513, y: -0.5939497, z: 0.12733182, w: -0.77671355}
+  m_LocalPosition: {x: -22.35, y: -0.96000004, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -7446,6 +7468,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1745089801}
+  - component: {fileID: 1745089802}
   m_Layer: 0
   m_Name: MainMenuUI
   m_TagString: Untagged
@@ -7467,6 +7490,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1745089802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1745089800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7603e24c36ec1af48accda037ac8b1fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1755584112
 GameObject:
   m_ObjectHideFlags: 0
@@ -7972,7 +8006,6 @@ MonoBehaviour:
   playerInstance: {fileID: 0}
   playerAttributesTemplates: {fileID: 11400000, guid: 7d250f369273c384c9832bc212f7d35a,
     type: 2}
-  selectedMovementTile: {fileID: 0}
 --- !u!1 &1978169331
 GameObject:
   m_ObjectHideFlags: 0
@@ -8335,8 +8368,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1976966178}
-        m_MethodName: EndPlayerTurn
+      - m_Target: {fileID: 2132423434}
+        m_MethodName: OnEndTurnButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8469,6 +8502,7 @@ GameObject:
   - component: {fileID: 2132423431}
   - component: {fileID: 2132423433}
   - component: {fileID: 2132423432}
+  - component: {fileID: 2132423434}
   m_Layer: 5
   m_Name: ActionsBar
   m_TagString: Untagged
@@ -8537,3 +8571,14 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2132423430}
   m_CullTransparentMesh: 0
+--- !u!114 &2132423434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2132423430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d2f5d52abb21af4eb4a54b8d30d68bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

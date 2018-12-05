@@ -17,6 +17,12 @@ using TMPro;
  * */
 public class GameManager : MonoBehaviour
 {
+	public enum EndState
+	{
+		Lose,
+		Win
+	}
+
     public static GameManager instance = null; // self reference for singleton pattern
 
     [Header("Game State")]
@@ -37,14 +43,39 @@ public class GameManager : MonoBehaviour
 
     private GameObject userInterface;
     private GameObject playerInfoPanel;
+	private GameObject playerActionBar;
+	private GameObject gameOverUI;
 
-    private UnityEngine.UI.Text uiPlayerHealth;
+
+	private UnityEngine.UI.Text uiPlayerHealth;
     private UnityEngine.UI.Text uiPlayerAmmo;
     private UnityEngine.UI.Text uiPlayerGold;
     private UnityEngine.UI.Text uiActionsRemaining;
 
     private UnityEngine.UI.Text uiTurnCount;
     private int turnCount;
+
+	public int GetTurnCount() { return this.turnCount; }
+
+
+	/*
+	 * Game has ended
+	 * */
+	public void GameOver(EndState endState)
+	{
+		switch (endState)
+		{
+			case EndState.Lose:
+				GameManager.instance.isPerformingAction = true; // block map interactions
+				playerActionBar.SetActive(false);
+				playerInfoPanel.SetActive(false);
+				gameOverUI = Instantiate(Resources.Load<GameObject>("Prefabs/UI/GameOverUI"));
+				break;
+			case EndState.Win:
+				Debug.LogError("GameManager.GameOver() :: Win condition is not implemented...");
+				break;
+		}
+	}
 
     // Use this for initialization
     void Awake()
@@ -59,11 +90,14 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Other GameManager instance already assgined, destroying this.");
             Destroy(gameObject);
+			return;
         }
 
         userInterface = this.gameObject.transform.Find("UI").gameObject;
         playerInfoPanel = userInterface.transform.Find("PlayerInfo").gameObject;
-        uiPlayerHealth = playerInfoPanel.transform.Find("Health").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+		playerActionBar = userInterface.transform.Find("ActionsBar").gameObject;
+
+		uiPlayerHealth = playerInfoPanel.transform.Find("Health").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
         uiPlayerAmmo = playerInfoPanel.transform.Find("Ammo").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
         uiPlayerGold = playerInfoPanel.transform.Find("Gold").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
         uiActionsRemaining = playerInfoPanel.transform.Find("ActionsRemaining").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
@@ -110,6 +144,7 @@ public class GameManager : MonoBehaviour
 
     // This is called to give the player control again
     public void StartPlayerTurn() {
+		turnCount++;
 		ResetPlayerActions();
 
         simulateTurn = false; // turn is over, let player do stuff
@@ -121,10 +156,6 @@ public class GameManager : MonoBehaviour
 
 		// update player attributes before ending turn
 		playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
-		int turnCount = int.Parse(uiTurnCount.text);
-
-		uiTurnCount.text = (++turnCount).ToString();
-		
 	}
 
 	public static void AddFloatingText(Vector3 position, Vector3 offset, string text, string materialName)
@@ -143,9 +174,9 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+		Debug.Log("Starting new game...");
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.LoadScene("Game");
-
     }
 
     /*
@@ -178,7 +209,7 @@ public class GameManager : MonoBehaviour
      * 
      * Index values are defined in the build settings (File | Build Settings)
      * */
-    private void LoadLevel(SceneState sceneState)
+    public void LoadLevel(SceneState sceneState)
     {
         Debug.Log("LoadLevel()");
         this.sceneState = sceneState;
@@ -188,7 +219,14 @@ public class GameManager : MonoBehaviour
     // Callback for when a scene is loaded
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         this.LoadLevel(this.sceneState.nextLevel);
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+		// ensure ui is visible
+		playerActionBar.SetActive(true);
+		playerInfoPanel.SetActive(true);
+		turnCount = 0;
+		StartPlayerTurn();
+
+		SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     /*
@@ -281,8 +319,8 @@ public class GameManager : MonoBehaviour
             uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
             uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
             uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
-
-        }
+			uiTurnCount.text = (turnCount).ToString();
+		}
     }
 
     // Method called to proceed to next level from the shop
