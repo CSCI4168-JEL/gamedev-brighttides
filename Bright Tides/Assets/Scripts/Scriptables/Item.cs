@@ -7,7 +7,6 @@ public enum ItemType : int
     Range,
     Damage,
     Health,
-    Speed,
     Restore
 }
 
@@ -23,9 +22,7 @@ public class Item : ScriptableObject
 
     public int rangeModifier;
     public int damageModifier;
-    public int speedModifier;
     public int healthModifier;
     public int maxHealthModifier;
     public int ammoModifier;
-
 }

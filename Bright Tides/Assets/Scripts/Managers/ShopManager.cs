@@ -47,11 +47,6 @@ public class ShopManager : MonoBehaviour {
                 playerEntity.ModifyMaxHealth(purchased.maxHealthModifier); // Modify the max health using the correct method
                 playerEntity.attributes.inventory.SetValue(purchased, 2);
                 break;
-
-            case ItemType.Speed:
-                playerEntity.attributes.movementSpeed += purchased.speedModifier;
-                playerEntity.attributes.inventory.SetValue(purchased, 3);
-                break;
         }
 
     }
