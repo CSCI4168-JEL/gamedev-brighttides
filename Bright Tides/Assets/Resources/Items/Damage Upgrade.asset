@@ -1,24 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a12aeb28b7d5da4a8a88da849f78851, type: 3}
-  m_Name: Damage Upgrade
-  m_EditorClassIdentifier: 
-  itemType: 1
-  itemName: Damage Upgrade
-  description: Increases the damage of your ship's ammo
-  price: 100
-  icon: {fileID: 0}
-  rangeModifier: 0
-  damageModifier: 1
-  speedModifier: 0
-  healthModifier: 0
-  maxHealthModifier: 0
-  ammoModifier: 0
+version https://git-lfs.github.com/spec/v1
+oid sha256:4c164bfb528a99169b4f64b14c5e3d8d2c3afbbf4aacfc379525cdf125177928
+size 647

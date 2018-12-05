@@ -5,9 +5,6 @@ using UnityEngine;
 public class Entity : MonoBehaviour {
 	private EntityAttributes attributesTemplate;
 
-    public bool isMoving = false; // Track if the entity is moving
-    public Tile desinationTile; // The tile that the entity is moving towards
-
     // Coroutine helpers
     private readonly WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame(); // To prevent unecessary memory allocation
 
@@ -45,9 +42,11 @@ public class Entity : MonoBehaviour {
 
     // Method to give loot from one entity to another
     public void TransferLoot(Entity looter) {
+		GameManager.AddFloatingText(GameManager.instance.playerInstance.transform.position, new Vector3(0.3f, 0.4f, 0), "+" + attributes.gold + " gold!", "TMP_Positive");
         looter.attributes.gold += attributes.gold;
         looter.attributes.gold += attributes.ammo;
-        attributes.gold = 0;
+		GameManager.AddFloatingText(GameManager.instance.playerInstance.transform.position, new Vector3(0.0f, 0.4f, 0.3f), "+" + attributes.ammo + " ammo!", "TMP_Positive");
+		attributes.gold = 0;
         attributes.ammo = 0;
     }
 
@@ -72,22 +71,10 @@ public class Entity : MonoBehaviour {
         attributes.actionsRemaining = attributes.actionsPerTurn;
     }
 
-    // Starts a movement and returns true if it was able to commence a movement
-    public bool MoveToTile(Tile target) {
-        if (attributes.movementSpeed > 0) {
-            desinationTile = target;
-            isMoving = true; // Begin the movement in the next update
-        } else {
-            Debug.LogWarning("Attempted to move an entity that has no movement speed!");
-        }
-
-        return isMoving;
-    }
-
     /** Entity Actions **/
 
     // MoveToTile as a coroutine to allow for frame updates while moving the entity. Moves at a fixed speed
-    public IEnumerator MoveToTileCoroutine(Tile target) {
+    public IEnumerator MoveToTile(Tile target) {
         float totalDistance = Vector3.Distance(transform.position, target.tileTopPosition);
 
         while (target != null) {
@@ -105,12 +92,10 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    public IEnumerator AttackCoroutine(Entity target) {
+    public IEnumerator Attack(Entity target) {
         Projectile projectile = Projectile.CreateProjectile(this, target); // Create a projectile heading towards the target
         while (projectile != null) {
             yield return waitForEndOfFrame; // Allow the projectile to live out its lifetime
         }
-
-        yield return null; // Exit the coroutine
     }
 }

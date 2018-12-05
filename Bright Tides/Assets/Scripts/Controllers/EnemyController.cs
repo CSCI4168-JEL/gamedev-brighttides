@@ -78,12 +78,12 @@ public class EnemyController: MonoBehaviour {
                 double distanceFromPlayer = Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position));
 
                 if (enemy.attributes.baseAttackRange >= distanceFromPlayer) { // Enemy is within firing range of the player
-                    yield return enemy.AttackCoroutine(player); // Fire at the player
+                    yield return enemy.Attack(player); // Fire at the player
                 }
                 else if (enemyTile && playerTile) { // Both tiles were successfully retrieved
                     List<Tile> moves = AStarPathfinding(enemyTile, playerTile); // Find the best path to the player. Calculating the path from the player to the enemy prevents loops in movement
                     if (moves != null) { // If the algorithm found a path
-                        yield return enemy.MoveToTileCoroutine(moves[1]); // The second element is the next step in the path
+                        yield return enemy.MoveToTile(moves[1]); // The second element is the next step in the path
                     } else {
                         Debug.Log(enemy.attributes.captainName + " could not find a path to the player. Skipping turn...");
                     }

@@ -128,9 +128,6 @@ public class MouseController : MonoBehaviour
 					UpdateSelectObject(hitObject);
 					break;
 				case MouseMode.move:
-					// no moves allowed if no actions in this turn allowed
-					if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
-
 					Tile selection = this.mouseOverObject.GetComponent<Tile>();
 					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
 					{
@@ -147,7 +144,6 @@ public class MouseController : MonoBehaviour
 					{
 						Debug.Log("No enemy at this location");
 					}
-					//Tile selection = this.mouseOverObject.GetComponent<Tile>();
 					
 					break;
 				default:
