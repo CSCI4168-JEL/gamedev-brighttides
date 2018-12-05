@@ -14,7 +14,8 @@ public class EntityAttributes : ScriptableObject {
 	public int experience;
 
     public int maxHealth;
-	public int health;
+    [HideInInspector]
+    public int health;
 	public int ammo;
 	public int gold;
 
@@ -36,4 +37,10 @@ public class EntityAttributes : ScriptableObject {
 
     public bool isPathableByPlayer; // If the entity occupies a tile, can it be pathed through by the player
     public bool isPathableByEnemy; // If the entity occupies a tile, can it be pathed through by the player
+
+    // Intialize the dependent values
+    public void Initialize() {
+        health = maxHealth;
+        actionsRemaining = actionsPerTurn;
+    }
 }
