@@ -23,21 +23,30 @@ public class Entity : MonoBehaviour {
 
 	public EntityAttributes attributes;
 
-
     private void Awake() {
         Debug.Log("Setting attributes for " + gameObject.name);
         if (attributesTemplate != null) {
             attributes = ScriptableObject.Instantiate(attributesTemplate);
+            attributes.Initialize();
         }
+    }
+
+    // Method to change the max health and update current health
+    public void ModifyMaxHealth(int maxHealthChange) {
+        attributes.maxHealth += maxHealthChange;
+
+        if (attributes.maxHealth > attributes.health) { // If max health increased past current health
+            attributes.health += maxHealthChange; // Modify the current health by the same amount
+        }
+
+        UpdateHealth(); // Ensure health is updated
     }
 
     // Method to directly deal damage to an Entity
     public void DealDamage(int damage) {
         attributes.health -= damage;
         Debug.Log(name + " just took " + damage + " damage!");
-        if (attributes.health <= 0) { // If fatal damage was dealt
-            KillEntity(); // Kill self and cause any side-effects
-        }
+        UpdateHealth(); // Ensure health is updated
     }
 
     // Handle this entity entering the same tile as another entity
@@ -76,6 +85,17 @@ public class Entity : MonoBehaviour {
             }
         }
         Destroy(gameObject); // If GameObject is a goner, Entity is a goner
+    }
+
+    // Ensure that health follows game rules. Future consideration is move this into the setter for health (which would require entity attributes to have access to the entity)
+    private void UpdateHealth() {
+        if (attributes.health > attributes.maxHealth) {
+            attributes.health = attributes.maxHealth; // Cap the entity health
+        }
+
+        if (attributes.health <= 0) { // If fatal damage was dealt
+            KillEntity(); // Kill self and cause any side-effects
+        }
     }
 
     /** Entity Actions **/

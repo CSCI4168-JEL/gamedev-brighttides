@@ -21,31 +21,36 @@ public class ShopManager : MonoBehaviour {
             return;
         }
 
-        GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold -= purchased.price;
+        Entity playerEntity = GameManager.instance.playerInstance.GetComponent<Entity>();
+
+        playerEntity.attributes.gold -= purchased.price;
         Debug.Log("Purchase successful");
 
         switch (purchased.itemType) {
             case ItemType.Restore:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo += purchased.ammoModifier;
-                int healthMod = Math.Min(purchased.healthModifier, GameManager.instance.playerInstance.GetComponent<Entity>().attributes.maxHealth - GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health);
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health += healthMod;
+                playerEntity.attributes.ammo += purchased.ammoModifier;
+                int healthMod = Math.Min(purchased.healthModifier, playerEntity.attributes.maxHealth - playerEntity.attributes.health);
+                playerEntity.attributes.health += healthMod;
                 break;
 
             case ItemType.Range:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.baseAttackRange += purchased.rangeModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 0);
+                playerEntity.attributes.baseAttackRange += purchased.rangeModifier;
+                playerEntity.attributes.inventory.SetValue(purchased, 0);
                 break;
+
             case ItemType.Damage:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.baseAttackDamage += purchased.damageModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 1);
+                playerEntity.attributes.baseAttackDamage += purchased.damageModifier;
+                playerEntity.attributes.inventory.SetValue(purchased, 1);
                 break;
+
             case ItemType.Health:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.maxHealth += purchased.maxHealthModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 2);
+                playerEntity.ModifyMaxHealth(purchased.maxHealthModifier); // Modify the max health using the correct method
+                playerEntity.attributes.inventory.SetValue(purchased, 2);
                 break;
+
             case ItemType.Speed:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.movementSpeed += purchased.speedModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 3);
+                playerEntity.attributes.movementSpeed += purchased.speedModifier;
+                playerEntity.attributes.inventory.SetValue(purchased, 3);
                 break;
         }
 
