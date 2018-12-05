@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviour
             playerInstance.GetComponent<Entity>().AttributesTemplate = ScriptableObject.Instantiate(GameManager.instance.playerAttributesTemplates);
             playerInstance.name = "Player";
 		}
-        startingTile.SetTileAsParent(playerInstance.GetComponent<Entity>()); // Update the player position and tile
+        startingTile.EnterTile(playerInstance.GetComponent<Entity>()); // Update the player position and tile
     }
 
     private void SaveMapData()
