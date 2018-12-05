@@ -110,15 +110,22 @@ public class GameManager : MonoBehaviour
 
     // This is called to give the player control again
     public void StartPlayerTurn() {
-        EntityAttributes playerAttributes = playerInstance.GetComponent<Entity>().attributes;
+		ResetPlayerActions();
 
-        // update player attributes before ending turn
-        playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
-        int turnCount = int.Parse(uiTurnCount.text);
-
-        uiTurnCount.text = (++turnCount).ToString();
         simulateTurn = false; // turn is over, let player do stuff
     }
+
+	private void ResetPlayerActions()
+	{
+		EntityAttributes playerAttributes = playerInstance.GetComponent<Entity>().attributes;
+
+		// update player attributes before ending turn
+		playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
+		int turnCount = int.Parse(uiTurnCount.text);
+
+		uiTurnCount.text = (++turnCount).ToString();
+		
+	}
 
 	public static void AddFloatingText(Vector3 position, Vector3 offset, string text, string materialName)
 	{
@@ -150,6 +157,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("LoadNextLevel()");
             this.LoadLevel(this.sceneState.nextLevel);
+			this.ResetPlayerActions();
         }
     }
 
