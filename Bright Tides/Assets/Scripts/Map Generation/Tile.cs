@@ -29,7 +29,14 @@ public class Tile : MonoBehaviour {
         GameManager.instance.currentRegion.RegisterSpawnTile(type, this); // When the tile is set as a spawn point, register it current region in the game manager
     }
 
-    public void SetTileAsParent(Entity entity) {
+    public void EnterTile(Entity entity) {
+
+        Entity[] tileContents = GetComponentsInChildren<Entity>(); // Get the current contents of the tile
+
+        foreach (Entity tileChild in tileContents) {
+            entity.Collide(tileChild); // Handle a 'collision' between the entities
+        }
+
         entity.transform.SetParent(transform); // Set the tile transform as the parent of the entity
         entity.transform.position = tileTopPosition; // Move the entity to the top of the tile
         TileProperties.IsPathableByPlayer = entity.attributes.isPathableByPlayer; // Update if the tile is pathable by the player
@@ -41,6 +48,7 @@ public class Tile : MonoBehaviour {
         TileProperties.IsPathableByEnemy = true; // Restore the tile pathability
     }
 }
+
 
 [System.Serializable]
 public class TileProperties {
@@ -56,6 +64,4 @@ public class TileProperties {
         IsPathableByEnemy = true;
         IsSpawnPoint = false;
     }
-
-
 }

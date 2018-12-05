@@ -40,13 +40,25 @@ public class Entity : MonoBehaviour {
         }
     }
 
+    // Handle this entity entering the same tile as another entity
+    public void Collide (Entity other) {
+        if (this.attributes.entityType == EntityType.Player && other.attributes.entityType == EntityType.Treasure) {
+            other.KillEntity(); // Destory the entity and give the loot to the player
+        }
+    }
+
+    // Method to reset the remaining moves for an entity
+    public void RefreshRemainingActions() {
+        attributes.actionsRemaining = attributes.actionsPerTurn;
+    }
+
     // Method to give loot from one entity to another
-    public void TransferLoot(Entity looter) {
-		GameManager.AddFloatingText(GameManager.instance.playerInstance.transform.position, new Vector3(0.3f, 0.4f, 0), "+" + attributes.gold + " gold!", "TMP_Positive");
+    private void TransferLoot(Entity looter) {
+        GameManager.AddFloatingText(GameManager.instance.playerInstance.transform.position, new Vector3(0.3f, 0.4f, 0), "+" + attributes.gold + " gold!", "TMP_Positive");
         looter.attributes.gold += attributes.gold;
-        looter.attributes.gold += attributes.ammo;
-		GameManager.AddFloatingText(GameManager.instance.playerInstance.transform.position, new Vector3(0.0f, 0.4f, 0.3f), "+" + attributes.ammo + " ammo!", "TMP_Positive");
-		attributes.gold = 0;
+        looter.attributes.ammo += attributes.ammo;
+        GameManager.AddFloatingText(GameManager.instance.playerInstance.transform.position, new Vector3(0.0f, 0.4f, 0.3f), "+" + attributes.ammo + " ammo!", "TMP_Positive");
+        attributes.gold = 0;
         attributes.ammo = 0;
     }
 
@@ -75,11 +87,6 @@ public class Entity : MonoBehaviour {
         
     }
 
-    // Method to reset the remaining moves for an entity
-    public void RefreshRemainingActions() {
-        attributes.actionsRemaining = attributes.actionsPerTurn;
-    }
-
     /** Entity Actions **/
 
     // MoveToTile as a coroutine to allow for frame updates while moving the entity. Moves at a fixed speed
@@ -90,7 +97,7 @@ public class Entity : MonoBehaviour {
             if (transform.position == target.tileTopPosition) {
                 Debug.Log("Moving entitiy " + name + " complete.");
                 GetComponentInParent<Tile>().LeaveTile(this); // Remove this from the previous tile
-                target.SetTileAsParent(this); // After the movement is complete, update the parent of the entity and the pathability of the tile
+                target.EnterTile(this); // After the movement is complete, update the parent of the entity and the pathability of the tile
                 target = null; // Clear the reference to the tile
                 yield return null;  // Exit the coroutine
             }
