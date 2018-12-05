@@ -8,7 +8,7 @@ public class ShopManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         if (GameManager.instance) {
-            GameManager.instance.ToggleUI(false); // Disable the UI
+			GameManager.instance.ToggleActionsBarUI(false);
         } else {
             Debug.LogError("Unable to find GameManager... Are you trying to run the Shop Scene on its own?");
         }
