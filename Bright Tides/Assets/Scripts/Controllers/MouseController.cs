@@ -265,6 +265,11 @@ public class MouseController : MonoBehaviour
             while (newObject.tag != "MapTile")
             {
                 newObject = newObject.transform.parent.gameObject;
+				if (!newObject)
+				{
+					Debug.Log("No MapTile root found");
+					return;
+				}
             }
 
             if (newObject == mouseOverObject) { return; }

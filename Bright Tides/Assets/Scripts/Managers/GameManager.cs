@@ -119,6 +119,11 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	public void ToggleActionsBarUI(bool state)
+	{
+		playerActionBar.SetActive(state);
+	}
+
 	// Method to enable/disable the UI for the current scene
 	public void ToggleUI(bool enabled) {
 		if (userInterface) { // Get the current userInterface reference
@@ -339,7 +344,7 @@ public class GameManager : MonoBehaviour
 			SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(3));
 			if (sceneState.showUI)
 			{
-				ToggleUI(sceneState.showUI);
+				ToggleActionsBarUI(true);
 			}
 		}
 		else
