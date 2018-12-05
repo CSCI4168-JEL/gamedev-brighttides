@@ -31,6 +31,17 @@ public class Entity : MonoBehaviour {
         }
     }
 
+	public int Heal()
+	{
+		// regenerate health by a random amount based on constitution
+		int healAmount = Random.Range(1, attributes.constitution);
+		attributes.health += healAmount;
+
+		UpdateHealth();
+		
+		return healAmount;
+	}
+
     // Method to change the max health and update current health
     public void ModifyMaxHealth(int maxHealthChange) {
         attributes.maxHealth += maxHealthChange;

@@ -30,6 +30,7 @@ public class EntityAttributes : ScriptableObject {
 	public int baseAttackDamage;
 
 	public int strength; // modifier for attack damage
+	public int constitution; // modifier for health regeneration
 	public int agility; // modifier for taking damage reduction
 	public int dexterity; // modifier for successful hit
 	public int wisdom; // modifier for experience gain
