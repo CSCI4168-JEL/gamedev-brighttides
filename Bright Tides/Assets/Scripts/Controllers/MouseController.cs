@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -110,7 +111,7 @@ public class MouseController : MonoBehaviour
 			moveToIndicatorsDrawn = true;
 		}
 
-		if (mouseMode != MouseMode.move || GameManager.instance.selectedMovementTile != null)
+        if (mouseMode != MouseMode.move || GameManager.instance.isPerformingAction)
 		{
 			moveToIndicatorsDrawn = false;
 			ClearMovementIndicators();
@@ -122,42 +123,42 @@ public class MouseController : MonoBehaviour
 		// if the fire button clicked, either select or deselect the tile that the mouse is over
 		if (Input.GetButtonDown("Fire1"))
 		{
-			switch (mouseMode)
+            Entity player = GameManager.instance.playerInstance.GetComponent<Entity>();
+            switch (mouseMode)
 			{
 				case MouseMode.explore:
 					UpdateSelectObject(hitObject);
 					break;
 				case MouseMode.move:
-					// no moves allowed if no actions in this turn allowed
-					if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
-
 					Tile selection = this.mouseOverObject.GetComponent<Tile>();
-					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
+					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, player.transform.position) < 2.0f)
 					{
-						
-						GameManager.instance.selectedMovementTile = selection; // Update the moveToTile with the selected, pathable tile
+						GameManager.instance.PlayerMoveToTile(selection); // Make the player move to this tile
 					}
 					break;
 				case MouseMode.attack:
-					Entity entity = mouseOverObject.GetComponentInChildren<Entity>();
+					Entity[] entities = mouseOverObject.GetComponentsInChildren<Entity>();
+                    Entity enemy = null;
 
-					if (entity != null && 
-						entity.attributes.entityType == EntityType.Enemy && 
-						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo > 0 &&
-						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining > 0)
-					{
-						
-						GameObject projectile = Instantiate(Resources.Load("Projectiles/CannonBall", typeof(GameObject)), GameManager.instance.playerInstance.transform) as GameObject;
+                    foreach (Entity entity in entities) {
+                        if (entity.attributes.entityType == EntityType.Enemy) {
+                            enemy = entity;
+                        }
+                    }
 
-						projectile.GetComponent<Projectile>().MoveToTarget = entity.gameObject;
-						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo--;
-						GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
-					} else
-					{
-						Debug.Log("No enemy at this location");
-					}
-					//Tile selection = this.mouseOverObject.GetComponent<Tile>();
-					
+                    if (enemy != null && enemy.attributes.entityType == EntityType.Enemy) {
+                        double distanceFromPlayer = Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position));
+
+                        if (player.attributes.baseAttackRange >= distanceFromPlayer) { // Enemy is within firing range of the player
+                            GameManager.instance.PlayerAttackEntity(enemy); // Make the player attack this enemy
+                        }
+                        else {
+                            Debug.Log("Enemy at this location is out of range");
+                        }
+                    }
+                    else {
+                        Debug.Log("No enemy at this location");
+                    }
 					break;
 				default:
 					Debug.LogError("MouseController.Update() - Invalid mouse mode detected...");
@@ -196,7 +197,7 @@ public class MouseController : MonoBehaviour
         }
     }
 
-    private GameObject findBaseTile(GameObject obj)
+    private GameObject FindBaseTile(GameObject obj)
     {
         // traverse game object tree until we get a map tile
         while (obj.tag != "MapTile")
@@ -214,7 +215,7 @@ public class MouseController : MonoBehaviour
     {
         if (newSelection != null && mouseMode == MouseMode.explore)
         {
-            newSelection = findBaseTile(newSelection);
+            newSelection = FindBaseTile(newSelection);
 
             // clear the selection indicator on the currently selected object if one exists
             if (selectedObject != null)
@@ -242,7 +243,6 @@ public class MouseController : MonoBehaviour
 	 * */
     private void ClearSelected()
     {
-        GameManager.instance.selectedMovementTile = null;
         selectedObject = null;
     }
 
@@ -265,6 +265,11 @@ public class MouseController : MonoBehaviour
             while (newObject.tag != "MapTile")
             {
                 newObject = newObject.transform.parent.gameObject;
+				if (!newObject)
+				{
+					Debug.Log("No MapTile root found");
+					return;
+				}
             }
 
             if (newObject == mouseOverObject) { return; }
@@ -304,7 +309,7 @@ public class MouseController : MonoBehaviour
             if (Physics.Raycast(playerTransform.position + startPoint, Vector3.down, out hitInfo, 10.0f))
             {
                 // if we are not colliding with a pathable game tile, then do nothing
-                if (findBaseTile(hitInfo.collider.gameObject).GetComponent<Tile>().TileProperties.IsPathableByPlayer == false) { continue; }
+                if (FindBaseTile(hitInfo.collider.gameObject).GetComponent<Tile>().TileProperties.IsPathableByPlayer == false) { continue; }
                 
                 // instance a movement indicator with the correct orientation
                 if (startPoint.x == 1 && startPoint.z == 0)

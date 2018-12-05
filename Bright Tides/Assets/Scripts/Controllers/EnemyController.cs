@@ -75,19 +75,20 @@ public class EnemyController: MonoBehaviour {
             while (enemy.attributes.actionsRemaining > 0) {
                 Tile enemyTile = enemy.transform.GetComponentInParent<Tile>(); // Get the tiles from the entities in question
                 Tile playerTile = player.transform.GetComponentInParent<Tile>();
+                double distanceFromPlayer = Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position));
 
-                if (enemyTile && playerTile) { // Both tiles were successfully retrieved
-                    double distanceFromPlayer = Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position));
-                    if (enemy.attributes.baseAttackRange >= distanceFromPlayer) { // Enemy is within firing range of the player
-                        Debug.Log(enemy.attributes.captainName + " is firing upon " + player.attributes.captainName);
-                    }
-                    else {
-                        List<Tile> moves = AStarPathfinding(enemyTile, playerTile); // Find the best path to the player. Calculating the path from the player to the enemy prevents loops in movement
-                        if (moves != null) { // If the algorithm found a path
-                            yield return enemy.MoveToTileCoroutine(moves[1]); // The second element is the next step in the path
-                        }
+                if (enemy.attributes.baseAttackRange >= distanceFromPlayer) { // Enemy is within firing range of the player
+                    yield return enemy.Attack(player); // Fire at the player
+                }
+                else if (enemyTile && playerTile) { // Both tiles were successfully retrieved
+                    List<Tile> moves = AStarPathfinding(enemyTile, playerTile); // Find the best path to the player. Calculating the path from the player to the enemy prevents loops in movement
+                    if (moves != null) { // If the algorithm found a path
+                        yield return enemy.MoveToTile(moves[1]); // The second element is the next step in the path
+                    } else {
+                        Debug.Log(enemy.attributes.captainName + " could not find a path to the player. Skipping turn...");
                     }
                 }
+
                 enemy.attributes.actionsRemaining--; // Reduce the number of actions for the enemy
             }  
         }

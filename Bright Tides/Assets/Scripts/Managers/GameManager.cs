@@ -7,6 +7,8 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+using TMPro;
+
 /*
  * Game Manager class definition
  * 
@@ -15,272 +17,339 @@ using UnityEngine.SceneManagement;
  * */
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance = null; // self reference for singleton pattern
+	public enum EndState
+	{
+		Lose,
+		Win
+	}
 
-    [Header("Game State")]
-    public bool loadingGame = true; // is the game currently in a loading phase
-    public bool simulateTurn = false; // are we currently actioning a turn
-    public bool isPerformingAction = false; // is an action (such as attacking or moving) currently happening
+	public static GameManager instance = null; // self reference for singleton pattern
 
-    [Header("Level State")]
-    public SceneState sceneState; // current scene data
-    public Region currentRegion; // The currently loaded region
+	[Header("Game State")]
+	public bool loadingGame = true; // is the game currently in a loading phase
+	public bool simulateTurn = false; // are we currently actioning a turn
+	public bool isPerformingAction = false; // is an action (such as attacking or moving) currently happening
 
-    [Header("Player Settings")]
-    public GameObject playerModel;
-    public GameObject playerInstance;
+	[Header("Level State")]
+	public SceneState sceneState; // current scene data
+	public Region currentRegion; // The currently loaded region
+
+	[Header("Player Settings")]
+	public GameObject playerModel;
+	public GameObject playerInstance;
 	public EntityAttributes playerAttributesTemplates;
 
-    public Tile selectedMovementTile;
+	// public Tile selectedMovementTile;
 
-    private GameObject userInterface;
-    private GameObject playerInfoPanel;
+	private GameObject userInterface;
+	private GameObject playerInfoPanel;
+	private GameObject playerActionBar;
+	private GameObject pauseUI;
 
-    private UnityEngine.UI.Text uiPlayerHealth;
-    private UnityEngine.UI.Text uiPlayerAmmo;
-    private UnityEngine.UI.Text uiPlayerGold;
-    private UnityEngine.UI.Text uiActionsRemaining;
 
-    private UnityEngine.UI.Text uiTurnCount;
-    private int turnCount;
+	private UnityEngine.UI.Text uiPlayerHealth;
+	private UnityEngine.UI.Text uiPlayerAmmo;
+	private UnityEngine.UI.Text uiPlayerGold;
+	private UnityEngine.UI.Text uiActionsRemaining;
 
-    // Use this for initialization
-    void Awake()
-    {
-        // set the singleton reference if it isn't already set, otherwise destroy
-        // the object attempting to be instantiated
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Debug.Log("Other GameManager instance already assgined, destroying this.");
-            Destroy(gameObject);
-        }
+	private UnityEngine.UI.Text uiTurnCount;
+	private int turnCount;
 
-        userInterface = this.gameObject.transform.Find("UI").gameObject;
-        playerInfoPanel = userInterface.transform.Find("PlayerInfo").gameObject;
-        uiPlayerHealth = playerInfoPanel.transform.Find("Health").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
-        uiPlayerAmmo = playerInfoPanel.transform.Find("Ammo").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
-        uiPlayerGold = playerInfoPanel.transform.Find("Gold").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
-        uiActionsRemaining = playerInfoPanel.transform.Find("ActionsRemaining").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+	public int GetTurnCount() { return this.turnCount; }
 
-        uiTurnCount = playerInfoPanel.transform.Find("TurnCount").Find("Count").gameObject.GetComponent<UnityEngine.UI.Text>();
-		
+
+	/*
+	 * Game has ended
+	 * */
+	public void GameOver(EndState endState)
+	{
+		switch (endState)
+		{
+			case EndState.Lose:
+				GameManager.instance.isPerformingAction = true; // block map interactions
+				playerActionBar.SetActive(false);
+				playerInfoPanel.SetActive(false);
+				Instantiate(Resources.Load<GameObject>("Prefabs/UI/GameOverUI"));
+				break;
+			case EndState.Win:
+				Debug.LogError("GameManager.GameOver() :: Win condition is not implemented...");
+				break;
+		}
+	}
+
+	// Use this for initialization
+	void Awake()
+	{
+		// set the singleton reference if it isn't already set, otherwise destroy
+		// the object attempting to be instantiated
+		if (instance == null)
+		{
+			instance = this;
+		}
+		else if (instance != this)
+		{
+			Debug.Log("Other GameManager instance already assgined, destroying this.");
+			Destroy(gameObject);
+			return;
+		}
+
+		userInterface = this.gameObject.transform.Find("UI").gameObject;
+		playerInfoPanel = userInterface.transform.Find("PlayerInfo").gameObject;
+		playerActionBar = userInterface.transform.Find("ActionsBar").gameObject;
+
+		uiPlayerHealth = playerInfoPanel.transform.Find("Health").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+		uiPlayerAmmo = playerInfoPanel.transform.Find("Ammo").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+		uiPlayerGold = playerInfoPanel.transform.Find("Gold").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+		uiActionsRemaining = playerInfoPanel.transform.Find("ActionsRemaining").Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>();
+
+		uiTurnCount = playerInfoPanel.transform.Find("TurnCount").Find("Count").gameObject.GetComponent<UnityEngine.UI.Text>();
+
+		pauseUI = Instantiate(Resources.Load<GameObject>("Prefabs/UI/PauseMenuUI"), gameObject.transform);
+
+
 		DontDestroyOnLoad(gameObject); // prevent garbage collection on scene transitions
-    }
+	}
 
-    // This is called to take control from the player for the enemy turn
+	private void OnGUI() {
+		UpdateUIPlayerInfo();
+
+		if (sceneState.showUI && Input.GetKeyDown(KeyCode.Escape))
+		{
+			pauseUI.SetActive(true);
+		}
+	}
+
+	public void ToggleActionsBarUI(bool state)
+	{
+		playerActionBar.SetActive(state);
+	}
+
+	// Method to enable/disable the UI for the current scene
+	public void ToggleUI(bool enabled) {
+		if (userInterface) { // Get the current userInterface reference
+			userInterface.gameObject.SetActive(enabled);
+		} else {
+			Debug.LogError("No UI found in the scene, cannot toggle its status!");
+		}
+	}
+
+	// This is called to take control from the player for the enemy turn
 	public void EndPlayerTurn()
 	{
+		if (isPerformingAction) {
+			Debug.LogWarning("Player attempted to end turn in the middle of an action... Be patient :)");
+			return;
+		}
+
+		if (simulateTurn) {
+			Debug.LogWarning("Player attempted to end turn during the enemy's turn. Wow, rude.");
+			return;
+		}
+
 		simulateTurn = true; // turn on turn simulation to prevent user actions
-        if (currentRegion != null && currentRegion.enemyController != null) {
-            currentRegion.enemyController.StartEnemyTurn(); // Begin the enemy turn
-        } else {
-            StartPlayerTurn(); // Enemies cannot take a turn, so start the player's next turn
-        }
+		if (currentRegion != null && currentRegion.enemyController != null) {
+			currentRegion.enemyController.StartEnemyTurn(); // Begin the enemy turn
+		}
+		else {
+			StartPlayerTurn(); // Enemies cannot take a turn, so start the player's next turn
+		}
+	}
 
-    }
+	// This is called to give the player control again
+	public void StartPlayerTurn() {
+		turnCount++;
+		ResetPlayerActions();
 
-    // This is called to give the player control again
-    public void StartPlayerTurn() {
-        EntityAttributes playerAttributes = playerInstance.GetComponent<Entity>().attributes;
+		simulateTurn = false; // turn is over, let player do stuff
+	}
 
-        // update player attributes before ending turn
-        playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
-        int turnCount = int.Parse(uiTurnCount.text);
+	private void ResetPlayerActions()
+	{
+		EntityAttributes playerAttributes = playerInstance.GetComponent<Entity>().attributes;
 
-        uiTurnCount.text = (++turnCount).ToString();
-        simulateTurn = false; // turn is over, let player do stuff
-    }
+		// update player attributes before ending turn
+		playerAttributes.actionsRemaining = playerAttributes.actionsPerTurn;
+	}
 
-    public void StartGame()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.LoadScene("Game");
+	public static void AddFloatingText(Vector3 position, Vector3 offset, string text, string materialName)
+	{
+		GameObject floatingText = Instantiate(Resources.Load<GameObject>("Prefabs/UI/FloatingText"));
+		floatingText.transform.position = position + offset;
+		
+		if (materialName != null)
+		{
+			Material customMaterial = Resources.Load<Material>("Materials/UI/" + materialName);
+			floatingText.GetComponent<Renderer>().material = customMaterial;
+		}
+		
+		floatingText.GetComponent<TextMeshPro>().text = text;
+	}
 
-    }
+	public void StartGame()
+	{
+		Debug.Log("Starting new game...");
+		SceneManager.sceneLoaded += OnSceneLoaded;
+		SceneManager.LoadScene("Game");
+	}
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        this.LoadLevel(this.sceneState.nextLevel);
+	/*
+	 * Loads the next scene indicated by the scene data
+	 * */
+	public void LoadNextLevel()
+	{
+		if (this.sceneState.nextLevel != null)
+		{
+			Debug.Log("LoadNextLevel()");
+			this.LoadLevel(this.sceneState.nextLevel);
+			this.ResetPlayerActions();
+		}
+	}
+
+	/*
+	 * Loads the previous scene as specified by scene data
+	 * */
+	public void LoadPreviousLevel()
+	{
+		Debug.Log("LoadPreviousLevel()");
+		if (this.sceneState.previousLevel != null)
+		{
+			this.LoadLevel(this.sceneState.previousLevel);
+		}
+	}
+
+	/*
+	 * Loads the specific scene by index value.
+	 * 
+	 * Index values are defined in the build settings (File | Build Settings)
+	 * */
+	public void LoadLevel(SceneState sceneState)
+	{
+		Debug.Log("LoadLevel()");
+		this.sceneState = sceneState;
+		this.sceneState.OnSceneTransition();
+	}
+
+	// Callback for when a scene is loaded
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+		this.LoadLevel(this.sceneState.nextLevel);
+
+		// ensure ui is visible
+		playerActionBar.SetActive(true);
+		playerInfoPanel.SetActive(true);
+		turnCount = 0;
+		StartPlayerTurn();
+
 		SceneManager.sceneLoaded -= OnSceneLoaded;
 	}
 
-    /*
-     * Loads the next scene indicated by the scene data
-     * */
-    public void LoadNextLevel()
-    {
-        if (this.sceneState.nextLevel != null)
-        {
-            Debug.Log("LoadNextLevel()");
-            this.LoadLevel(this.sceneState.nextLevel);
-        }
-    }
+	/*
+	 * Exits the game
+	 * */
+	public void QuitGame()
+	{
+		Application.Quit();
+	}
 
-    /*
-     * Loads the previous scene as specified by scene data
-     * */
-    public void LoadPreviousLevel()
-    {
-        Debug.Log("LoadPreviousLevel()");
-        if (this.sceneState.previousLevel != null)
-        {
-            this.LoadLevel(this.sceneState.previousLevel);
-        }
-    }
-
-    /*
-     * Loads the specific scene by index value.
-     * 
-     * Index values are defined in the build settings (File | Build Settings)
-     * */
-    private void LoadLevel(SceneState sceneState)
-    {
-        Debug.Log("LoadLevel()");
-        this.sceneState = sceneState;
-        this.sceneState.OnSceneTransition();
-    }
-
-
-    /*
-     * Exits the game
-     * */
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-
-    public void InstantiatePlayer(Tile startingTile)
-    {
+	public void InstantiatePlayer(Tile startingTile)
+	{
 		if (playerInstance == null) // Only create a new player instance if one doesn't exist
-        {
+		{
 			playerInstance = Instantiate(playerModel, startingTile.transform);
-            playerInstance.GetComponent<Entity>().AttributesTemplate = ScriptableObject.Instantiate(GameManager.instance.playerAttributesTemplates);
-            playerInstance.name = "Player";
+			playerInstance.GetComponent<Entity>().AttributesTemplate = ScriptableObject.Instantiate(GameManager.instance.playerAttributesTemplates);
+			playerInstance.name = "Player";
 		}
-        startingTile.SetTileAsParent(playerInstance.GetComponent<Entity>()); // Update the player position and tile
-    }
+		startingTile.EnterTile(playerInstance.GetComponent<Entity>()); // Update the player position and tile
+	}
 
-    private void Update()
-    {
-        if (!this.simulateTurn)
-        {
-            if (this.selectedMovementTile != null)
-            {
-                MovePlayerToTile();
-            }
-        }
-    }
+	private void SaveMapData()
+	{
+		BinaryFormatter binaryFormatter = new BinaryFormatter();
+		FileStream saveFile = File.Open(Application.persistentDataPath + "/" + this.sceneState.name + ".dat", FileMode.OpenOrCreate);
 
-    private void OnGUI()
-    {
-        UpdateUIPlayerInfo();
-        //GUI.Label(new Rect(10, 10, 400, 30), "Map Generated:" + this.scene.map.transform.childCount);
-    }
+		foreach (Transform child in this.sceneState.map.transform)
+		{
+			Material b = child.gameObject.GetComponent<Material>();
 
-    void SaveMapData()
-    {
-        BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream saveFile = File.Open(Application.persistentDataPath + "/" + this.sceneState.name + ".dat", FileMode.OpenOrCreate);
+			binaryFormatter.Serialize(saveFile, JsonUtility.ToJson(b));
+		}
+	}
 
-        foreach (Transform child in this.sceneState.map.transform)
-        {
-            Material b = child.gameObject.GetComponent<Material>();
+	public void PlayerMoveToTile(Tile destination) {
+		Entity playerEntity = playerInstance.GetComponent<Entity>();
 
-            binaryFormatter.Serialize(saveFile, JsonUtility.ToJson(b));
-        }
-    }
+		// Call the MoveToTile coroutine 
+		StartCoroutine(PlayerPerformAction(playerEntity.MoveToTile(destination), () => {
+			if (destination.TileProperties.tileType == TileType.playerExitTile) {
+				this.LoadNextLevel(); // After the coroutine runs, if the tile reached is the goal, go to the next level
+			}
+		}));
+	}
 
-    void MovePlayerToTile()
-    {
-        if (GameManager.instance.playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) return;
-        isPerformingAction = true; // Prevent further actions from starting
-        Entity playerEntity = playerInstance.GetComponent<Entity>();
-        playerEntity.MoveToTile(selectedMovementTile);
+	public void PlayerAttackEntity(Entity target) {
+		Entity playerEntity = playerInstance.GetComponent<Entity>();
 
-        if (playerInstance.transform.parent == selectedMovementTile.transform) // If the player has reached the tile, the tile becomes the parent
-        {
-			isPerformingAction = false;
-			playerInstance.GetComponent<Entity>().attributes.actionsRemaining--;
-			if (selectedMovementTile.TileProperties.tileType == TileType.playerExitTile)
-			{
-				this.LoadNextLevel();
-                //SceneManager.LoadSceneAsync("ShopMenu", LoadSceneMode.Additive); // Must remove. Used to test shop.
-            }
+		// If the player has ammo, call the Attack coroutine
+		if (playerEntity.attributes.ammo > 0) {
+			StartCoroutine(PlayerPerformAction(playerEntity.Attack(target), null, () => {
+				playerEntity.attributes.ammo--; // Reduce the ammo before the attack coroutine runs
+			}));
+		}
+	}
 
-            this.selectedMovementTile = null;
-            // simulateTurn = false;
-        }
-    }	
+	// Wrapper method for state-controlled player actions with optional callbacks before and after the action
+	private IEnumerator PlayerPerformAction(IEnumerator actionCallback, Action after = null, Action before = null) {
+		if (playerInstance.GetComponent<Entity>().attributes.actionsRemaining <= 0) {
+			Debug.LogWarning("Out of moves, unable to perform player action");
+			yield break; // Exit early since no moves remain
+		}
 
-    void UpdateUIPlayerInfo()
-    {
-        if (playerInstance != null)
-        {
-            uiPlayerHealth.text = playerInstance.GetComponent<Entity>().attributes.health.ToString();
-            uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
-            uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
-            uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
+		if (isPerformingAction) {
+			Debug.LogWarning("An action is already underway, unable to perform player action");
+			yield break; // Exit early since action is already being performed
+		}
 
-        }
-    }
+		if (before != null) {
+			before();
+		}
 
-    // Method called to proceed to next level
-    public void ExitShop()
-    {
-        if (SceneManager.GetSceneByBuildIndex(3).isLoaded)
-        {
-            SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(3));
+		isPerformingAction = true; // Prevent further actions from starting
+		yield return StartCoroutine(actionCallback); // Perform the specified action
+		isPerformingAction = false; // The action is complete
+
+		playerInstance.GetComponent<Entity>().attributes.actionsRemaining--; // Reduce remaining actions
+
+		if (after != null) {
+			after();
+		}
+
+	}
+
+	private void UpdateUIPlayerInfo()
+	{
+		if (playerInstance != null)
+		{
+			uiPlayerHealth.text = playerInstance.GetComponent<Entity>().attributes.health.ToString();
+			uiPlayerAmmo.text = playerInstance.GetComponent<Entity>().attributes.ammo.ToString();
+			uiPlayerGold.text = playerInstance.GetComponent<Entity>().attributes.gold.ToString();
+			uiActionsRemaining.text = playerInstance.GetComponent<Entity>().attributes.actionsRemaining.ToString();
+			uiTurnCount.text = (turnCount).ToString();
+		}
+	}
+
+	// Method called to proceed to next level from the shop
+	public void ExitShop()
+	{
+		if (SceneManager.GetSceneByBuildIndex(3).isLoaded)
+		{
+			SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(3));
 			if (sceneState.showUI)
 			{
-				GameManager.instance.gameObject.transform.Find("UI").gameObject.SetActive(true);
+				ToggleActionsBarUI(true);
 			}
 		}
-        else
-        {
-            Debug.Log("Shop scene is not currently loaded");
-        }
-    }
-
-    // Adds the selected item to the player's inventory if they have enough gold
-    public void AddPlayerItem(Item purchased)
-    {
-        if (purchased.price > GameManager.instance.playerInstance.GetComponent<Entity>().attributes.gold)
-        {
-            Debug.Log("Not enough gold");
-            return;
-        }
-
-        playerInstance.GetComponent<Entity>().attributes.gold -= purchased.price;
-
-        Debug.Log("Purchase successful");
-        switch (purchased.itemType)
-        {
-            case ItemType.Restore:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.ammo += purchased.ammoModifier;
-                int healthMod = Math.Min(purchased.healthModifier, GameManager.instance.playerInstance.GetComponent<Entity>().attributes.maxHealth - GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health);
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.health += healthMod;
-                break;
-
-            case ItemType.Range:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.baseAttackRange += purchased.rangeModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 0);
-                break;
-            case ItemType.Damage:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.baseAttackDamage += purchased.damageModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 1);
-                break;
-            case ItemType.Health:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.maxHealth += purchased.maxHealthModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 2);
-                break;
-            case ItemType.Speed:
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.movementSpeed += purchased.speedModifier;
-                GameManager.instance.playerInstance.GetComponent<Entity>().attributes.inventory.SetValue(purchased, 3);
-                break;
-        }
-    }
+		else
+		{
+			Debug.Log("Shop scene is not currently loaded");
+		}
+	}
 }

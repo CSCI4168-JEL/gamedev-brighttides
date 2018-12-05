@@ -56,7 +56,7 @@ public class SceneState : ScriptableObject
 
 	void InitScene()
 	{
-		if (this.mapGenerated == false)
+		if (this.mapDefinitionFile && this.mapGenerated == false)
 		{
 			GameObject region = GameObject.FindGameObjectWithTag("Region");
 			if (region == null)
@@ -75,15 +75,16 @@ public class SceneState : ScriptableObject
 			Debug.Log("First time in level, generating map...");
 			GameManager.instance.currentRegion.Initialize(); // Call the initialize method for the region
 		}
+		else if (!this.mapDefinitionFile)
+		{
+			Debug.LogWarning("No map definition file is defined for " + this.name);
+		} 
 		else
 		{
 			Debug.Log("Skipping map generation...");
 		}
 
-		if (this.showUI)
-		{
-			GameManager.instance.gameObject.transform.Find("UI").gameObject.SetActive(this.showUI);
-		}
+        GameManager.instance.ToggleUI(showUI); // Toggle the UI based on this scene settings
 
 		// we have finished loading 
 		GameManager.instance.loadingGame = false;

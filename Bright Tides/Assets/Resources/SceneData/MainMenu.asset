@@ -1,23 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7e64b136b76c674c901fdcd204135e7, type: 3}
-  m_Name: MainMenu
-  m_EditorClassIdentifier: 
-  sceneName: Main Menu
-  self: {fileID: 11400000}
-  mapDefinitionFile: {fileID: 0}
-  tileSet: {fileID: 0}
-  showUI: 0
-  map: {fileID: 0}
-  mapGenerated: 0
-  playerStartPosition: {fileID: 0}
-  previousLevel: {fileID: 0}
-  nextLevel: {fileID: 11400000, guid: 591498de56116464798609351d2e8651, type: 2}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a93b1f2ec28ba205a5ba026221c2627d20f2a0c0e6ebfa1c10b73bb070f2db1c
+size 691

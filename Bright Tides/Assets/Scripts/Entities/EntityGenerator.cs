@@ -36,7 +36,7 @@ public class EntityGenerator {
                         if (enemyCount > 0) {
                             EntityAttributes selectedAttributes = entitySet.GetEntityAttributesForType(type);
                             Entity entityInstance = entitySet.CreateEntity(selectedAttributes); // Create the entity at the given tile
-                            spawn.SetTileAsParent(entityInstance); // Set the tile as the parent along with any side-effects
+                            spawn.EnterTile(entityInstance); // Set the tile as the parent along with any side-effects
                             GameManager.instance.currentRegion.enemyController.RegisterEnemyEntity(entityInstance); // Register the enemy with the controller
                             enemyCount--; // Reduce the enemies left to spawn
                         }
@@ -55,7 +55,7 @@ public class EntityGenerator {
                         if (treasureCount > 0) {
                             EntityAttributes selectedAttributes = entitySet.GetEntityAttributesForType(type);
                             Entity entityInstance = ScriptableObject.Instantiate(entitySet.CreateEntity(selectedAttributes)); // Create the entity at the given tile
-                            spawn.SetTileAsParent(entityInstance); // Set the tile as the parent along with any side-effects
+                            spawn.EnterTile(entityInstance); // Set the tile as the parent along with any side-effects
                             treasureCount--; // Reduce the treasures left to spawn
                         }
                         else {
