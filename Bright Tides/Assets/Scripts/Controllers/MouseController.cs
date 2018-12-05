@@ -137,12 +137,20 @@ public class MouseController : MonoBehaviour
 					}
 					break;
 				case MouseMode.attack:
-					Entity entity = mouseOverObject.GetComponentInChildren<Entity>();
-                    double distanceFromPlayer = Math.Floor(Vector3.Distance(entity.transform.position, player.transform.position));
+					Entity[] entities = mouseOverObject.GetComponentsInChildren<Entity>();
+                    Entity enemy = null;
 
-                    if (entity != null && entity.attributes.entityType == EntityType.Enemy) {
+                    foreach (Entity entity in entities) {
+                        if (entity.attributes.entityType == EntityType.Enemy) {
+                            enemy = entity;
+                        }
+                    }
+
+                    if (enemy != null && enemy.attributes.entityType == EntityType.Enemy) {
+                        double distanceFromPlayer = Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position));
+
                         if (player.attributes.baseAttackRange >= distanceFromPlayer) { // Enemy is within firing range of the player
-                            GameManager.instance.PlayerAttackEntity(entity); // Make the player attack this enemy
+                            GameManager.instance.PlayerAttackEntity(enemy); // Make the player attack this enemy
                         }
                         else {
                             Debug.Log("Enemy at this location is out of range");
