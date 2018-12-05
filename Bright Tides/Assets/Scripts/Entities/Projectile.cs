@@ -4,30 +4,45 @@ using UnityEngine;
 using TMPro;
 
 public class Projectile : MonoBehaviour {
-	private const float RAD_DEGREES = Mathf.PI / 180;
+    private static  GameObject cannonballAsset;
 
-	public GameObject MoveToTarget { get; set; }
-	public float speed = 1.0f;
+    public static GameObject CannonballAsset {
+        get {
+            if (!cannonballAsset) {
+                cannonballAsset = (GameObject)Resources.Load("Prefabs/Projectiles/CannonBall", typeof(GameObject)); // Load the resource for the projectile and keep it in memory
+            }
+            return cannonballAsset;
+        }
+    }
 
-	private Vector3 startPosition;
-	private Vector3 newPosition;
-	private float travelDistance = -1f;
-	private float startTime;
+    private const float RAD_DEGREES = Mathf.PI / 180;
 
-	private int baseDamage;
-	private float damageModifier;
-	
-	
+    public Entity MoveToTarget { get; set; }
+    public float speed = 1.0f;
 
-	// Use this for initialization
-	void Awake () {
-		GameManager.instance.isPerformingAction = true;
-		startPosition = transform.parent.position;
-		baseDamage = transform.parent.gameObject.GetComponent<Entity>().attributes.baseAttackDamage;
-		damageModifier = 0.4f;
-		startTime = Time.time;		
-		
-	}
+    private Vector3 startPosition;
+    private Vector3 newPosition;
+    private float travelDistance = -1f;
+    private float startTime;
+
+    private int baseDamage;
+    private float damageModifier;
+
+    // Use this for initialization
+    void Awake() {
+        startPosition = transform.parent.position;
+        baseDamage = transform.parent.gameObject.GetComponent<Entity>().attributes.baseAttackDamage;
+        damageModifier = 0.4f;
+        startTime = Time.time;
+    }
+
+    public static Projectile CreateProjectile(Entity parent, Entity target) {
+        GameObject projectile = Instantiate(CannonballAsset, parent.transform) as GameObject; // Instantiate the object as child of the parent
+        Projectile projectileInstance = projectile.GetComponent<Projectile>();
+        projectileInstance.MoveToTarget = target;
+
+        return projectileInstance;
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -61,5 +76,4 @@ public class Projectile : MonoBehaviour {
 			}
 		}
 	}
-
 }
