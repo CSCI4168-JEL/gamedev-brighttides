@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -122,29 +123,42 @@ public class MouseController : MonoBehaviour
 		// if the fire button clicked, either select or deselect the tile that the mouse is over
 		if (Input.GetButtonDown("Fire1"))
 		{
-			switch (mouseMode)
+            Entity player = GameManager.instance.playerInstance.GetComponent<Entity>();
+            switch (mouseMode)
 			{
 				case MouseMode.explore:
 					UpdateSelectObject(hitObject);
 					break;
 				case MouseMode.move:
 					Tile selection = this.mouseOverObject.GetComponent<Tile>();
-					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, GameManager.instance.playerInstance.transform.position) < 2.0f)
+					if (selection.TileProperties.IsPathableByPlayer && Vector3.Distance(mouseOverObject.transform.position, player.transform.position) < 2.0f)
 					{
 						GameManager.instance.PlayerMoveToTile(selection); // Make the player move to this tile
 					}
 					break;
 				case MouseMode.attack:
-					Entity entity = mouseOverObject.GetComponentInChildren<Entity>();
+					Entity[] entities = mouseOverObject.GetComponentsInChildren<Entity>();
+                    Entity enemy = null;
 
-					if (entity != null && entity.attributes.entityType == EntityType.Enemy)
-					{
-                        GameManager.instance.PlayerAttackEntity(entity); // Make the player attack this entity
-					} else
-					{
-						Debug.Log("No enemy at this location");
-					}
-					
+                    foreach (Entity entity in entities) {
+                        if (entity.attributes.entityType == EntityType.Enemy) {
+                            enemy = entity;
+                        }
+                    }
+
+                    if (enemy != null && enemy.attributes.entityType == EntityType.Enemy) {
+                        double distanceFromPlayer = Math.Floor(Vector3.Distance(enemy.transform.position, player.transform.position));
+
+                        if (player.attributes.baseAttackRange >= distanceFromPlayer) { // Enemy is within firing range of the player
+                            GameManager.instance.PlayerAttackEntity(enemy); // Make the player attack this enemy
+                        }
+                        else {
+                            Debug.Log("Enemy at this location is out of range");
+                        }
+                    }
+                    else {
+                        Debug.Log("No enemy at this location");
+                    }
 					break;
 				default:
 					Debug.LogError("MouseController.Update() - Invalid mouse mode detected...");
