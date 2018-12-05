@@ -15,3 +15,6 @@ The player controls a ship placed on a 3D tile grid and must navigate to the end
 - **Attack** - Uses one action. consume ammo to perform a ranged attack against an enemy. Deals damage to the target based on the player's attack damage stat.
 - **Move** - Uses one action. Move the player from their current tile to any adjacent open tile.
 - **End Turn** - Allow the enemies to take their turn, then refresh player actions.
+
+### Player Hotkeys
+- **Esc** - Open the exit menu to quit the game during runtime.
