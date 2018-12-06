@@ -39,6 +39,9 @@ public class GameManager : MonoBehaviour
 	public GameObject playerInstance;
 	public EntityAttributes playerAttributesTemplates;
 
+	[Header("Sounds")]
+	public AudioClip[] soundEffects;
+
 	// public Tile selectedMovementTile;
 
 	private GameObject userInterface;

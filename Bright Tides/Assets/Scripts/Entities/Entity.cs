@@ -85,7 +85,12 @@ public class Entity : MonoBehaviour {
     // Destory this entity and if it is not a player, give its loot to the player
     private void KillEntity() {
         Tile parentTile = GetComponentInParent<Tile>();
-        if (parentTile) { // If the entity is on a tile (it probably should be)
+
+		GameManager.instance.gameObject.GetComponent<AudioSource>().clip = GameManager.instance.soundEffects[0];
+		GameManager.instance.gameObject.GetComponent<AudioSource>().Play();
+
+
+		if (parentTile) { // If the entity is on a tile (it probably should be)
             parentTile.LeaveTile(this); // Remove the entity from the tile and cause any side-effects
             if (attributes.entityType != EntityType.Player) {
                 GameObject playerObject = GameManager.instance.playerInstance;
