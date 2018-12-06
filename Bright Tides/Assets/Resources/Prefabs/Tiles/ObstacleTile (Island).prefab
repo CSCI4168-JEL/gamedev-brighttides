@@ -196,8 +196,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1926528916516722}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.505, z: 0}
-  m_LocalScale: {x: 0.37975, y: 0.37975, z: 0.37975}
+  m_LocalPosition: {x: 0.00012525, y: 0.4949, z: 0.000061012}
+  m_LocalScale: {x: 0.34856856, y: 0.27497226, z: 0.33521366}
   m_Children: []
   m_Father: {fileID: 4273203872392788}
   m_RootOrder: 0
@@ -276,8 +276,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1112124166705592}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.01917553, y: 0.6860204, z: 0.06631708}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.013864, y: 0.643, z: 0.052985}
+  m_LocalScale: {x: 0.74341094, y: 0.7953892, z: 0.7973527}
   m_Children:
   - {fileID: 4339199764800302}
   - {fileID: 4019579604952056}
@@ -561,6 +561,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7f146d925970654fa03a2f6d35badbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileTopPosition: {x: 0, y: 0, z: 0}
+  neighbours: []
 --- !u!114 &114837418090561462
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -572,3 +574,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7f146d925970654fa03a2f6d35badbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileTopPosition: {x: 0, y: 0, z: 0}
+  neighbours: []
