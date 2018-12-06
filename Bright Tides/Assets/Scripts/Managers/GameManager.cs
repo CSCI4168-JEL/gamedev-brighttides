@@ -261,19 +261,6 @@ public class GameManager : MonoBehaviour
 		startingTile.EnterTile(playerInstance.GetComponent<Entity>()); // Update the player position and tile
 	}
 
-	private void SaveMapData()
-	{
-		BinaryFormatter binaryFormatter = new BinaryFormatter();
-		FileStream saveFile = File.Open(Application.persistentDataPath + "/" + this.sceneState.name + ".dat", FileMode.OpenOrCreate);
-
-		foreach (Transform child in this.sceneState.map.transform)
-		{
-			Material b = child.gameObject.GetComponent<Material>();
-
-			binaryFormatter.Serialize(saveFile, JsonUtility.ToJson(b));
-		}
-	}
-
 	public void PlayerMoveToTile(Tile destination) {
 		Entity playerEntity = playerInstance.GetComponent<Entity>();
 
@@ -339,9 +326,9 @@ public class GameManager : MonoBehaviour
 	// Method called to proceed to next level from the shop
 	public void ExitShop()
 	{
-		if (SceneManager.GetSceneByBuildIndex(3).isLoaded)
+		if (SceneManager.GetSceneByBuildIndex(2).isLoaded)
 		{
-			SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(3));
+			SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(2));
 			if (sceneState.showUI)
 			{
 				ToggleActionsBarUI(true);
