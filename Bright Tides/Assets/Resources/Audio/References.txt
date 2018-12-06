@@ -1,3 +1,5 @@
 File				Original Name					Attribution
 Ambiance/MainMenu.mp3		Beach Soundscape 3-SoundBible.com-416299667	http://soundbible.com/551-Beach-Soundscape-3.html
 Cannon.mp3			Cannon-SoundBible.com-1661203605		http://soundbible.com/909-Cannon.html
+entity_dead.mp3			Depth Charge Shorter-SoundBible.com-1978501900	http://soundbible.com/1468-Depth-Charge-Shorter.html
+button_click.mp3		Button Click Off-SoundBible.com-1730098776	http://soundbible.com/1294-Button-Click-Off.html
