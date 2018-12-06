@@ -28,16 +28,15 @@ public class CameraController : MonoBehaviour
         newPosition += followPosition.y * objectBeingFollowedTransform.up;
 
         transform.position = newPosition;
-    }
+		transform.LookAt(objectBeingFollowedTransform.position);
+	}
 
 
     void LateUpdate()
     {
         //compute new camera position
-        newPosition = objectBeingFollowedTransform.position;
-        newPosition += followPosition.x * objectBeingFollowedTransform.right;
-        newPosition += followPosition.z * objectBeingFollowedTransform.forward;
-        newPosition += followPosition.y * objectBeingFollowedTransform.up;
+        newPosition = objectBeingFollowedTransform.position + followPosition;
+
 
         //zoom in or out based on mouse wheel direction
         if (Input.GetAxis("Mouse ScrollWheel") != 0) //&& transform.rotation.x > 0)
@@ -47,7 +46,7 @@ public class CameraController : MonoBehaviour
         }
 
         //set the new camera position and look toward the object being followed
-        transform.position = Vector3.MoveTowards(transform.position, newPosition, 0.5f);
+        transform.position = Vector3.MoveTowards(transform.position, newPosition, 0.1f);
 
 
         // turn left
@@ -75,7 +74,7 @@ public class CameraController : MonoBehaviour
             // GetComponent<Transform>().Rotate(transform.right, Input.GetAxis("Mouse Y") * objectBeingFollowed.GetComponent<PlayerControl>().rotationSpeed * Time.deltaTime, Space.World);
         }
 
-        transform.LookAt(objectBeingFollowedTransform.position);
+        //transform.LookAt(objectBeingFollowedTransform.position);
 		
     }
 }
