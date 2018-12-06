@@ -31,6 +31,17 @@ public class Entity : MonoBehaviour {
         }
     }
 
+	public int Heal()
+	{
+		// regenerate health by a random amount based on constitution
+		int healAmount = Random.Range(1, attributes.constitution);
+		attributes.health += healAmount;
+
+		UpdateHealth();
+		
+		return healAmount;
+	}
+
     // Method to change the max health and update current health
     public void ModifyMaxHealth(int maxHealthChange) {
         attributes.maxHealth += maxHealthChange;
@@ -113,7 +124,12 @@ public class Entity : MonoBehaviour {
     public IEnumerator MoveToTile(Tile target) {
         float totalDistance = Vector3.Distance(transform.position, target.tileTopPosition);
 
-        while (target != null) {
+		Vector3 rotateToVector = target.transform.position - transform.position;
+		rotateToVector.y = 0;
+		transform.rotation = Quaternion.LookRotation(rotateToVector); 
+
+		while (target != null) {
+			
             if (transform.position == target.tileTopPosition) {
                 Debug.Log("Moving entitiy " + name + " complete.");
                 GetComponentInParent<Tile>().LeaveTile(this); // Remove this from the previous tile
@@ -123,13 +139,14 @@ public class Entity : MonoBehaviour {
             }
             else {
                 transform.position = Vector3.MoveTowards(transform.position, target.tileTopPosition, totalDistance * Time.deltaTime);
+				
                 yield return waitForEndOfFrame; // Wait until frame advances, then continue
             }
         }
     }
 
     public IEnumerator Attack(Entity target) {
-        Projectile projectile = Projectile.CreateProjectile(this, target); // Create a projectile heading towards the target
+		Projectile projectile = Projectile.CreateProjectile(this, target); // Create a projectile heading towards the target
         while (projectile != null) {
             yield return waitForEndOfFrame; // Allow the projectile to live out its lifetime
         }

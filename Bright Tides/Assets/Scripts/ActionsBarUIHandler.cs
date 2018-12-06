@@ -36,6 +36,19 @@ public class ActionsBarUIHandler : MonoBehaviour {
 
 	public void OnRestButtonClick()
 	{
-		Debug.LogWarning("Rest button is not implemented...");
+		Entity playerEntity = GameManager.instance.playerInstance.GetComponent<Entity>();
+
+		if (playerEntity.attributes.health == playerEntity.attributes.maxHealth)
+		{
+			Debug.LogWarning("Player at max health");
+		}
+
+		if (playerEntity.attributes.actionsRemaining > 0)
+		{
+			int healAmount = playerEntity.Heal();
+			GameManager.AddFloatingText(GameManager.instance.playerInstance.transform.position, new Vector3(0, 0.4f, 0), "+" + healAmount + " HP!", "TMP_Positive");
+
+			playerEntity.attributes.actionsRemaining--;
+		}
 	}
 }
