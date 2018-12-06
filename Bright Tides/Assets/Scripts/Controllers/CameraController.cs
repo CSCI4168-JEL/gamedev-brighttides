@@ -12,7 +12,10 @@ public class CameraController : MonoBehaviour
     [Tooltip("Camera position relative to the object being followed.")]
     public Vector3 followPosition;
 
-    private Vector3 newPosition; // position that the camera will move to at the end of each frame
+	[Header("Settings")]
+	public float lookSpeed = 50.0f;
+
+	private Vector3 newPosition; // position that the camera will move to at the end of each frame
 
     // Use this for initialization
     void Start()
@@ -41,40 +44,15 @@ public class CameraController : MonoBehaviour
         //zoom in or out based on mouse wheel direction
         if (Input.GetAxis("Mouse ScrollWheel") != 0) //&& transform.rotation.x > 0)
         {
-            //followPosition.y += -Input.GetAxis("Mouse ScrollWheel") * cameraZoomSpeed;
-            //followPosition.z -= -Input.GetAxis("Mouse ScrollWheel") * cameraZoomSpeed;
+			float newY = followPosition.y + -Input.GetAxis("Mouse ScrollWheel") * lookSpeed / 10;
+			newY = Mathf.Clamp(newY, 0.2f, 5.0f);
+			followPosition.y = newY;
         }
 
         //set the new camera position and look toward the object being followed
         transform.position = Vector3.MoveTowards(transform.position, newPosition, 0.1f);
 
 
-        // turn left
-        if (Input.GetAxis("Mouse X") < 0)
-        {
-            // GetComponent<Transform>().Rotate(Vector3.up, Input.GetAxis("Mouse X") * objectBeingFollowed.GetComponent<PlayerControl>().rotationSpeed * Time.deltaTime, Space.World);
-        }
-
-        // turn right
-        else if (Input.GetAxis("Mouse X") > 0)
-        {
-            // GetComponent<Transform>().Rotate(Vector3.up, Input.GetAxis("Mouse X") * objectBeingFollowed.GetComponent<PlayerControl>().rotationSpeed * Time.deltaTime, Space.World);
-        }
-
-        // look up
-        if (Input.GetAxis("Mouse Y") > 0)
-        {
-
-            // GetComponent<Transform>().Rotate(transform.right, Input.GetAxis("Mouse Y") * objectBeingFollowed.GetComponent<PlayerControl>().rotationSpeed * Time.deltaTime, Space.World);
-        }
-
-        // look down
-        else if (Input.GetAxis("Mouse Y") < 0)
-        {
-            // GetComponent<Transform>().Rotate(transform.right, Input.GetAxis("Mouse Y") * objectBeingFollowed.GetComponent<PlayerControl>().rotationSpeed * Time.deltaTime, Space.World);
-        }
-
-        //transform.LookAt(objectBeingFollowedTransform.position);
-		
+        transform.LookAt(objectBeingFollowedTransform.position);
     }
 }
